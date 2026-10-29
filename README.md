@@ -13,20 +13,24 @@ This publication copy contains the paper, computational material and final 30-mi
 |---|---|
 | [Paper PDF](paper/main.pdf) | Compiled perspective paper |
 | [LaTeX source](paper/main.tex) | Main text, with [appendices](paper/appendices.tex) and [bibliography](paper/references.bib) |
-| [Notebooks](code/notebooks) | Eighteen executable teaching examples |
+| [Notebook guide and Colab links](code/notebooks/README.md) | Eighteen teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
 | [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
 | [Slide-to-resource guide](talk/resources.md) | All 25 slides, local examples and pinned external implementations |
 | [August background paper](paper/background/august-perspective.pdf) | Section numbering used by notebooks 00–07, including their lettered companions |
 
-Repository links and downloads require GitHub access while this copy remains private. After dependencies are installed, the numerical examples run locally without network services, API keys, model downloads or patient data.
+This repository is public. Every notebook has an **Open in Colab** badge and runs on a standard CPU runtime. After dependencies are installed, the default numerical examples also run locally without network services, API keys, model downloads or patient data.
 
 ## Paper and provenance
 
 The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. 
 
 ## Run the notebooks
+
+For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebook 05b also enables Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
+
+Each notebook includes learning goals, two reading paths (clinical/neuroscience and mathematical), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions provide the broader conceptual background; 08–13 give focused current-paper calculations. See the guide for direct Colab links to all eighteen.
 
 Use Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Clone this repository using your GitHub access, then change to the checkout directory containing `pyproject.toml` and `uv.lock`:
 
@@ -37,7 +41,7 @@ uv run --locked --extra dev jupyter lab
 
 In JupyterLab, open a notebook under `code/notebooks`, choose the project's Python kernel, and run the setup cell first. Use **Kernel → Restart Kernel and Run All Cells** to reproduce a notebook's default calculation. Each notebook is independent; earlier notebooks do not need to run first.
 
-Keep `code/src` with the notebooks. Setup cells locate the shared implementation from the repository root or `code/notebooks`. Copying an individual notebook elsewhere can break imports. Some notebooks regenerate `paper/figures`, and notebook 05b can replace animations under `code/animations`; inspect `git status` after experiments.
+Keep `code/src` with the notebooks when running locally. Setup cells locate the shared implementation from the repository root or a subdirectory and set the working directory to `code/notebooks` for consistent exercise paths. In Colab, setup obtains the shared files automatically. Some notebooks regenerate `paper/figures`, and notebook 05b can replace animations under `code/animations`; inspect `git status` after experiments.
 
 | Notebook | Topic |
 |---|---|
@@ -62,7 +66,7 @@ Keep `code/src` with the notebooks. Setup cells locate the shared implementation
 - **Interactive landscape:** notebook 05b uses `ipympl` and `ipywidgets`, included in the environment above. Restart the kernel if the widget does not appear. GIF export needs no additional system software; MP4 export requires `ffmpeg`.
 - **Missing imports:** repeat `uv sync --locked --extra dev`, select the project kernel, and restart and run all cells. Check that `import sys; print(sys.executable)` points into the project's `.venv`.
 - **Exercises:** expand a notebook's **Show solution** section, or load a solution with `%load ../solutions/01_1_drop_the_causal_mask.py`. See the [exercise guide](code/solutions/README.md) and [instructor discussion notes](code/notebooks/questions_responses.md).
-- **Google Colab:** background notebooks retain a Colab clone setup, but private repository access must be arranged separately in the runtime. The local workflow is recommended during preparation. Notebooks 08–13 require an existing checkout. The original clone setup accepts `BRAINSMODELS_REPO_URL` if the repository is later renamed.
+- **Google Colab:** all eighteen notebooks have their own badge and setup. No GitHub authentication or Drive mount is needed to download this public repository. Save a notebook copy in Drive to retain edits, and download generated files before the temporary runtime ends. Setup reuses an existing runtime checkout; to obtain a fresh copy after repository updates, disconnect and delete the runtime, then reconnect and run again.
 
 ## Reproduce the paper and check the code
 
@@ -90,6 +94,14 @@ This requires the `dev` extra. It executes current-paper notebooks 08–13 in a 
 ```bash
 .venv/bin/python scripts/check_notebooks.py 01_tiny_transformer.ipynb
 ```
+
+To exercise the Colab setup path in isolated local kernels:
+
+```bash
+.venv/bin/python scripts/check_notebooks.py --colab --all
+```
+
+This uses fresh sparse checkouts of a temporary snapshot, installs the declared notebook dependencies, and simulates Colab detection and widget-manager registration. It checks the bootstrap and all calculations; it does not test Google's hosted runtime or browser widget rendering. Results go to `.build/notebook-checks-colab/`. The ordinary notebook checks remain offline after environment setup.
 
 ## Scientific scope
 

@@ -30,6 +30,12 @@ def publication_files():
 def check_local_links(path, text):
     for target in re.findall(r"!?\[[^\]]*\]\(([^\s)]+)\)", text):
         parsed = urlsplit(target)
+        public_prefix = "https://github.com/arvidl/brains-to-models/blob/main/"
+        if target.startswith(public_prefix):
+            # Absolute repository links also work when a notebook opens in Colab.
+            linked = ROOT / unquote(parsed.path.split("/blob/main/", 1)[1])
+            assert linked.exists(), f"{path.relative_to(ROOT)}: missing link {target}"
+            continue
         if parsed.scheme or parsed.netloc or not parsed.path:
             continue
         linked = path.parent / unquote(parsed.path)
@@ -81,6 +87,15 @@ def main():
     for path in notebooks:
         notebook = json.loads(path.read_text())
         assert notebook["nbformat"] == 4, path.name
+        badge = ("https://colab.research.google.com/github/arvidl/brains-to-models/"
+                 f"blob/main/code/notebooks/{path.name}")
+        introduction = "".join(notebook["cells"][0]["source"])
+        assert badge in introduction, f"Missing or incorrect Colab badge: {path.name}"
+        setup = next(cell for cell in notebook["cells"] if cell["cell_type"] == "code")
+        assert "setup" in setup["metadata"].get("tags", []), path.name
+        setup_source = "".join(setup["source"])
+        assert "https://github.com/arvidl/brains-to-models.git" in setup_source, path.name
+        assert "brains-to-models-publication" not in setup_source, path.name
         ids = [cell["id"] for cell in notebook["cells"]]
         assert len(ids) == len(set(ids)), f"Duplicate cell IDs: {path.name}"
         for cell in notebook["cells"]:
