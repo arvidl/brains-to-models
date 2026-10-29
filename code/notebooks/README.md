@@ -34,6 +34,8 @@ These twenty-one independent notebooks accompany *From Brains to Models* for MSc
 
 In Colab, connect to a standard CPU runtime and run the setup cell first, then run the remaining cells in order. Setup downloads a small checkout containing the shared code and figure references; the PPTX is excluded. It installs NumPy and Matplotlib if needed; 14b and 14c also install NiBabel for NIfTI input. Notebook 05b also installs and enables `ipywidgets`/`ipympl`; 14a–14c install `ipywidgets` and enable Colab widget support. No model weights, patient data, API keys or Drive mount are needed. See [Google's GitHub notebook guide](https://colab.research.google.com/github/googlecolab/colabtools/blob/main/notebooks/colab-github-demo.ipynb) for opening and saving copies.
 
+For mouse interaction in [05b](05b_multistable_animation.ipynb), open the widget cell’s output menu (⋮) and choose **View output fullscreen** for contour clicks and 3-D rotation. Press **Esc** to return to the notebook.
+
 Notebooks 14b and 14c read about 9.25 MB of checksum-verified normal BrainWeb data bundled under [the package data directory](../src/brainsmodels/data/brainweb/README.md). After checkout and dependency setup, no network or companion repository is required. The T1 and tissue labels are phantom source data, not patient observations or tumour targets. Input files retain BrainWeb terms and attribution. A missing or changed input raises an error; no substitute anatomy is used. See [growth provenance and checks](../../README.md#growth-lessons-and-provenance).
 
 Use **File → Save a copy in Drive** to keep notebook edits. Files generated in the runtime are separate from that saved notebook; download any figures, GIFs or JSON records you want to retain. The runtime is temporary. Re-running setup preserves its existing checkout; to start from current repository code, disconnect and delete the runtime before reconnecting.
@@ -55,3 +57,13 @@ For a growth-modelling session, use **13 → 14a → 14b → 14c**: numerical ve
 Run the interactive cell in 14a–14c to create the widgets. Model and algorithm changes take effect when you press the run button. In 14a/14b, day, threshold and image-view controls read the last computed run immediately. A pending-change message prevents a previous result from being mistaken for a new simulation. Invalid time steps are rejected explicitly.
 
 In 14c, compare noise seeds, generating rates, early observation times, search resolution and fitting steps. Day 90 is always withheld. The static examples above the controls remain the reproducible paper reference; widgets do not overwrite them. GitHub shows those saved figures, while interactivity requires a running kernel.
+
+## Colab verification
+
+**Last verified: 29 October 2026.** All twenty-one notebooks completed their default execution paths on Google Colab hosted CPU runtimes using Python 3.13.18 and NumPy 2.1.3. These were hosted runs, in addition to the repository's local checks and Colab setup simulations.
+
+- **05b:** static figures, GIF/MP4 exports and widget startup passed without a manual runtime restart. Coordinate controls and contour clicks updated the trajectory and energy readout. Mouse dragging rotated the 3-D view; selecting another start preserved the rotated camera. Mouse interactions were tested in the full-screen output view described above.
+- **12:** recall, energy assertions, the cue-corruption sweep and results export passed, including the equal-energy stored and inverse patterns.
+- **14a–14c:** notebook titles, default runs and representative widget changes passed, including model reruns, cached display controls and parameter recovery with a withheld forecast. In 14b/14c, the bundled BrainWeb inputs loaded successfully; both NIfTI files matched their manifest checksums.
+
+Widget checks exercised representative control changes rather than every parameter combination. Notebook 13's default independent numerical checks passed; its optional audit of an external 3-D solver was not run.
