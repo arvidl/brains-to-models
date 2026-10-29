@@ -1,12 +1,15 @@
 """Check the publication contents, paper references and saved notebooks."""
 
 import ast
+import hashlib
 import json
 import math
 from pathlib import Path
 import re
 import subprocess
 from urllib.parse import unquote, urlsplit
+import xml.etree.ElementTree as ET
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -96,6 +99,21 @@ def main():
 
     from brainsmodels.growth_verification import REFERENCE_COMMIT, REFERENCE_MODEL_SHA256
     resources = json.loads((ROOT / "talk/resources.json").read_text())
+    deck = resources["deck"]
+    deck_path = ROOT / deck["path"]
+    assert deck_path == ROOT / "talk" / deck["filename"], "Unexpected deck path"
+    assert deck_path in files, "Final deck is missing from the publication contents"
+    assert deck_path.stat().st_size == deck["size_bytes"], "Deck byte size differs from manifest"
+    with deck_path.open("rb") as stream:
+        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+    assert digest == deck["sha256"], "Deck checksum differs from manifest"
+    with zipfile.ZipFile(deck_path) as package:
+        assert package.testzip() is None, "Damaged PPTX package"
+        presentation = ET.fromstring(package.read("ppt/presentation.xml"))
+        slides = presentation.find(
+            "{http://schemas.openxmlformats.org/presentationml/2006/main}sldIdLst")
+        assert slides is not None and len(slides) == deck["slide_count"], \
+            "Deck slide count differs from manifest"
     reference = resources["references"]["brainweb_fisher_kpp"]
     assert reference["commit"] == REFERENCE_COMMIT
     assert reference["model_sha256"] == REFERENCE_MODEL_SHA256
@@ -112,7 +130,8 @@ def main():
     assert re.fullmatch(r"[0-9a-f]{64}", resources["deck"]["sha256"])
 
     print(f"PASS: publication contents; {len(keys)} bibliography entries; paper figures; "
-          f"local links; {len(notebooks)} notebooks; numerical references; Python syntax.")
+          f"local links; {len(notebooks)} notebooks; numerical references; Python syntax; "
+          f"final PPTX checksum, size, package and {deck['slide_count']} slides.")
 
 
 if __name__ == "__main__":

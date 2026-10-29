@@ -4,7 +4,9 @@ A perspective paper and reproducible computational examples for the joint PRESIM
 
 The paper connects representation, attention, memory, embodiment and consciousness with medical AI. The examples distinguish a model's successful performance from claims about biological mechanisms, understanding and clinical benefit. They are teaching resources, not clinical systems.
 
-This publication copy is being prepared privately with fresh Git history. It contains the paper and computational material. The final 30-minute presentation will be added under [talk/](talk/README.md) before public release. Earlier presentations and development archives remain outside this repository.
+This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx). It has fresh Git history. Earlier presentations and development archives remain in the separate private development repository.
+
+The repository currently remains private at [arvidl/brains-to-models-publication](https://github.com/arvidl/brains-to-models-publication). The planned public name is `arvidl/brains-to-models`; the rename and public release are pending. Clone URLs use the current publication address until that change.
 
 ## Start here
 
@@ -15,6 +17,7 @@ This publication copy is being prepared privately with fresh Git history. It con
 | [Notebooks](code/notebooks) | Eighteen executable teaching examples |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
+| [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
 | [Slide-to-resource guide](talk/resources.md) | All 25 slides, local examples and pinned external implementations |
 | [August background paper](paper/background/august-perspective.pdf) | Section numbering used by notebooks 00–07, including their lettered companions |
 
@@ -77,7 +80,7 @@ make check PYTHON=.venv/bin/python
 
 `make all` runs figure generation, paper compilation and checks in that order. `make paper` can also compile directly from the committed figures. `make clean-paper` removes TeX intermediates while retaining the compiled PDF.
 
-`make check` checks bibliography keys, cited figures, local documentation links, notebook structure and saved errors, numerical reference values, segmentation gradients and interventions, action-specific Q-learning, maze outcomes and planner controls, Transformer gradients, growth-model verification, generated teaching notes, and all 49,152 possible single-unit updates in the 12-unit Hopfield example. It also rejects presentation sources and development archives from the publication contents; a final PPTX is allowed only under `talk/`.
+`make check` checks bibliography keys, cited figures, local documentation links, notebook structure and saved errors, numerical reference values, segmentation gradients and interventions, action-specific Q-learning, maze outcomes and planner controls, Transformer gradients, growth-model verification, generated teaching notes, and all 49,152 possible single-unit updates in the 12-unit Hopfield example. It also checks the final PPTX's checksum, byte size, package integrity and slide count against the resource manifest. Other presentation sources and development archives remain excluded; the final PPTX resides under `talk/`.
 
 To execute notebooks afresh in separate kernels:
 

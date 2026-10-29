@@ -2,7 +2,9 @@
   "deck": {
     "filename": "From Brains to Models_20261029_1030.pptx",
     "sha256": "a93a22e1d2680bd9f0c3c66fa9c44a452cb77d271e066a99c3306016773bc82f",
-    "slide_count": 25
+    "slide_count": 25,
+    "path": "talk/From Brains to Models_20261029_1030.pptx",
+    "size_bytes": 81886573
   },
   "references": {
     "brainweb_fisher_kpp": {
