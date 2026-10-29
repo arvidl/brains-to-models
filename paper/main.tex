@@ -60,9 +60,10 @@ Artificial intelligence (AI) in medical imaging is both an engineering instrumen
 
 \textbf{Two reading paths through a shared core.}
 In Sections~\ref{sec:why}--\ref{sec:decisions}, follow the question, verbal example, figures and takeaway; then read the report exercise and synthesis (Sections~\ref{sec:report}--\ref{sec:conclusion}). Both paths retain the assumptions, interpretations and check questions. The perspective boxes offer different starting points within selected technical examples. Choose either path and switch when the other helps; discipline does not determine mathematical preparation or clinical knowledge.
+Start with \coursenotebook{00_intro_timeline.ipynb}{Notebook 00} for Marr's levels of explanation and \coursenotebook{09_segmentation_reflection.ipynb}{Notebook 09} for a controlled imaging example.
 \begin{itemize}
 \item \emph{Biomedical and imaging path:} use the MRI vignette (Section~\ref{sec:clinical}) to anchor each model claim. In growth modelling, distinguish the simulated density, the displayed boundary and an imaging observation (Section~\ref{sec:growth}). In the vocabulary examples, identify the measured operation before making a brain comparison (Section~\ref{sec:vocabulary}). Use the expected counts to explain a positive result before considering an action (Section~\ref{sec:decisions}). The biomedical and imaging paragraphs in the boxes guide these comparisons.
-\item \emph{Computational path:} after each verbal example, trace the variables, update rule and test. Follow the growth equation and numerical checks (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), then the attention and Hopfield derivations (Appendices~\ref{app:attention} and~\ref{app:hopfield}; Notebooks 08, 10 and 12). Derive predictive value and the action threshold from counts and expected costs (Section~\ref{sec:decisions}). The computational paragraphs guide these calculations; return to the shared interpretation to identify what the computed quantity measures.
+\item \emph{Computational path:} after each verbal example, trace the variables, update rule and test. Follow the growth equation and numerical checks (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), then the attention and Hopfield derivations (Appendices~\ref{app:attention} and~\ref{app:hopfield}; Notebooks 08, 10 and 12). Derive predictive value and the action threshold from counts and expected costs (Section~\ref{sec:decisions}; Notebook 15). The computational paragraphs guide these calculations; return to the shared interpretation to identify what the computed quantity measures.
 \end{itemize}
 
 \textbf{Optional extension for either path.} Reasoning/functional MRI studies, embodiment and consciousness (Sections~\ref{sec:research}--\ref{sec:consciousness}), and clinical 4E examples (Appendix~\ref{app:4e}), extend the same question: what observation would distinguish two explanations?
@@ -436,6 +437,8 @@ Choose the action when its expected cost is lower. For positive costs, rearrange
 p > \frac{C_{\mathrm{FP}}}{C_{\mathrm{FP}}+C_{\mathrm{FN}}}.
 \end{equation}
 For an arithmetic example, if a missed condition costs four units and an unnecessary action costs one, the threshold is $1/(1+4)=0.2$. These stipulated costs demonstrate the calculation. A clinical decision model would also need justified estimates of treatment harms, delays, competing outcomes, repeated tests and patient preferences. The mathematical point is that an objective does not specify its own acceptable consequences. Someone must justify the target, the actions, and the values represented by their costs.
+
+\coursenotebook{15_ppv_and_decisions.ipynb}{Notebook 15} reproduces the counts and cost comparisons, with separate controls for population rates, decision probability and costs.
 
 \begin{perspectives}{predictive value and decisions}
 \textbf{Biomedical and imaging perspective.} Use the 10,000-person table to explain why only 90 of 1,080 positive results are true positives in this example. Identify the population to which those counts refer. Before proposing an action, ask which consequences and patient preferences the simplified cost model leaves out.

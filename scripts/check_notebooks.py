@@ -26,6 +26,7 @@ DEFAULTS = (
     "14a_growth_density_and_thresholds.ipynb",
     "14b_brainweb_growth.ipynb",
     "14c_growth_parameter_recovery.ipynb",
+    "15_ppv_and_decisions.ipynb",
 )
 
 

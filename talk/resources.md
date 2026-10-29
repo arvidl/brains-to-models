@@ -80,6 +80,10 @@ associative-memory calculation. Predictive coding, multistability, spatial
 gating, global workspace and values notebooks support the broader paper;
 they are not prerequisites for this presentation.
 
+[15: PPV and decisions](../code/notebooks/15_ppv_and_decisions.ipynb) connects
+the paper's expected diagnostic counts to prevalence-dependent predictive value
+and a stipulated two-action cost model, with separate population and decision controls.
+
 The resource guide records interpretations that should accompany the existing
 slides. It does not change the presentation or establish access rights to
 third-party sources. Repository visibility remains controlled separately.

@@ -1,6 +1,6 @@
 # Notebook guide
 
-These twenty-one independent notebooks accompany *From Brains to Models* for MSc and PhD students in biomedicine, imaging and computational science. Each includes an **Open in Colab** badge, learning goals, setup instructions and two reading paths explaining the concepts and notation used in its calculations. Read the explanations beside the calculations, predict a result before changing a parameter, and use the interpretation questions to design a further test.
+These twenty-two independent notebooks accompany *From Brains to Models* for MSc and PhD students in biomedicine, imaging and computational science. Each includes an **Open in Colab** badge, learning goals, setup instructions and two reading paths explaining the concepts and notation used in its calculations. Read the explanations beside the calculations, predict a result before changing a parameter, and use the interpretation questions to design a further test.
 
 **Related resources:** [Paper](../../paper/main.pdf) · [Presentation guide](../../talk/resources.md)
 
@@ -29,10 +29,11 @@ These twenty-one independent notebooks accompany *From Brains to Models* for MSc
 | [14a — Density and display thresholds](14a_growth_density_and_thresholds.ipynb) | Separate model dynamics, tissue-dependent spread and threshold area | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/brains-to-models/blob/main/code/notebooks/14a_growth_density_and_thresholds.ipynb) |
 | [14b — BrainWeb growth](14b_brainweb_growth.ipynb) | Simulate on a pinned normal phantom with physical coordinates and explicit tissue assumptions | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/brains-to-models/blob/main/code/notebooks/14b_brainweb_growth.ipynb) |
 | [14c — Parameter recovery](14c_growth_parameter_recovery.ipynb) | Fit generated observations, withhold a forecast and compare persistence | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/brains-to-models/blob/main/code/notebooks/14c_growth_parameter_recovery.ipynb) |
+| [15 — PPV and decisions](15_ppv_and_decisions.ipynb) | Derive PPV from expected counts and compare actions under explicit costs | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/brains-to-models/blob/main/code/notebooks/15_ppv_and_decisions.ipynb) |
 
 ## Running and saving
 
-In Colab, connect to a standard CPU runtime and run the setup cell first, then run the remaining cells in order. Setup downloads a small checkout containing the shared code and figure references; the PPTX is excluded. It installs NumPy and Matplotlib if needed; 14b and 14c also install NiBabel for NIfTI input. Notebook 05b also installs and enables `ipywidgets`/`ipympl`; 14a–14c install `ipywidgets` and enable Colab widget support. No model weights, patient data, API keys or Drive mount are needed. See [Google's GitHub notebook guide](https://colab.research.google.com/github/googlecolab/colabtools/blob/main/notebooks/colab-github-demo.ipynb) for opening and saving copies.
+In Colab, connect to a standard CPU runtime and run the setup cell first, then run the remaining cells in order. Setup downloads a small checkout containing the shared code and figure references; the PPTX is excluded. It installs NumPy and Matplotlib if needed; 14b and 14c also install NiBabel for NIfTI input. Notebook 05b also installs and enables `ipywidgets`/`ipympl`; 14a–14c and 15 install `ipywidgets` and enable Colab widget support. No model weights, patient data, API keys or Drive mount are needed. See [Google's GitHub notebook guide](https://colab.research.google.com/github/googlecolab/colabtools/blob/main/notebooks/colab-github-demo.ipynb) for opening and saving copies.
 
 For mouse interaction in [05b](05b_multistable_animation.ipynb), open the widget cell’s output menu (⋮) and choose **View output fullscreen** for contour clicks and 3-D rotation. Press **Esc** to return to the notebook.
 
@@ -52,6 +53,8 @@ The [instructor discussion notes](questions_responses.md) and embedded exercises
 
 For a growth-modelling session, use **13 → 14a → 14b → 14c**: numerical verification, density-to-measurement choices, anatomical context, then generated-data inference and a withheld forecast. Each remains independently runnable. Allow time to predict each result before executing its calculation. The 2-D map in 14a is constructed; the 3-D anatomy in 14b/14c is BrainWeb. Their output units and evidence status are explained beside each result.
 
+For prediction and decision-making, use **15**: start with the paper's expected 10,000-person table, derive PPV, then compare two actions under stipulated costs. Sliders vary prevalence, sensitivity and specificity separately from decision probability and costs. The notebook distinguishes a classifier's operating threshold from a cost-based decision threshold and includes worked exercises for both reading paths.
+
 ## Interactive growth controls
 
 Run the interactive cell in 14a–14c to create the widgets. Model and algorithm changes take effect when you press the run button. In 14a/14b, day, threshold and image-view controls read the last computed run immediately. A pending-change message prevents a previous result from being mistaken for a new simulation. Invalid time steps are rejected explicitly.
@@ -60,10 +63,12 @@ In 14c, compare noise seeds, generating rates, early observation times, search r
 
 ## Colab verification
 
-**Last verified: 29 October 2026.** All twenty-one notebooks completed their default execution paths on Google Colab hosted CPU runtimes using Python 3.13.18 and NumPy 2.1.3. These were hosted runs, in addition to the repository's local checks and Colab setup simulations.
+**Last verified: 29 October 2026.** The twenty-one notebooks 00–14c completed their default execution paths on Google Colab hosted CPU runtimes using Python 3.13.18 and NumPy 2.1.3. These were hosted runs, in addition to the repository's local checks and Colab setup simulations.
 
 - **05b:** static figures, GIF/MP4 exports and widget startup passed without a manual runtime restart. Coordinate controls and contour clicks updated the trajectory and energy readout. Mouse dragging rotated the 3-D view; selecting another start preserved the rotated camera. Mouse interactions were tested in the full-screen output view described above.
 - **12:** recall, energy assertions, the cue-corruption sweep and results export passed, including the equal-energy stored and inverse patterns.
 - **14a–14c:** notebook titles, default runs and representative widget changes passed, including model reruns, cached display controls and parameter recovery with a withheld forecast. In 14b/14c, the bundled BrainWeb inputs loaded successfully; both NIfTI files matched their manifest checksums.
 
 Widget checks exercised representative control changes rather than every parameter combination. Notebook 13's default independent numerical checks passed; its optional audit of an external 3-D solver was not run.
+
+**Notebook 15:** local execution and a fresh Colab bootstrap simulation check the paper's PPV values, expected-count identities, limiting cases, decision-cost boundary and representative widget callbacks. This is not yet a hosted Colab/browser verification of notebook 15.

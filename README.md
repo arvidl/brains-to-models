@@ -13,7 +13,7 @@ This publication copy contains the paper, computational material and final 30-mi
 |---|---|
 | [Paper PDF](paper/main.pdf) | Compiled perspective paper |
 | [LaTeX source](paper/main.tex) | Main text, with [appendices](paper/appendices.tex) and [bibliography](paper/references.bib) |
-| [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-one teaching examples with learning goals, definitions and guided interpretation |
+| [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-two teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
 | [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
@@ -34,11 +34,11 @@ Four paired perspective boxes connect these approaches in growth modelling, atte
 
 ## Run the notebooks
 
-For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b and 14a–14c also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
+For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b, 14a–14c and 15 also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
 
-**Colab verified — 29 October 2026:** All twenty-one notebooks completed their default runs on hosted CPU runtimes. Verification included representative widget checks, 05b’s full-screen mouse interactions and bundled BrainWeb data loading. See [verification results and scope](code/notebooks/README.md#colab-verification).
+**Colab verified — 29 October 2026:** The twenty-one notebooks 00–14c completed their default runs on hosted CPU runtimes. Verification included representative widget checks, 05b’s full-screen mouse interactions and bundled BrainWeb data loading. Notebook 15 is checked locally and through the Colab bootstrap simulation. See [verification results and scope](code/notebooks/README.md#colab-verification).
 
-Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification; 14a–14c extend growth modelling into tissue-guided spread, BrainWeb anatomy and generated-data parameter recovery. See the guide for direct Colab links to all twenty-one.
+Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification; 14a–14c extend growth modelling into tissue-guided spread, BrainWeb anatomy and generated-data parameter recovery. Notebook 15 connects expected diagnostic counts and PPV to explicit decision costs. See the guide for direct Colab links to all twenty-two.
 
 Use Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Clone this repository using your GitHub access, then change to the checkout directory containing `pyproject.toml` and `uv.lock`:
 
@@ -70,6 +70,7 @@ Keep `code/src` with the notebooks when running locally. Setup cells locate the 
 | [14a](code/notebooks/14a_growth_density_and_thresholds.ipynb) | Density, tissue-dependent spread and the effect of display thresholds |
 | [14b](code/notebooks/14b_brainweb_growth.ipynb) | Three-dimensional Fisher–KPP growth on the normal BrainWeb phantom |
 | [14c](code/notebooks/14c_growth_parameter_recovery.ipynb) | Generated observations, two-parameter recovery and a withheld forecast |
+| [15](code/notebooks/15_ppv_and_decisions.ipynb) | Expected diagnostic counts, prevalence-dependent PPV and decisions under stipulated costs |
 
 ### Editors, widgets and exercises
 
@@ -77,7 +78,7 @@ Keep `code/src` with the notebooks when running locally. Setup cells locate the 
 - **Interactive landscape:** notebook 05b uses `ipympl` and `ipywidgets`, included in the environment above. Restart the kernel if the widget does not appear. GIF export needs no additional system software; MP4 export requires `ffmpeg`.
 - **Missing imports:** repeat `uv sync --locked --extra dev`, select the project kernel, and restart and run all cells. Check that `import sys; print(sys.executable)` points into the project's `.venv`.
 - **Exercises:** expand a notebook's **Show solution** section, or load a solution with `%load ../solutions/01_1_drop_the_causal_mask.py`. See the [exercise guide](code/solutions/README.md) and [instructor discussion notes](code/notebooks/questions_responses.md).
-- **Google Colab:** all twenty-one notebooks have their own badge and setup. No GitHub authentication or Drive mount is needed to download this public repository. Save a notebook copy in Drive to retain edits, and download generated files before the temporary runtime ends. Setup reuses an existing runtime checkout; to obtain a fresh copy after repository updates, disconnect and delete the runtime, then reconnect and run again.
+- **Google Colab:** all twenty-two notebooks have their own badge and setup. No GitHub authentication or Drive mount is needed to download this public repository. Save a notebook copy in Drive to retain edits, and download generated files before the temporary runtime ends. Setup reuses an existing runtime checkout; to obtain a fresh copy after repository updates, disconnect and delete the runtime, then reconnect and run again.
 
 ### Interactive growth lessons
 
@@ -110,7 +111,7 @@ To execute notebooks afresh in separate kernels:
 make check-notebooks PYTHON=.venv/bin/python
 ```
 
-This requires the `dev` extra. It executes current-paper notebooks 08–14c in a temporary copy of the project and saves executed notebooks and generated outputs under ignored `.build/`. Use `.venv/bin/python scripts/check_notebooks.py --all` to execute all twenty-one notebooks. To check a different notebook, pass its filename:
+This requires the `dev` extra. It executes current-paper notebooks 08–15 in a temporary copy of the project and saves executed notebooks and generated outputs under ignored `.build/`. Use `.venv/bin/python scripts/check_notebooks.py --all` to execute all twenty-two notebooks. To check a different notebook, pass its filename:
 
 ```bash
 .venv/bin/python scripts/check_notebooks.py 01_tiny_transformer.ipynb

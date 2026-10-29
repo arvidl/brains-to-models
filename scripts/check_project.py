@@ -74,6 +74,8 @@ def main():
         assert (ROOT / "paper" / figure).is_file(), f"Missing figure: {figure}"
     for included in re.findall(r"\\(?:input|include)\{([^}]+)\}", manuscript):
         assert (ROOT / "paper" / included).with_suffix(".tex").is_file(), included
+    for notebook in re.findall(r"\\coursenotebook\{([^}]+)\}", manuscript):
+        assert (ROOT / "code/notebooks" / notebook).is_file(), f"Missing paper notebook link: {notebook}"
 
     values = json.loads((ROOT / "paper/figures/computed_values.json").read_text())
     for prevalence, expected in [("0.01", 1 / 12), ("0.1", .5), ("0.5", .9)]:
@@ -96,6 +98,10 @@ def main():
         assert badge in introduction, f"Missing or incorrect Colab badge: {path.name}"
         markdown = "\n".join("".join(cell["source"]) for cell in notebook["cells"]
                              if cell["cell_type"] == "markdown")
+        assert notebook["metadata"].get("colab", {}).get("name") == path.name, \
+            f"Incorrect Colab title: {path.name}"
+        for audience in ("For biomedical and imaging readers", "For computational readers"):
+            assert audience in markdown, f"Missing reading path in {path.name}: {audience}"
         resource_lines = [line for line in markdown.splitlines()
                           if line.startswith("**Related resources:**")]
         expected_resources = (
@@ -143,6 +149,16 @@ def main():
             assert any("interactive" in cell.get("metadata", {}).get("tags", [])
                        and "brainsmodels.growth_widgets" in "".join(cell["source"])
                        for cell in notebook["cells"]), f"Missing live growth controls: {path.name}"
+        if path.name == "15_ppv_and_decisions.ipynb":
+            assert "ipywidgets>=8.1" in setup_source and "enable_custom_widget_manager" in setup_source
+            assert any("widget-check" in cell["metadata"].get("tags", [])
+                       for cell in notebook["cells"]), "Missing decision-widget checks"
+            for cell in notebook["cells"]:
+                if cell["cell_type"] == "code":
+                    ast.parse("".join(cell["source"]), filename=path.name)
+            previews = sum("image/png" in output.get("data", {})
+                           for cell in notebook["cells"] for output in cell.get("outputs", []))
+            assert previews >= 2, "Decision notebook is missing its saved reference plots"
 
     from brainsmodels.brainweb_data import COMMIT, FILES, BUNDLED, verify_files
     verify_files(BUNDLED)
