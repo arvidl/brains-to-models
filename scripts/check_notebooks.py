@@ -91,12 +91,29 @@ def main():
                     # Do not let the fixture's location make shared imports succeed accidentally.
                     "PYTHONPATH": "",
                 })
-                notebook.cells.insert(0, nbformat.v4.new_code_cell(
+                prelude = (
                     "import sys, types\n"
                     "colab = types.ModuleType('google.colab')\n"
                     "colab.output = types.SimpleNamespace(enable_custom_widget_manager=lambda: None)\n"
                     "sys.modules['google.colab'] = colab\n"
-                ))
+                )
+                if name == "05b_multistable_animation.ipynb":
+                    # Reproduce Colab discovering backends before ipympl is installed.
+                    # Restore discovery before setup, as pip would make the entry visible.
+                    prelude += (
+                        "from importlib import metadata\n"
+                        "from unittest.mock import patch\n"
+                        "entries = metadata.entry_points(group='matplotlib.backend')\n"
+                        "without_widget = [e for e in entries if e.name not in ('widget', 'ipympl')]\n"
+                        "with patch.object(metadata, 'entry_points', return_value=without_widget):\n"
+                        "    from matplotlib import backends\n"
+                        "    registry = getattr(backends, 'backend_registry', None)\n"
+                        "    if registry is not None:\n"
+                        "        registry.list_all()\n"
+                        "if registry is not None:\n"
+                        "    assert not registry.is_valid_backend('widget')\n"
+                    )
+                notebook.cells.insert(0, nbformat.v4.new_code_cell(prelude))
             print(f"Executing {name}", flush=True)
             NotebookClient(notebook, timeout=600, kernel_name="brainsmodels-check",
                            resources={"metadata": {"path": str(runtime)}}).execute()

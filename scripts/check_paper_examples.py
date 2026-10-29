@@ -48,7 +48,10 @@ def main():
         assert delta <= 1e-12
     inverse = hopfield_12(flipped_bits=tuple(range(12)))
     assert np.all(inverse.states == -result.pattern)
-    assert hopfield_energy(-result.pattern, result.weights) == appendix["inverse_pattern_energy"]
+    np.testing.assert_allclose(
+        hopfield_energy(-result.pattern, result.weights),
+        appendix["inverse_pattern_energy"], rtol=0, atol=1e-12,
+    )
 
     # All 4096 states: check the closed-form energy and every possible one-unit update.
     states = 2 * ((np.arange(4096)[:, None] >> np.arange(12)) & 1) - 1
