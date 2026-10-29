@@ -25,6 +25,13 @@ This repository is public. Every notebook has an **Open in Colab** badge and run
 
 The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. A short [provenance note](paper/background/README.md) identifies the preserved background manuscript.
 
+The [reader's guide](paper/main.pdf#page=2) offers two reading paths through a shared core:
+
+- **Biomedical and imaging:** focus on clinical observations, measurements and interpretation.
+- **Computational:** trace variables, update rules, numerical checks and worked derivations.
+
+Four paired perspective boxes connect these approaches in growth modelling, attention and image overlays, associative retrieval, and predictive value and decisions. Both paths retain the assumptions, takeaways and check questions. Readers can switch paths as their interests and preparation suggest.
+
 ## Run the notebooks
 
 For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b and 14a–14c also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
