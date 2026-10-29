@@ -4,8 +4,8 @@ A perspective paper and reproducible computational examples for the joint PRESIM
 
 The paper connects representation, attention, memory, embodiment and consciousness with medical AI. The examples distinguish a model's successful performance from claims about biological mechanisms, understanding and clinical benefit. They are teaching resources, not clinical systems.
 
-This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) (see also this [[link](https://docs.google.com/presentation/d/e/2PACX-1vQYRZnUC5Ae8V7WGU5Gw1XjBR4-0Ez_DUImMWuV4mgNcOI_JADfLvSEEagQYJXCipluD4p232XmfuGo/pub?start=false&loop=false&delayms=3000)]. It has fresh Git history. 
-The repository currently remains private at [arvidl/brains-to-models-publication](https://github.com/arvidl/brains-to-models-publication). 
+This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) (see also this [[link](https://docs.google.com/presentation/d/e/2PACX-1vQYRZnUC5Ae8V7WGU5Gw1XjBR4-0Ez_DUImMWuV4mgNcOI_JADfLvSEEagQYJXCipluD4p232XmfuGo/pub?start=false&loop=false&delayms=3000)]).
+
 
 ## Start here
 
