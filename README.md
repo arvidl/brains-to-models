@@ -4,9 +4,8 @@ A perspective paper and reproducible computational examples for the joint PRESIM
 
 The paper connects representation, attention, memory, embodiment and consciousness with medical AI. The examples distinguish a model's successful performance from claims about biological mechanisms, understanding and clinical benefit. They are teaching resources, not clinical systems.
 
-This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx). It has fresh Git history. Earlier presentations and development archives remain in the separate private development repository.
-
-The repository currently remains private at [arvidl/brains-to-models-publication](https://github.com/arvidl/brains-to-models-publication). The planned public name is `arvidl/brains-to-models`; the rename and public release are pending. Clone URLs use the current publication address until that change.
+This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) (see also this [[link](https://docs.google.com/presentation/d/e/2PACX-1vQYRZnUC5Ae8V7WGU5Gw1XjBR4-0Ez_DUImMWuV4mgNcOI_JADfLvSEEagQYJXCipluD4p232XmfuGo/pub?start=false&loop=false&delayms=3000)]. It has fresh Git history. 
+The repository currently remains private at [arvidl/brains-to-models-publication](https://github.com/arvidl/brains-to-models-publication). 
 
 ## Start here
 
@@ -25,9 +24,7 @@ Repository links and downloads require GitHub access while this copy remains pri
 
 ## Paper and provenance
 
-The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. It retains the attributed glioma figures, the Figure 6 legend-discrepancy note, and the fMRI discussion checked on 9 September 2026. The resource guide maps the 29 October presentation to this material and to versioned external research code.
-
-The [August background paper](paper/background/README.md) is retained because the original twelve notebooks refer to its sections. The active paper has a different organization. Its earlier development history is preserved separately in the private development repository.
+The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. 
 
 ## Run the notebooks
 
