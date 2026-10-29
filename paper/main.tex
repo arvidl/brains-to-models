@@ -1,0 +1,381 @@
+% !TEX TS-program = pdflatex
+% !BIB program = bibtex
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,longtable}
+\usepackage[round,authoryear]{natbib}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{caption,placeins,fancyhdr}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\urlstyle{same}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.22}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small From Brains to Models}\fancyhead[R]{\small Educational perspective | October consolidation}\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\title{\textbf{From Brains to Models:\\What AI Reveals About Being Human}\\[5mm]\large Representation, understanding, and responsibility in medical AI}
+\author{Arvid Lundervold\\\normalsize Department of Biomedicine, University of Bergen\\\normalsize Mohn Medical Imaging and Visualization Centre}
+\date{\small Companion to the Joint PRESIMAL $\times$ NORA HS keynote\\5 November 2026, Sola Strand Hotel, Stavanger}
+\begin{document}
+\maketitle
+\begin{abstract}
+Artificial intelligence in medical imaging is both an engineering instrument and a comparative tool for thinking about cognition. A model may identify an image pattern, generate a useful explanation, or reproduce a human error without sharing the biological mechanism or lived experience associated with that performance. This educational perspective connects medical image analysis with questions about representation, attention, memory, embodiment, and consciousness. Marr's levels of explanation provide a framework for separating the purpose of a computation, the representations and algorithms that support it, and its physical implementation. A longitudinal brain-imaging vignette and a patient-facing report exercise connect this framework to clinical practice. Reproducible examples illustrate shortcut learning, prevalence-dependent predictive value, associative memory, and the differences between attention weights, gradients, and perturbation effects. They are deliberately synthetic and support conceptual learning rather than clinical claims. The central proposal is that comparisons between brains and models become informative when their scope, interventions, and failure criteria are explicit. Successful prediction can support useful action, but clinical reliance also requires evidence about context, uncertainty, workflow, and consequences. Embodiment and viability are treated as substantive hypotheses about cognition, not as established tests of consciousness or definitions of uniquely human value. The resulting educational task is to make both model capabilities and human responsibilities more precise.
+\end{abstract}
+\textbf{Keywords:} medical imaging; representation learning; cognitive neuroscience; clinical AI; consciousness; human oversight; AI education.
+
+\section{Why this comparison belongs in a clinical AI school}
+A \emph{medical image} is already a \emph{mediated view} of a person. Acquisition hardware, pulse sequences or reconstruction algorithms, preprocessing decisions, and display conventions determine what can be seen. A \emph{learned model} introduces another representation: a mask, probability, embedding, or sentence. \emph{Clinical interpretation} adds history and purpose. The patient then asks a question that none of these representations answers on its own: \emph{what does this mean for my life?}
+
+This sequence makes medical imaging a productive \emph{meeting place for technical and philosophical inquiry}. It discourages both uncritical enthusiasm and a dismissal of models as mere calculation. Computation can be extraordinarily useful. The more important issue is which claim a computation warrants. A reproducible segmentation result is evidence about a specified image-analysis task. It is not automatically evidence about treatment benefit, biological mechanism, or the model's experience.
+
+The present perspective accompanies a 30-minute educational keynote at the joint PRESIMAL and NORA HS research school. It is a narrative synthesis and teaching resource, not a systematic review. Sources were selected to connect brain--model comparisons with foundational computational work, medical AI evaluation, and recent consciousness research. The distinction between an empirical result, a modeling assumption, and a philosophical position is maintained throughout. Synthetic calculations and toy simulations are used to illustrate concepts and processes.
+
+The author's earlier MRI overview provides a natural point of departure: deep learning enters multiple stages of an imaging workflow, rather than constituting a single diagnostic device \citep{lundervold2019}. The supplied keynote also recalls work on expert systems and knowledge engineering in the late 1980s. Those historical details are treated here as author-provided context; the original conference papers and documents were not supplied for independent verification. The continuity is nevertheless a useful question for the speaker to develop: when rules are replaced by learned parameters, which difficulties disappear, and which reappear as problems of data, evaluation, and responsibility?
+
+\section{A running example: an image, a model, and a person}
+Consider a hypothetical multidisciplinary review of longitudinal brain MRI after glioma treatment. An automated system segments enhancing tissue and produces a volume trajectory. A second model converts a technical radiology report into accessible language. A clinician must interpret both outputs in light of timing, symptoms, treatment history, and the patient's concerns. This vignette is not an account of an identifiable patient and contains no measured patient results.
+
+Longitudinal datasets such as LUMIERE make repeated imaging and response-assessment research possible \citep{suter2022}. Their existence does not make every downstream label unambiguous or every model externally valid. Enhancement is an imaging observation, whereas progression is a clinical interpretation made under specified criteria. RANO 2.0 illustrates the need for a structured response-assessment framework \citep{wen2023}. The lesson for this keynote is narrow: a changing image-derived quantity should not be silently promoted into a stronger clinical assertion.
+
+An image-derived biomarker is a measured imaging characteristic used as an indicator of a biological process, disease process, or response to an intervention. Its meaning depends on a specified context of use \citep{best}. Three questions must be separated. \emph{Analytical validity} asks whether the measurement is sufficiently accurate and reproducible. \emph{Clinical validity} asks whether it measures or predicts the clinically relevant process in the intended population. \emph{Clinical utility} asks whether using it improves a decision or outcome. These are different evidential requirements: a repeatable number can be a poor indicator of progression, and a valid indicator need not improve care when acted upon.
+
+In this vignette, enhancement reflects contrast behavior and cannot simply be equated with viable tumour. Treatment effects can complicate interpretation; timing, other imaging findings, and clinical status matter within response assessment \citep{wen2023}. Acquisition differences, registration, and segmentation error can also change a measured volume. The inferential sequence is therefore: a measured change, a justified interpretation of its cause, and a decision about its consequences. Each transition needs evidence. An apparent increase should not become ``the tumour is progressing'' merely because a fluent report generator supplies that wording.
+
+For a synthetic example, suppose enhancing volume changes from 10 to 12 mL. The relative increase is 20\%, but this calculation alone says nothing about measurement variability or cause. If repeat measurements vary appreciably, the change may be difficult to distinguish from measurement error. Even a precisely measured increase does not identify its biological explanation. Finally, a change that supports concern about progression still needs to be considered alongside treatment options and the patient's goals. The values are illustrative; they are not a response threshold or a recommendation to alter treatment.
+
+At each step, information is compressed. An image does not contain the entire person; a segmentation does not retain the entire image; a volume does not retain the segmentation's spatial arrangement. A short explanation may omit the uncertainty preserved in a longer report. Compression is essential for decision making, but its omissions should be appropriate to the decision. Figure~\ref{fig:pathway} therefore includes two sources that cannot be replaced by image processing alone: clinical context and patient priorities.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=9mm and 8mm,>=Latex, every node/.style={font=\small},box/.style={draw=MidnightBlue,rounded corners=2pt,align=center,text width=31mm,minimum height=13mm,fill=blue!3}]
+\node[box] (acq) {Acquisition\\and reconstruction};
+\node[box,right=of acq] (img) {Image-derived\\representation};
+\node[box,right=of img] (review) {Clinical\\interpretation};
+\node[box,right=of review] (act) {Shared decision\\and follow-up};
+\node[box,below=13mm of img] (context) {History, treatment,\\and examination};
+\node[box,below=13mm of act] (patient) {Patient priorities\\and understanding};
+\draw[->] (acq)--(img);\draw[->] (img)--(review);\draw[->] (review)--(act);
+\draw[->] (context)--(review);\draw[->] (patient)--(act);
+\draw[->] (act.north) -- ++(0,8mm) -| (acq.north);
+\node[above=8mm of review,font=\scriptsize] {Follow-up informs the next observation};
+\end{tikzpicture}
+\caption{An original conceptual diagram of clinical interpretation. Arrows denote information or feedback, not validated causal effects. A model's output becomes useful within a larger process. The illustration synthesizes the imaging perspective of \citet{lundervold2019} and the clinical evaluation emphasis of \citet{decide2022}.}
+\label{fig:pathway}
+\end{figure}
+
+\subsection{A published glioma example: from compartments to regional burden}
+\citet{lundervold2026glioma} provide a concrete research counterpart to the hypothetical vignette. Their feasibility pipeline combines multiparametric MRI---T1, gadolinium-enhanced T1, T2, and FLAIR---with deep-learning tumour segmentation and subject-specific anatomical parcellation. It relates central non-enhancing/necrotic tumour, enhancing tumour, and surrounding oedema to brain regions, producing volumes and regional tumour-burden ``hit-plots''. Evaluation included 50 UCSF-PDGM glioblastoma cases and one longitudinal LUMIERE case with six timepoints. The reported agreement supports the evaluated segmentation task; the regional profiles supply anatomical context, while their effect on treatment decisions and outcomes remains to be established.
+
+This example makes the distinction between representation and interpretation tangible: a tumour mask describes spatial membership, a volume summarizes extent, and a regional-burden profile describes overlap with named anatomy. None of these measurements alone establishes tissue viability or the patient's functional experience. The proposed teaching use is to ask what each successive representation preserves and what additional evidence is needed for the clinical conclusion.
+
+Figures~\ref{fig:glioma-source-A3} and~\ref{fig:glioma-source-6} reproduce source Figure A3 and Figure 6, respectively. The original legends retain source numbering; [60] denotes \citet{suter2022}. Detailed descriptions are added here.
+
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.90\linewidth]{figures/lundervold2026-appendix-A3.jpeg}
+\caption[Longitudinal mpMRI and comparator segmentations: source Figure A3]{\textbf{Reproduction of Appendix Figure A3 from \citet{lundervold2026glioma}. Original legend:} ``Example of longitudinal data on GBM from the LUMIERE collection. CT1/T1: Post-/pre-contrast T1-weighted, T2-weighted, and fluid-attenuated inversion recovery (FLAIR). For this individual, the entire contrast enhancement was fully removed. Following a phase of complete response, there was a progression characterised by a highly rapid growth rate. In the present study we process all six mpMRI examinations of Patient-048 under the unified evaluation framework (Results, Figure 6). From Suter et al. [60] \url{https://www.nature.com/articles/s41597-022-01881-7} (CC BY 4.0).''}
+\label{fig:glioma-source-A3}
+\end{figure}
+
+{\small\textbf{Detailed description.} Six columns follow the same published LUMIERE case from baseline and day 3 to weeks 13, 23, 45, and 49. Four axial MRI rows display contrast-enhanced T1 (CT1), unenhanced T1, T2, and FLAIR. The baseline images show a conspicuous lesion with enhancement and surrounding signal abnormality; the immediate postoperative images show the altered tumour bed. The later columns allow visual comparison of the low-enhancement interval and subsequent recurrence. Two lower rows show the corresponding colour-coded DeepBraTumIA and HD-GLIO-AUTO segmentation outputs. These are comparator outputs from the LUMIERE illustration, not the unified SegResNet output plotted next. Their colours should not be transferred to the next graph's legend. The ``No tumor detected'' annotation is an output of the displayed segmentation method, not proof of absence of all tumour cells. A single axial view illustrates morphology, while volumetry uses the three-dimensional masks. The source legend's description of complete removal should likewise be distinguished from the small postoperative enhancing volume estimated by the unified model.}
+
+\medskip
+{\footnotesize\textbf{Attribution.} Image extracted unchanged from Appendix Figure A3, printed p.~28 (PDF p.~29), of \citet{lundervold2026glioma}; the source credits \citet{suter2022}. Both articles identify CC BY 4.0 licensing. Image resized only; original legend retained, with typography reset. Licence: \url{https://creativecommons.org/licenses/by/4.0/}.}
+
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{figures/lundervold2026-figure-6.jpeg}
+\caption[Longitudinal SegResNet volumes: source Figure 6]{\textbf{Reproduction of Figure 6 from \citet{lundervold2026glioma}. Original legend:} ``LUMIERE Patient-048 -- longitudinal tumour volumes from the unified MONAI Bundle BraTS three-compartment SegResNet ($n=6$ timepoints). Per-compartment volume (mL) on a continuous day-resolved time axis: enhancing tumour (ET, red), necrotic core (NCR, blue), tumour core (TC$=$NCR$+$ET, dashed), edoema (ED, green), and whole tumour (WT$=$NCR$+$ED$+$ET, black). RANO labels (Pre-Op, Post-Op, SD, CR, PD, PD) and selected clinical event annotations (post-operative ET drop; recurrence trough/peak) are shown above the trajectories. LUMIERE anonymisation disclosure: the two baseline scans (week-000-1, week-000-2) carry day-resolution from the LUMIERE archive (0 and 3 days, respectively); from week-013 onward LUMIERE reports timepoints as floor-weeks [60], so days for week-013 / -023 / -045 / -049 are computed as week$\times7$ and carry a $\pm3$ day uncertainty.''}
+\label{fig:glioma-source-6}
+\end{figure}
+
+{\small\textbf{Verification note.} The published legend above does not match all plotted encodings. The image actually shows \emph{four} series: WT as solid blue circles, TC as solid orange triangles, ET as solid red squares, and ED as dashed green open circles. NCR is not plotted separately. The image and original legend have been retained without correction; the description below follows the displayed plot.}
+
+\medskip
+{\small\textbf{Detailed description.} The horizontal axis gives days since baseline; the vertical axis gives compartment volumes in millilitres. Six visits correspond to days 0, 3, 91, 161, 315, and 343, with the source's timing qualification retained above. WT falls markedly after the preoperative scan, remains much lower through the middle visits, then rises at the final visit. ET also drops sharply after surgery, stays near the volume floor, and increases again at recurrence. The source text reports WT/ET of 140.1/24.0 mL at baseline, postoperative ET of 3.7 mL, and final WT/ET of 100.0/22.7 mL. The displayed RANO labels identify stable disease (SD), complete response (CR), and progressive disease (PD), in addition to the surgical visits. These clinical categories are annotations, not classifications established by a volume curve alone. Lines connect discrete examinations; they are not continuous observations of tumour growth. TC and WT are composite volumes, so the four plotted quantities should not be summed.}
+
+\medskip
+{\footnotesize\textbf{Attribution.} Image extracted unchanged from Figure 6, printed p.~15 (PDF p.~16), of \citet{lundervold2026glioma}, \copyright~2026 The Author(s), published by Informa UK Limited, trading as Taylor \& Francis Group. CC BY 4.0: \url{https://creativecommons.org/licenses/by/4.0/}. Image resized only; original legend retained, with typography reset.}
+\clearpage
+
+
+A useful exercise (a thought experiment) is to ask three people to state the output they need. The imaging scientist might require a reproducible boundary estimate. The clinician might require evidence that a change alters management. The patient might require an explanation of what remains uncertain and what happens next. These are compatible purposes, but they demand different evaluation targets. Confusing them makes technical improvements look more clinically complete than they are.
+
+\section{Three levels of explanation, plus an explicit context}
+
+Why can an accurate simulation still leave us unsure what a system is doing, mechanistically? David Marr developed his framework in the study of vision, where a description of cells or computer instructions does not by itself explain how an image can support a description of the world. His book \emph{Vision}, first published in 1982 and cited here in its 2010 edition, separates questions that are easily conflated \citep{marr2010}. The motivation is explanatory: understanding a mechanism requires knowing the problem it solves, how it represents and transforms information, and how those operations are physically realized.
+
+Consider estimating the volume of an enhancing lesion on MRI. At the computational level, the task is to quantify the spatial extent of tissue meeting a specified imaging definition, so that examinations can be compared. At the representation-and-algorithm level, a binary mask assigns each voxel to the target or background, and summing the target voxels and multiplying by voxel volume produces an estimate in millilitres. At the implementation level, the mask and summation are stored and executed on physical computing hardware. Knowing the memory layout does not tell us whether enhancement is the right target; knowing the intended comparison does not tell us how the mask was obtained. A clinician tracing the lesion and a network predicting its mask could support the same volume calculation through different processes. This medical example separates agreement on an output from an explanation of the mechanisms producing it.
+
+Marr distinguished a computational account of a task, a representation-and-algorithm account, and an implementation account \citep{marr2010}. The framework is not a rigid pipeline or a ranking in which hardware is more fundamental than purpose. It \emph{asks different questions about the same system}. A task can have multiple algorithms, and an algorithm can have multiple physical realizations. Conversely, the properties of an implementation can constrain which algorithms are feasible.
+
+For segmentation, the computational question concerns what boundary or category should be estimated and why that output matters. The algorithmic question concerns the representation, architecture, loss, and inference procedure. The implementation question concerns numerical precision, memory, devices, and execution. A U-Net's contracting and expanding paths explain aspects of its computational organization \citep{ronneberger2015}; they do not by themselves specify the clinical meaning of its labels. The nnU-Net work further demonstrates how preprocessing, configuration, and training decisions belong to the effective method \citep{isensee2021}.
+
+Lived experience and viability are not simply a fourth Marr level. We place clinical purpose, environment, development, and values around the explanatory framework because they influence what counts as a successful task. Whether a system has experience remains a separate question whose answer cannot be read off an architecture diagram.
+
+\begin{table}[htbp]\centering\small
+\caption{Applying Marr's questions to the running example. The final row is contextual, not a fourth Marr level.}
+\begin{tabularx}{\linewidth}{p{27mm}XX}\toprule
+Question & Medical imaging model & Brain and clinical reasoning \\\midrule
+Purpose & Estimate a defined tissue label or response-related feature. & Interpret evidence to support an appropriate action.\\
+Representation and algorithm & Features, masks, attention operations, losses, and decision rules. & Distributed representations, learning, memory, and inference; mechanisms require evidence.\\
+Implementation & Devices, numerical operations, memory, and software. & Cells, synapses, neuromodulation, bodily systems, and development.\\
+Context & Training population, workflow, incentives, and intended use. & Experience, relationships, bodily needs, and professional obligations.\\\bottomrule
+\end{tabularx}\label{tab:marr}
+\end{table}
+
+The framework also prevents a common rhetorical shortcut: counting parameters and neurons as though they were interchangeable units of intelligence. A parameter is a quantity in an engineered computation; a biological neuron is a dynamic cell within a complex physiological system. Morphological comparisons such as those reviewed by \citet{defelipe2011} establish biological richness, not a conversion factor between brains and models. Similarly, the GPT-4 technical report does not disclose the model size, detailed architecture, hardware, or training compute \citep{openai2023}. Comparisons should use disclosed or measured quantities with clearly defined system boundaries.
+
+\subsection{A dated example: model interfaces and the observability of reasoning}
+The September 2026 source manuscript recorded that OpenAI's API documentation for GPT-6 Astra listed text and image input, text output, reasoning-effort controls, a 1,050,000-token context window, and a maximum output of 128,000 tokens \citep{openaiAstra2026}. These dated details are retained as historical context rather than a current product specification. They describe an interface and resource limits, not a neuron count, a theory of understanding, or an independent estimate of performance. A long context window specifies how much input may be available to a computation; it does not establish reliable recall of every item or autobiographical memory. Model and product configurations should be recorded separately when reproducing an experiment.
+
+Chain-of-thought monitoring raises a different question: can an observable reasoning trace help detect a specified property of the computation or resulting action? A trace may supply useful evidence, but it is not a complete record of internal activity. Research on monitorability emphasizes that relevant computation may remain unexpressed, and that changes in training or reasoning methods can weaken this source of evidence \citep{korbak2025}. A displayed explanation or summary should also be distinguished from the underlying trace available to an evaluator.
+
+The term ``neuralese recurrent loop'' can now be made concrete. In a commentary on GPT-6 Astra, \citet{linch2026} contrasts a loop that feeds generated language back into a model with one that passes continuous numerical states between iterations. The article describes a possible hybrid Astra architecture on the basis of reporting about leaks, rather than a published architecture specification. Its central concern is loss of the readable intermediate record that supports chain-of-thought monitoring. We cite this as a clearly attributed contemporary argument, not as independent confirmation of Astra's internal design.
+
+The underlying computational ideas have primary research examples. \emph{Coconut} abbreviates \emph{Chain of Continuous Thought}: it is a method for reasoning through numerical hidden states rather than emitting a natural-language token at every intermediate step \citep{hao2024}. Its last-layer hidden state---a vector of activations---is fed back as the next input embedding. Training progressively replaces explicit reasoning steps with such latent steps; ordinary token generation can resume to produce an answer. This is a particular model-and-training procedure, not a name for every recurrent network.
+
+Recurrent-depth models instead apply an internal block repeatedly, allocating additional computation before producing an output token \citep{geiping2025}. A schematic description is
+\begin{equation}
+ h^{(k+1)}=F_\theta\!\left(h^{(k)},x\right),\qquad k=0,\ldots,K-1.
+ \label{eq:latent-loop}
+\end{equation}
+Here $x$ denotes the encoded task input or conditioning context; $h^{(k)}\in\mathbb{R}^{d}$ is the numerical latent state after internal step $k$; $d$ is its dimension; $F_\theta$ is the update operation with learned parameters $\theta$; and $K$ is the number of internal updates. The superscript $(k)$ indexes an iteration, not a power. The initial state $h^{(0)}$ is supplied by the model's initialization or input-processing stage. The parameters are held fixed during this schematic inference loop. An actual transformer may maintain a sequence of vectors and cached context, so the equation suppresses implementation details. By contrast, an external text loop decodes and appends tokens between steps. Both can supply additional inference-time computation; neither establishes a human-readable inner language or identifies Astra's internal architecture.
+
+\subsection{From fMRI representations to interpretation and understanding}
+BOLD fMRI and language-model monitoring both require a measurement to be interpreted through a model, but they expose different kinds of evidence. BOLD is a haemodynamic signal related to neural activity, not a direct record of spikes or a transcript of thought \citep{logothetis2001}. Its spatial pooling and delayed temporal response constrain inferences about rapid processing. A chain-of-thought trace is generated symbolic output; an activation probe reads numerical states when these are accessible. Neither channel becomes an explanation simply because an investigator can decode information from it.
+
+Three operations should be distinguished. An \emph{encoding model} predicts measured brain responses from stimulus features, for example contextual language-model embeddings. A \emph{decoder} predicts stimulus content or a report from brain measurements. An \emph{explanatory test} asks whether a proposed feature or mechanism survives a discriminating experiment. For encoding, independent test stories or images are essential, with temporal alignment and feature selection fitted without test leakage. For decoding, comparisons with language-only, image-only, shuffled-input, and zero-input controls establish what the brain signal adds. For explanation, new stimuli or targeted interventions must challenge alternatives. Similar representational geometry is evidence of a relationship under a chosen analysis, not proof of identical computation.
+
+A foundational example is \citet{tang2023}: their fMRI decoder generated language capturing aspects of perceived and imagined speech and silent-video content. Its dependence on participant cooperation illustrates why successful decoding in a trained setting should not be generalized to unrestricted access to thought. More recent work extends the comparison in several directions. The following selection, checked for this revision on 9 September 2026, emphasizes relevance to representation and interpretation rather than claiming exhaustive coverage.
+
+\paragraph{Visual meaning in a language-model space.}
+\citet{doerig2025} showed that embeddings of scene captions predict fMRI responses to viewed scenes and support caption reconstruction. Controlled comparisons implicated contextual information beyond individual words; image networks trained to predict these embeddings also acquired representations aligned with brain responses. This provides a quantitative account of some high-level visual information, while leaving open whether humans use the model's representational format or learning procedure.
+
+\paragraph{Readable hypotheses tested in the scanner.}
+\citet{antonello2026} developed \emph{generative causal testing}: descriptions of what drives a brain-response model are used to generate new linguistic stimuli, and the resulting brain responses test those descriptions. The June 2026 manuscript is reported as accepted in \emph{Nature Neuroscience}. The method connects prediction to experimentally tested selectivity. Manipulating stimulus content strengthens an explanation of response tuning, but does not by itself identify a necessary neural circuit or explain subjective understanding.
+
+\paragraph{Sparse features and competing predictors.}
+In a June 2026 preprint, \citet{lepori2026} replaced dense language-model states with sparse-autoencoder features and included surprisal as a separate predictor. Using 7-T fMRI from eight participants listening to 200 sentences, they identified interpretable response profiles, including sensitivity to people-related content; frontal responses were relatively well explained by surprisal alone. This is a useful bridge between model interpretation and brain encoding, and a reminder to test simpler predictors before attributing explanatory power to a complex embedding.
+
+\paragraph{Inner speech and the contribution of context.}
+The June 2026 \emph{MindAlign} preprint maps fMRI during silent image description into a semantic space, then combines that representation with visual context to prompt a frozen multimodal language model \citep{liu2026mindalign}. The authors report improvements over fMRI-only and random baselines. Because the image supplies information about the intended description, the central explanatory question is what neural input adds beyond an image-only account. The trained task should not be equated with unconstrained inner-speech reading.
+
+\paragraph{A recent decoding failure that sharpens the test.}
+The July 2026 preprint by \citet{suvakovic2026} reports that apparently strong candidate-ranking performance in an fMRI-to-language system remained essentially unchanged when fMRI inputs were zeroed. The result is specific to their system and evaluation; it does not invalidate neural decoding generally. It does show why fluent output and above-chance ranking cannot establish brain-signal use without appropriate controls. Their decoding regimes and test stories also differ across comparisons, limiting broad performance conclusions.
+
+These studies suggest a concrete connection to monitoring LLM inference. A probe can reveal that information is available in a hidden state, just as a decoder can recover information from fMRI; demonstrating that the system \emph{uses} that information requires further evidence. In an accessible model, activation replacement, ablation, or a controlled input change can test whether the candidate representation contributes to an output. In a person, experimentally varied stimuli, behavioural measurements, and appropriately justified neural interventions answer related but non-identical questions. A readable reasoning trace, an activation-based interpretation, and an fMRI reconstruction should therefore be evaluated against a specified target, such as detecting an error or distinguishing two hypotheses, rather than treated as interchangeable windows into thought. Understanding advances when the proposed account predicts what will change under a new test.
+
+\section{Shared vocabulary needs operational definitions}
+\subsection{Representation: similar geometry is informative, but incomplete}
+A representation makes some distinctions available to a downstream process. For a model, this can mean that a layer's activations support a classifier or predict neural responses on held-out stimuli. For a person, representations are inferred from behavior, physiology, and interventions. Their relationships to meaning, action, and experience require additional arguments. ``Representation'' is useful precisely because it is broad, but that breadth can conceal changes in the claim being made.
+
+For a concrete model example, freeze an image encoder and fit a linear classifier to its embeddings to distinguish lesion-containing from lesion-free patches. Evaluate it on patients excluded from both encoder training and classifier fitting. Successful decoding indicates that this distinction is available to that readout under those conditions. It does not show that the encoder's original output head uses it, or that the signal is the lesion rather than a correlated feature.
+
+For a human comparison, ask participants to categorize objects viewed from unfamiliar angles and test whether an independently fitted encoding model predicts their measured visual responses. Behaviour, neural prediction, and a causal intervention address different claims. Recognizing a cup across views, reaching to grasp it, and experiencing its appearance are related phenomena, but a decoder of object category measures only one part of that relationship. An intervention that disrupts grasp selection would add evidence about action; category decoding alone would not establish the experience of seeing.
+
+\citet{yamins2014} tested a more specific connection. They optimized hierarchical models for object categorization and assessed their ability to predict neural responses to images in macaque visual cortex. The stimuli varied object appearance and included background variation. Higher model representations predicted inferior temporal responses, while intermediate representations predicted V4 responses. The important point is that an engineering objective helped select representations informative about independently measured biology; a network was not simply assigned a cortical label because its diagram looked hierarchical. This is a substantive bridge between engineering and neuroscience. Its evidential force depends on the stimuli, recording conditions, model comparisons, and evaluation procedure. Predicting some neural responses does not identify the biological learning rule. It also does not show that every layer has a one-to-one cortical counterpart. A model may approximate an input-output relation while implementing it differently.
+
+An optimization-based approach to neuroscience asks how objective functions, learning rules, and architectures jointly constrain behavior \citep{richards2019}. For medical AI, this motivates comparing models under changed conditions rather than only comparing average test scores. Does a representation retain the lesion information needed after an acquisition change? Does it support appropriate abstention when a required sequence is absent? These questions connect representation to its practical role without assuming that a successful embedding explains the whole person.
+
+An illustrative experiment makes the optimization argument tangible. Train the same architecture with either a lesion-label objective or an image-reconstruction objective; separately hold the objective fixed while changing the architecture or learning rule. Use matched data and report any unmatched training budget. Then test whether lesion information remains decodable and usable after a controlled change in image contrast. The first comparison examines the effect of the objective; the others examine architectural and learning constraints. This is a proposed experiment, not a result attributed to \citet{richards2019}.
+
+In the MRI vignette, compare lesion masks on paired images with identical anatomy but a specified synthetic intensity transformation, and then validate on an independent acquisition setting. Report lesion-wise failures and boundary changes as well as average overlap. Separately remove a required sequence and record whether a system designed to abstain does so. Preserved average performance, preserved lesion information, and appropriate abstention are three distinct outcomes. Synthetic transformations help isolate a question, but do not reproduce every consequence of a scanner change.
+
+\subsection{Attention: a weighting operation and a family of human capacities}
+Attention in a Transformer lets one input position combine information from other positions using weights that depend on their representations. A query specifies what is being matched, keys provide the quantities against which it is matched, and values carry the information to be combined. For example, an image-patch representation can be updated using information from other patches. These are learned numerical transformations, rather than literal questions or labels supplied by a person. Appendix~\ref{app:attention} gives the equation, dimensions, and a worked calculation \citep{vaswani2017}.
+
+This computational definition does not define human attention, which is studied through selective processing, task performance, and neural mechanisms. The shared name invites hypotheses about selection; it does not establish identity. A useful teaching question is: what information is being selected, by which operation, and for which output?
+
+A heatmap is a display format, not a single explanation method. An attention map displays internal weighting coefficients. A gradient saliency map displays how a chosen output locally changes with input values. A perturbation map compares outputs after specified input changes. These quantities answer different questions; none becomes a clinical explanation simply by being overlaid on an anatomical image.
+
+To see the distinction, imagine a classifier whose overlay highlights an enhancing region. This may be compatible with appropriate use of lesion information, but visual plausibility alone cannot exclude dependence on another feature. A saliency method can even produce plausible structure after learned parameters have been randomized. Model-parameter and training-label randomization are therefore useful sanity checks: an explanation that claims to describe a learned decision should be examined for dependence on that learning \citep{adebayo2018}. Passing these checks is a starting point, not proof of a biological mechanism.
+
+A complementary exercise is to change a suspected acquisition cue while preserving the lesion as far as possible, then inspect the prediction and explanation together. Such experiments also need controls: masking a region can create an unfamiliar image, so a changed prediction may reflect the intervention artifact. The explanatory claim and the validity of its test both require scrutiny. When an interpretable model can meet the clinical task, the trade-off should be examined explicitly \citep{rudin2019}.
+
+For a specific controlled example, put a bright site marker outside the anatomy in otherwise identical synthetic images. Change only that marker and recompute the score and maps. The anatomy is exactly preserved by construction, so a score change establishes sensitivity to the marker in this model. In a real exported image, remove or replace an existing border annotation without altering anatomical pixels, and compare with an equally sized control edit elsewhere in the border. The latter comparison helps detect sensitivity to the editing procedure. It still cannot establish that the marker explains all errors or that arbitrary inpainting is a valid counterfactual.
+
+Appendix~\ref{app:maps} and \texttt{code/src/brainsmodels/attention\_maps.py} make these distinctions executable. A small, explicitly specified self-attention sublayer and scalar readout produce an attention matrix, a signed input gradient, and a patch-occlusion map for the same synthetic input. The example also changes a marker while holding the central pattern fixed and randomizes parameters. It is a transparent computational exercise, not a trained clinical Transformer or a reproduction of a saliency validation study.
+
+\subsection{Memory: distinguish parameters, context, retrieval, and recollection}
+For a deployed language-model system, ``memory'' can refer to trained parameters, the current context, an external retrieval store, or an application-maintained record. These differ in persistence, update mechanism, provenance, and access. A statement available through retrieval may disappear when the index changes; a statement encoded in parameters may be difficult to locate or revise. Neither should be casually equated with an autobiographical episode.
+
+For example, trained parameters may support completing a familiar phrase; a current prompt may contain a newly supplied fictional identifier; retrieval may supply a versioned teaching protocol; and an application may reload the preference ``explain abbreviations.'' Only the last three examples require access to those particular records at inference time. Even there, the mechanisms can overlap: a retrieved passage usually becomes part of the generator's context.
+
+Autobiographical remembering adds a different explanatory target. Remembering one's first day in a laboratory can include a place, an event sequence, personal significance, and a sense of having been there. A system could store and accurately reproduce a dated account of that day, but this establishes access to information about an event, not the first-person experience of recollecting it. The distinction does not prove that artificial recollection is impossible; it specifies why factual accuracy alone cannot settle the question.
+
+Consider a report assistant that correctly recalls a patient's stated preference within a conversation. The preference may be present in the current input, loaded from an application record, or retrieved from a document. Correct output alone does not reveal which mechanism supplied it. Removing the earlier message, disabling retrieval, or changing the stored record are different interventions. They help identify the source of the behavior without assuming that the system has recollected an event.
+
+\begin{table}[htbp]\centering\small
+\caption{Four engineering uses of ``memory.'' Persistence depends on the deployed system; these are mechanisms, not human memory categories.}
+\begin{tabularx}{\linewidth}{p{24mm}XX}\toprule
+Mechanism & Concrete illustrative example & A discriminating check \\\midrule
+Parameters & A familiar phrase can be completed without providing its source in the prompt; learned weights influence the completion. & Compare documented model versions or controlled training interventions.\\
+Context & A prompt states that fictional sample Q7 has label blue; the next answer uses that statement. & Remove the relevant passage while holding the other input fixed.\\
+Retrieval & A versioned teaching protocol is retrieved from an index and supplied with the question. & Inspect retrieved sources and repeat with retrieval disabled.\\
+Application record & Software reloads the saved preference ``explain abbreviations at the start of a new session. & Inspect what was saved and what is actually reintroduced.\\\bottomrule
+\end{tabularx}
+\end{table}
+
+Retrieval-augmented generation explicitly combines parametric and external information \citep{lewis2020}. Access to a source does not guarantee that the source was selected correctly or used faithfully. In a clinical report exercise, one should therefore record both the retrieved passage and the generated statement. Provenance is a property to inspect, rather than infer from the confidence of the language.
+
+Biological memory also involves multiple interacting processes. Complementary learning systems theory offers an influential account of rapid acquisition and slower integration \citep{mcclelland1995}. Its value for this discussion is to replace an undifferentiated storage metaphor with questions about learning rates, interference, and generalization. The analogy with engineered retrieval can be productive if we identify the operation being compared and the evidence that would falsify the comparison.
+
+In complementary learning systems theory, rapid hippocampal learning and slower neocortical learning help reconcile two needs: acquiring a particular event and integrating regularities across events without excessive interference \citep{mcclelland1995}. A teaching example is learning a new colleague's name after one introduction while gradually learning the conventions of a new laboratory. These are illustrative cases, not clean anatomical assignments: the theory concerns interacting systems, and learning rate alone does not identify a brain region.
+
+An engineering comparison could store each new meeting note immediately in an external index while updating a general model only periodically. This separates rapid item availability from slower changes in generalization. However, retrieval into a fixed-weight generator does not itself implement hippocampal--neocortical consolidation. To test the narrower analogy, add conflicting records and then revise selected facts. Measure item-specific recall, interference with older items, and transfer to questions whose answers are not copied from any one record. If apparent ``integration'' disappears whenever retrieval is disabled, the claim that knowledge was consolidated into model parameters is unsupported. Conversely, persistent performance alone is insufficient if the answer was already learned; novel controlled facts and held-out questions are needed.
+
+Why introduce a Hopfield network here? It isolates a modest but recognizable operation: recovering a whole pattern from a corrupted cue. Think of recognizing a familiar pattern despite missing or misleading details. In the model, ``remembering'' means that repeated local updates settle into a stored configuration. This makes associative retrieval explicit enough to inspect mathematically \citep{hopfield1982}; it does not model the feeling of recollection or the history of a personal episode.
+
+Its didactic advantage is that storage and retrieval become different operations that students can inspect. During storage, pairwise weights are set from a pattern; during retrieval, those weights remain fixed while the state changes. A partial cue can therefore be completed without an exact address lookup or further weight training. Students can corrupt a cue, predict which unit will change next, and then check both the recovered pattern and the energy. This connects the earlier distinctions between parameters, transient state, and retrieval to an executable mechanism.
+
+Imagine recognizing a familiar melody after hearing only fragments. Pattern completion is the selected functional analogy; the 12 binary units below do not represent a realistic auditory circuit. The model's value is to generate questions: how much corruption can retrieval tolerate, which competing pattern is recovered, and can the dynamics settle confidently into the wrong state? A wrong attractor is especially useful pedagogically because it separates convergence from correctness.
+
+Figure~\ref{fig:hopfield} shows a 12-unit example in which three signs of a stored pattern have been flipped. Each unit is updated in turn using a weighted signal from the others. A scalar energy tracks the settling process. Under the stated assumptions, each actual change lowers the energy, but an unchanged update leaves it flat. Appendix~\ref{app:hopfield} derives this result and connects the equations to the accompanying code. Successful settling is not guaranteed to recover the intended memory in more complex cases: there can be competing or spurious attractors.
+
+Can this tell us how the brain might work? It demonstrates the sufficiency of one recurrent mechanism for content-addressable pattern completion and suggests tests of attractor-based accounts. A biological prediction is that degrading retrieval cues should expose a dependence on circuitry that supports completion. In mice, \citet{nakazawa2002} found impaired recall under reduced spatial cues after a CA3-targeted NMDA-receptor manipulation, despite preserved performance under full cues. This supports a role for CA3-related processes in associative recall; it does not establish the Hopfield update equation or isolate all contributions of encoding and retrieval.
+
+Stronger tests would compare neural population trajectories and behavioural errors across cue quality, competing memories, and interventions, against alternative models such as feed-forward classification. The classical network assumes symmetric weights, binary states, and asynchronous updates, whereas biological circuits have richer dynamics and plasticity. Its energy is a mathematical function, not a measurement of metabolic expenditure. Thus the model can reveal a candidate computational principle and its failure modes while leaving its biological realization open.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/hopfield.pdf}
+\caption{A computed 12-unit Hopfield example with one stored pattern and three flipped bits in the initial cue. The left panel records the energy after individual asynchronous updates; the right panel compares states. The result illustrates associative retrieval under specified assumptions, not human recollection or consciousness. Source code and numeric outputs accompany the paper.}\label{fig:hopfield}
+\end{figure}
+
+\begin{table}[htbp]\centering\small
+\caption{A vocabulary for careful brain--model comparison. Each row identifies a question rather than a verdict on equivalence.}
+\begin{tabularx}{\linewidth}{p{23mm}XX}\toprule
+Term & An operational model meaning & What remains to be established \\\midrule
+Representation & Information usable by a downstream computation. & Which biological or semantic relationships the representation captures.\\
+Attention & Input-dependent weighting in a specified architecture. & Relationship to human selection, control, and awareness.\\
+Memory & Parameters, context, retrieval, or stored application state. & Relationship to learning, consolidation, recollection, and selfhood.\\
+Reasoning & Performance on inference tasks with explicit tests. & Robustness, mechanism, causal competence, and transfer.\\
+Understanding & A stipulated capacity, such as explanation and counterfactual use. & Whether performance supports the intended stronger interpretation.\\\bottomrule
+\end{tabularx}\label{tab:vocabulary}
+\end{table}
+
+\section{Controlled comparison without an essentialist remainder}
+One tempting approach is a ``subtractive comparison'': identify functional counterparts in models and ask what remains distinctive about humans. This is an engaging teaching device, but subtraction can suggest a stronger inference than the experiment supports. If a model succeeds at a task, the result demonstrates that the implemented system is sufficient for that tested behavior under those conditions. It does not establish that its components are necessary for the behavior, or that humans use the same components. If it fails, the cause might be a poor interface, insufficient training, a mismatched task, or a genuine missing capacity.
+
+A stronger protocol therefore starts with a named ability and competing explanations. For example, both a clinician and an image classifier may detect a lesion. One explanation is sensitivity to relevant anatomy; another is reliance on a correlated acquisition cue. Change the cue while preserving the target as far as technically possible, evaluate the change in behavior, and check whether the intervention itself introduces artifacts. Repeat across alternative models and appropriate human comparison groups. Control training exposure and test contamination where feasible, and acknowledge when they cannot be matched.
+
+Agreement in aggregate accuracy is particularly weak evidence for shared mechanisms. Two systems may succeed on different cases, express different uncertainty, or fail for different reasons. Compare error structure, responses to perturbations, and the information available to each system. Ablation can establish dependence on a component within a particular implementation, but the component may be replaceable in a different implementation. These distinctions are also relevant to claims about human-like learning \citep{lake2017}.
+
+\subsection{A transparent shortcut experiment}
+Suppose a binary label $Y$ is balanced and a site marker $S$ agrees with it with probability $a$. A fixed rule $\widehat Y=S$ has expected accuracy $a$. Suppose another binary image feature agrees with the label with probability $0.8$, independently of the site--label relation. A fixed feature rule then has expected accuracy $0.8$ under the stipulated changes. At $a=0.95$, the site rule wins. At $a=0.50$, it falls to chance. At $a=0.05$, its predictions are usually wrong. Figure~\ref{fig:shortcut} follows directly from these assumptions; no classifier has been trained and no hospital data have been analyzed.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\linewidth]{figures/shortcut.pdf}
+\caption{Analytic teaching example of shortcut dependence. The site rule's accuracy equals the marker--label agreement probability. The stable feature rule remains at 80\% by construction. The figure illustrates how a ranking can reverse across environments; it does not estimate the performance of a medical AI system.}\label{fig:shortcut}
+\end{figure}
+
+The broader shortcut-learning problem is documented across deep learning \citep{geirhos2020}. In chest radiography, cross-hospital evaluation has exposed variable generalization and hospital-associated signals \citep{zech2018}. Neither result licenses the assumption that every medical model uses a shortcut. It motivates appropriate tests. Patient-level separation, site-aware evaluation, temporal validation, and inspection of acquisition-related cues answer different leakage and transportability questions. A random split alone may leave important correlations untouched.
+
+\section{Prediction acquires meaning inside a decision}
+A probability is useful only when its target and intended use are clear. Ranking ability, calibration, and utility are distinct properties. A model can rank cases well while giving probabilities that are too extreme. Calibration methods can improve agreement between predicted probabilities and observed frequencies on suitable evaluation data \citep{guo2017}. That improvement should not be presumed to survive every population change. Calibration must be assessed where the output will be used, with uncertainty and subgroup sample size taken seriously.
+
+Even a classifier with fixed sensitivity and specificity changes its positive predictive value when prevalence changes. For prevalence $\pi$, sensitivity $\mathrm{Se}$, and specificity $\mathrm{Sp}$,
+\begin{equation}
+\operatorname{PPV}=\frac{\mathrm{Se}\,\pi}{\mathrm{Se}\,\pi+(1-\mathrm{Sp})(1-\pi)}.
+\end{equation}
+With sensitivity and specificity both set to 90\%, PPV is about 8.3\% at 1\% prevalence, 50\% at 10\%, and 90\% at 50\%. These are exact consequences of a hypothetical model, not published clinical estimates. Figure~\ref{fig:ppv} makes visible why the phrase ``90\% accurate'' is insufficient for judging an individual positive result. The calculation also assumes sensitivity and specificity remain fixed; in practice they can change with case mix and acquisition.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\linewidth]{figures/ppv.pdf}
+\caption{Positive predictive value under fixed 90\% sensitivity and 90\% specificity. The plotted values are calculated from Bayes' rule. Changing prevalence changes the meaning of a positive classification even before considering calibration drift or altered test performance.}\label{fig:ppv}
+\end{figure}
+
+Clinical utility adds the consequences of an action. In a deliberately simplified binary model, let $C_{\mathrm{FP}}$ be the cost of acting when the target condition is absent, and $C_{\mathrm{FN}}$ the cost of not acting when it is present. If correct actions have zero cost, choose the action when
+\begin{equation}
+p > \frac{C_{\mathrm{FP}}}{C_{\mathrm{FP}}+C_{\mathrm{FN}}}.
+\end{equation}
+This is a teaching derivation, not a clinical threshold recommendation. Actual decisions may include treatment harms, delays, competing outcomes, repeated tests, and patient preferences. The mathematical point is that an objective does not specify its own acceptable consequences. Someone must justify the target, the actions, and the values represented by their costs.
+
+\subsection{Evaluate the system people actually use}
+A workflow may change who sees a case, when they see it, and what they believe before reviewing the image. A nominal human checkpoint does not establish effective oversight. The reviewer needs relevant information, sufficient time, the ability to challenge an output, and an actionable fallback. Performance should be assessed for the combined human--AI process, including errors introduced or amplified by that process.
+
+Clinical studies can investigate this process directly. The MASAI randomized mammography screening study illustrates evaluation of an AI-supported reading workflow rather than a model in isolation \citep{masai2023}. Its findings should be interpreted within the intervention and endpoints studied, not generalized to every imaging modality. Reporting guidance provides complementary structure: STARD-AI addresses diagnostic accuracy studies, DECIDE-AI early live clinical evaluation, and TRIPOD-LLM studies involving large language models \citep{stard2025,decide2022,gallifant2025}. A completed checklist is not evidence of benefit; it makes the design and evidence easier to assess.
+
+\begin{table}[htbp]\centering\small
+\caption{Moving from a technical result to justified clinical reliance. These are examples of evidence questions, not a certification checklist.}
+\begin{tabularx}{\linewidth}{p{28mm}XX}\toprule
+Claim & Evidence to examine & What it does not establish alone \\\midrule
+A mask is accurate & Relevant reference labels; overlap and boundary errors; small-lesion failures. & Correct diagnosis, response assessment, or treatment benefit.\\
+A score transports & External, temporal, and subgroup evaluation; calibration and missing-input behavior. & Utility at the intended action threshold.\\
+A report is clearer & Fidelity, omissions, uncertainty preservation, and reader comprehension. & Appropriate advice or improved outcomes.\\
+Oversight works & Observed review behavior, correction, workload, escalation, and fallback. & That a nominal human checkpoint prevents harm.\\
+The system helps & Prospective workflow comparison and outcomes appropriate to intended use. & Durability after model, population, or workflow changes.\\\bottomrule
+\end{tabularx}\label{tab:evidence}
+\end{table}
+
+\section{Embodiment and viability: a hypothesis with limits}
+A useful introduction is the family of \emph{4E approaches}: cognition is considered as embodied, embedded, enactive, and extended \citep{newen2018}. Embodied emphasizes bodily contributions; embedded emphasizes environmental and social supports; enactive emphasizes cognition through active engagement; extended asks whether some tightly integrated external resources constitute parts of a cognitive process. These approaches overlap, but they are not one theory with a single test. Appendix~\ref{app:4e} develops the distinctions through the imaging vignette.
+
+For this paper, their value is to broaden the unit of analysis. A clinician's interpretation depends on a body, a working environment, active inspection, and external records. Whether an external resource merely supports cognition or partly constitutes it is a further philosophical claim \citep{clark1998}. Workflow dependence can be studied without first deciding that stronger question.
+
+A substantive philosophical proposal concerns prediction under viability constraints. Biological cognition occurs in organisms that regulate bodily conditions, develop over time, act in an environment, and can be injured. This gives perception and action a practical significance that is not captured by a task score alone. Predictive and interoceptive accounts make aspects of this proposal computationally explicit \citep{friston2010,seth2013}.
+
+The proposal should not be inflated into the claim that all behavior is governed by a single literal survival objective. People pursue social, intellectual, moral, and self-destructive goals. Nor is embodiment uniquely human: it characterizes many living systems. Calling it the human remainder would therefore confuse a contrast with certain engineered systems and a definition of humanity. The defensible claim is that bodily regulation and lived context deserve explicit consideration when interpreting human cognition and clinical needs.
+
+The artificial side needs equal care. A base language model's next-token training objective is not a complete description of every deployed AI system. Post-training, multimodal input, retrieval, external tools, memory, and robotic interaction alter the system being evaluated. Some artificial systems act through bodies and feedback loops. Being embodied in an engineering sense does not itself settle whether a system has biological needs or experience. Conversely, the absence of biological metabolism is not a proof that experience is impossible.
+
+A more precise comparison therefore names the systems: for example, an adult human regulating bodily state and a specified language-model application with fixed weights, a given context window, and defined tools. It asks which feedback signals are available, what changes through learning, how goals are represented, and what counts as failure. These questions can be investigated without first settling a universal boundary between humans and machines.
+
+\section{Consciousness: preserve the question, discipline the inference}
+``Consciousness'' can name different explanatory targets. Here, \emph{phenomenal consciousness} means subjective experience: there being something it is like to see a colour, feel pain, or hear a sound. \emph{Access consciousness} concerns information being available for use in reasoning, report, and deliberate control \citep{block1995}. The first asks about experience; the second asks about availability for cognitive use. These are conceptual distinctions, not two established anatomical compartments.
+
+Consider seeing a red warning on a display. Its visual appearance illustrates the phenomenal question. Using the warning to explain a concern or decide what to inspect next illustrates the access question. The example distinguishes questions about an ordinary event; it does not demonstrate that the two properties can be cleanly separated experimentally. Wakefulness, selective attention, self-awareness, and verbal report are also relevant concepts, but none should be used as a synonym for all consciousness.
+
+Global neuronal workspace theory proposes that information becomes widely available through interactions among specialized processors. Such broadcasting is a proposed mechanism for aspects of conscious access; it is not simply a restatement of the definition. Integrated information theory makes different commitments about the causal organization relevant to experience \citep{sethbayne2022}. A theory, a measured correlate, and a definition must therefore be kept distinct when interpreting experiments.
+
+An AI system can produce a sentence about pain, uncertainty, or self-awareness. The sentence is an observable output. Whether it provides evidence of experience depends on additional assumptions about the system and the relation between report and consciousness. The same caution applies to the reverse inference: inability to give a verbal report does not show absence of experience. This matters in medicine, where patients may have impaired communication.
+
+Theories of consciousness make different commitments about mechanisms and explanatory targets \citep{sethbayne2022}. An adversarial collaboration testing global neuronal workspace and integrated information theories illustrates how specified predictions can be confronted with data \citep{cogitate2025}. It does not establish a universally accepted test for consciousness in artificial systems. Theory-derived indicator approaches offer a structured way to assess AI while retaining uncertainty about both the theories and their application \citep{butlin2025}.
+
+Two positions deserve a fair hearing. A functionalist approach holds that relevant organization could, in principle, be implemented in more than one substrate. A biologically oriented approach argues that details of living organization may matter in ways current models omit. Neither position is resolved by a fluent conversation or by showing that a model uses matrix multiplication. The purpose of the keynote is to explain why the question remains open and how stronger evidence might be sought, not to announce that consciousness has been detected or excluded.
+
+There is also an ethical distinction between determining a machine's possible moral status and determining its effect on people. A nonconscious system could profoundly alter a patient's care, expectations, or opportunities. Clinical responsibility therefore cannot wait for agreement about machine experience. People and institutions remain the parties who select, deploy, oversee, and respond to the consequences of clinical systems.
+
+\section{A report exercise that bridges into RadKom}
+The preliminary school programme places this keynote before the RadKom workshop on patient-friendly radiology language. The following invented sentence offers a short exercise without exposing patient information: \emph{``The enhancement is indeterminate; treatment-related change and progression remain possible.''} Ask participants to produce a plain-language rendering while preserving both possibilities and the uncertainty.
+
+A reasonable answer is: \emph{``The scan shows a change whose cause is not yet clear. It may be related to treatment, or it may mean the tumour has grown.''} This wording is an educational example, not patient advice. It does not add an unsupported treatment recommendation, claim that further imaging has already been ordered, or convert a possibility into a diagnosis. The omission of a definite plan is intentional because the source sentence does not supply one.
+
+A technically fluent model may make the passage shorter and warmer while changing its meaning. An expert may preserve meaning while using language that is hard to understand. These are separate dimensions and should be evaluated separately. An appropriate exercise records the input, exact model or system version, prompt, output, and human revisions. Reviewers assess contradiction, unsupported additions, omissions, uncertainty, and readability. Patient or public involvement should shape what counts as understandable communication in the intended setting.
+
+This example also connects to a linguistic debate. Bender and Koller distinguish linguistic form from meaning and caution against unexamined claims of understanding \citep{bender2020}. Their argument concerns the relationship between a learning setup and a stronger semantic claim; it should not be turned into a blanket empirical verdict on all multimodal or interactive AI. For this exercise, the operational question is more tractable: did the transformation preserve the source's clinically relevant propositions and their uncertainty?
+
+\section{Teaching transferable judgment}
+A mixed cohort benefits when each technical concept ends in an interpretable question. After the attention example, ask what operation it implements; use Appendix~\ref{app:attention} for the calculation. After the Hopfield example, ask which assumptions ensure energy decreases. After the shortcut plot, ask which test would distinguish useful anatomy from acquisition cues. After the prevalence calculation, ask what additional information is needed before acting. The same activity can be approached computationally by one participant and conceptually by another.
+
+The educational aim is not simply to teach students how to obtain an answer from a model. It is to make them specify what they would accept as evidence and notice when an answer exceeds that evidence. A practical assessment can ask students to submit a result together with one falsification attempt: a changed population, a perturbed input, a contradictory example, or a check of the source text. An unsuccessful model can still teach something if the failure is characterized accurately; a successful one can still be misunderstood.
+
+The accompanying code uses small deterministic examples that run on an ordinary CPU. No large-model download is required. Keeping the demonstrations modest supports inspection and reproducibility. It also avoids turning a keynote into a comparison of opaque hardware estimates. For substantive model experiments, resource reporting should name the model, precision, context, software, workload, and measurement method. Memory estimates for weights alone exclude runtime buffers and other overhead.
+
+A useful collaboration between the two school communities would pair a computational claim with a conceptual audit. One participant states the target, data, and test. Another asks what the target leaves out, whose purposes it serves, and which stronger interpretations might be mistakenly inferred. Both then revise the experiment. This is not an opposition between engineering and ethics; the questions jointly determine whether the technical result is relevant to the proposed use.
+
+\section{Conclusion}
+AI can serve as a comparative instrument for studying human abilities and as a practical instrument for medicine. Its value in both roles increases when the claims become narrower and more testable. Shared outputs do not by themselves imply shared mechanisms. Shared terminology does not settle shared experience. A successful model needs a justified connection to the actions people take with it.
+
+The most useful conclusion for clinical integration is therefore a disciplined allocation of questions. Ask the model what it can estimate under specified conditions. Ask the experiment which alternative explanations have been excluded. Ask the clinical team and patient what matters for the decision. Being human need not be defined as whatever the latest model cannot yet do. In medicine, our responsibilities become clearer when we understand both the power of these models and the lives into which their outputs enter.
+
+\section*{Reproducibility and provenance}
+The worked numerical examples are synthetic; the published glioma study and fMRI findings are identified separately as empirical research. The two reproduced figures contain the published LUMIERE case information; no underlying imaging volumes or additional patient records are included. This publication copy retains the September-based manuscript and its reproducible examples, with presentation sources and development archives preserved separately in a private development repository. The longer paper supplies background rather than a speaking script for the 30-minute keynote. The original twelve notebooks and August perspective remain supplementary resources; their section references refer to that background paper. The attention-map notebook accompanies the present manuscript. Historical recollections remain author-provided context. This AI-assisted working draft remains subject to the named author's scientific judgment. Source, dependencies, build commands, and the access status of the companion material are recorded in \url{https://github.com/arvidl/brains-to-models-publication}.
+
+\FloatBarrier
+\input{appendices}
+\FloatBarrier
+\clearpage
+\setlength{\bibsep}{3pt}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

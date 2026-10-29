@@ -1,0 +1,32 @@
+[project]
+name = "brainsmodels"
+version = "0.1.0"
+description = "Computational illustrations for From Brains to Models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Arvid Lundervold" }]
+dependencies = [
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+    "ipykernel>=6.29,<7",
+    "ipywidgets>=8.1",
+    "pip>=24.0",
+    "ipympl>=0.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyter>=1.0",
+    "nbconvert>=7.16",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+"" = "code/src"
+
+[tool.setuptools.packages.find]
+where = ["code/src"]
