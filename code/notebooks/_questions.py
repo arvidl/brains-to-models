@@ -1,8 +1,7 @@
 """Append Questions for reflection cells to notebooks 00–07 (including b).
 
-Five questions per notebook, written against the two themes and for both
-audiences. Inserted immediately before Further reading. The two-theme
-opener lives only in the Further reading cell; do not repeat it here.
+Five questions per notebook for the biomedical and computational reading
+paths. Inserted immediately before Further reading.
 
 Regenerate with:  .venv/bin/python code/notebooks/_questions.py
 """
@@ -10,14 +9,7 @@ Regenerate with:  .venv/bin/python code/notebooks/_questions.py
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
-
-_HERE = Path(__file__).resolve().parent
-if str(_HERE) not in sys.path:
-    sys.path.insert(0, str(_HERE))
-
-from _reading import T
 
 ROOT = Path(__file__).resolve().parents[2]
 NB = ROOT / "code" / "notebooks"

@@ -18,19 +18,18 @@ This publication copy contains the paper, computational material and final 30-mi
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
 | [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
 | [Slide-to-resource guide](talk/resources.md) | All 25 slides, local examples and pinned external implementations |
-| [August background paper](paper/background/august-perspective.pdf) | Section numbering used by notebooks 00–07, including their lettered companions |
 
 This repository is public. Every notebook has an **Open in Colab** badge and runs on a standard CPU runtime. After dependencies are installed, the default numerical examples also run locally without network services, API keys, model downloads or patient data.
 
-## Paper and provenance
+## Paper
 
-The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. 
+The paper connects clinical interpretation and brain–model comparisons with numerical verification of AI-assisted tumor-growth code. A short [provenance note](paper/background/README.md) identifies the preserved background manuscript.
 
 ## Run the notebooks
 
 For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebook 05b also enables Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
 
-Each notebook includes learning goals, two reading paths (clinical/neuroscience and mathematical), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions provide the broader conceptual background; 08–13 give focused current-paper calculations. See the guide for direct Colab links to all eighteen.
+Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification. See the guide for direct Colab links to all eighteen.
 
 Use Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Clone this repository using your GitHub access, then change to the checkout directory containing `pyproject.toml` and `uv.lock`:
 

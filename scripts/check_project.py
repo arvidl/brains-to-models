@@ -91,6 +91,27 @@ def main():
                  f"blob/main/code/notebooks/{path.name}")
         introduction = "".join(notebook["cells"][0]["source"])
         assert badge in introduction, f"Missing or incorrect Colab badge: {path.name}"
+        markdown = "\n".join("".join(cell["source"]) for cell in notebook["cells"]
+                             if cell["cell_type"] == "markdown")
+        resource_lines = [line for line in markdown.splitlines()
+                          if line.startswith("**Related resources:**")]
+        expected_resources = (
+            "**Related resources:** "
+            "[Paper](https://github.com/arvidl/brains-to-models/blob/main/paper/main.pdf)"
+            " · [Presentation guide]"
+            "(https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md)"
+        )
+        assert resource_lines == [expected_resources], \
+            f"Missing or repeated course navigation: {path.name}"
+        assert expected_resources in introduction, path.name
+        editorial_history = re.search(
+            r"August (?:background|perspective|manuscript)|September (?:draft|manuscript)"
+            r"|Section numbers in the background readings|Section references follow"
+            r"|(?:20|30)[-– ]minute (?:talk|presentation)", markdown,
+            re.IGNORECASE,
+        )
+        assert editorial_history is None, \
+            f"Editorial history in {path.name}: {editorial_history.group(0)}"
         setup = next(cell for cell in notebook["cells"] if cell["cell_type"] == "code")
         assert "setup" in setup["metadata"].get("tags", []), path.name
         setup_source = "".join(setup["source"])
@@ -145,7 +166,8 @@ def main():
     assert re.fullmatch(r"[0-9a-f]{64}", resources["deck"]["sha256"])
 
     print(f"PASS: publication contents; {len(keys)} bibliography entries; paper figures; "
-          f"local links; {len(notebooks)} notebooks; numerical references; Python syntax; "
+          f"local links; {len(notebooks)} notebooks with course navigation; "
+          f"numerical references; Python syntax; "
           f"final PPTX checksum, size, package and {deck['slide_count']} slides.")
 
 

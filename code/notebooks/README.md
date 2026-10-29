@@ -1,8 +1,8 @@
 # Notebook guide
 
-These eighteen independent notebooks accompany *From Brains to Models*. Each starts with an **Open in Colab** badge, learning goals, concepts for clinicians/neuroscientists and mathematically inclined readers, and setup instructions. Read the explanations beside the calculations, predict a result before changing a parameter, and distinguish what was measured from its possible biological interpretation.
+These eighteen independent notebooks accompany *From Brains to Models* for MSc and PhD students in biomedicine, imaging and computational science. Each includes an **Open in Colab** badge, learning goals, setup instructions and two reading paths explaining the concepts and notation used in its calculations. Read the explanations beside the calculations, predict a result before changing a parameter, and use the interpretation questions to design a further test.
 
-The [current paper](../../paper/main.pdf) and [slide-to-resource guide](../../talk/resources.md) connect the examples to the 30-minute presentation. Section numbers in the background readings for notebooks 00–07 and their lettered companions refer to the preserved [August perspective](../../paper/background/august-perspective.pdf).
+**Related resources:** [Paper](../../paper/main.pdf) · [Presentation guide](../../talk/resources.md)
 
 ## Choose a notebook
 
@@ -37,8 +37,8 @@ For local use, follow the [environment instructions](../../README.md#run-the-not
 
 ## Using the notebooks for teaching
 
-Read the clinical/neuroscience explanation for the observable contrast and its interpretation. Use the mathematical path for the variables, objective and update rule. The paths describe the same calculation. Neither needs to be completed before the other.
+Read the biomedical/imaging explanation for the observable contrast and its interpretation. Use the computational path for the variables, objective and update rule. The paths describe the same calculation. Neither needs to be completed before the other.
 
 For notebook 09's interpretation exercise, run cells individually and pause before displaying an overlay. Notebook 05b has static figures and a GIF as well as its interactive panel; browser widget support affects interaction, not the underlying descent calculation. Notebook 13's independent references run by default; its optional audit of a pinned external 3-D solver is a separate, explicitly reported step.
 
-The [instructor discussion notes](questions_responses.md) and embedded exercises extend the background notebooks. For a short session focused on the presentation, start with 10, 11 or 12, then use 08, 09 or 13 for a more detailed investigation. Use 00–07 and their lettered companions to develop the broader concepts. All default calculations are teaching models; each notebook states what its results establish and which biological or clinical questions require further evidence.
+The [instructor discussion notes](questions_responses.md) and embedded exercises extend the conceptual notebooks. For a short session focused on the presentation, start with 10, 11 or 12, then use 08, 09 or 13 for a more detailed investigation. Use 00–07 and their lettered companions to develop the broader concepts. Each notebook identifies what its calculation measures and the observations or controls needed to investigate a biological or imaging application.

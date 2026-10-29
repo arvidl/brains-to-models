@@ -1,5 +1,5 @@
-# August background perspective
+# Repository provenance
 
-[august-perspective.pdf](august-perspective.pdf) is the 34-page August manuscript, before the September consolidation. Notebooks 00–07, including their lettered companions, refer to its section numbers.
+[august-perspective.pdf](august-perspective.pdf) is a preserved background manuscript from the development of this course material. It remains available as an archival reading; the notebooks explain their own concepts and notation and link directly to scientific sources.
 
-The active paper is [main.tex](../main.tex), with a [compiled PDF](../main.pdf). The background PDF is retained as a readable companion to the original notebooks. Its earlier LaTeX sources and development history remain in the separate private development repository; that history is not included in this publication copy.
+Use the [paper](../main.pdf), its [LaTeX source](../main.tex) and the [presentation guide](../../talk/resources.md) for the course. Development sources and history are retained in a separate private repository.
