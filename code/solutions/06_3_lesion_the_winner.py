@@ -30,10 +30,4 @@ intact = ws.run_trial("intact", ws.STRONG_PEAK, ws.RUNNER_PEAK)
 lesion = ws.run_trial("lesion count", 0.0, ws.STRONG_PEAK)
 print("intact :", intact.occupants, "ignition_t", intact.ignition_t)
 print("lesion :", lesion.occupants, "ignition_t", lesion.ignition_t)
-print(
-    "\nWhoever crosses the bar is broadcast. Remove the original winner's "
-    "drive and the runner occupies the slots. The workspace did not "
-    "interpret the pulse; it admitted the largest local activities. "
-    "That is access as a bottleneck, not a mind, and not a clinical "
-    "neglect syndrome."
-)
+print('Removing one drive changes which module crosses the threshold and enters the workspace. The experiment tests the implemented selection rule.')

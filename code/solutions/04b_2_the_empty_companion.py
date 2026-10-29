@@ -32,10 +32,4 @@ for cell in QUADRANTS:
 print()
 empty = [c for c in QUADRANTS if not c.companion]
 print(format_quadrant(empty[0]))
-print(
-    "\nThinking rationally has no extra toy because a scratchpad is still "
-    "next-token prediction with a longer prefix. A notebook that printed "
-    "a 'therefore' and called it a proof would be the misleading toy: it "
-    "would look like System 2 and implement the same objective as "
-    "notebook 01. The empty companion is the claim."
-)
+print('The missing companion marks a gap in this collection. A useful addition could compare generated arguments with a proof checker or independently verified answers. The training objective alone does not determine whether reasoning succeeds.')

@@ -32,10 +32,4 @@ for leak in (0.05, 0.20, 0.80):
     net.train(x, y, n_epochs=25, seed=SEED)
     acc = float(np.mean(net.predict(x, seed=SEED) == y))
     print(f"leak {leak:.2f}  train acc {acc:.2f}")
-print(
-    "\nLeak changes how long a spike is remembered inside one trial. It is "
-    "a time-constant, not a layer. On a linearly separable cloud it barely "
-    "moves the score; XOR would still be out of reach. Do not read a "
-    "membrane parameter as architectural depth, and do not read this cell "
-    "as cortex."
-)
+print('Leak changes membrane-state decay within a trial. Report its measured effect here; changing leak leaves the architecture and update rule fixed.')

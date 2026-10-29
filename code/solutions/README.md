@@ -1,6 +1,6 @@
 # Notebook exercises
 
-Each of notebooks 01–07 (including `b` companions) ends with three
+Each of notebooks 01–07 (including lettered companions) ends with three
 exercises. Solutions live here so they can be `%load`-ed from a clone:
 
 ```
@@ -20,11 +20,11 @@ Regenerate the `.py` files and the notebook cells with:
 These are teaching checks, not new measurements. They do not write
 `paper/figures/`.
 
-Notebooks 00–07 also end with **Questions for reflection** (ten questions
-against the two themes, for both audiences) and **Further reading**
-(annotated core references). The two-theme opener is only in Further
-reading. Short instructor notes (not a quiz key) reprint each question
-in `code/notebooks/questions_responses.md`. Regenerate with:
+Notebooks 00–07 also include five **Questions for reflection** and a concise
+**Further reading** list. Instructor discussion notes reprint each question in
+[questions_responses.md](../notebooks/questions_responses.md). These are sample
+answers, with scope and assumptions stated. Regenerate the questions, reading
+lists and notes with:
 
 ```bash
 .venv/bin/python code/notebooks/_questions.py

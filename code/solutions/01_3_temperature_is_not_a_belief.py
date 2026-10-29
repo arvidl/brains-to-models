@@ -42,9 +42,4 @@ for T in temps:
     print(f"T={T:<4}  unique first-words {uniq:2d}  object hits {hits}")
     print("   e.g.", texts[0][len(prompt) : 28])
 
-print(
-    "\nT=0 repeats the mode. Raising T spreads mass; more object-words appear, "
-    "and so do broken spellings. Temperature rescales a categorical. It does not "
-    "add a world that could make one completion true of a particular cat. A "
-    "confident sample is a peaked next-character distribution, not a belief."
-)
+print('Temperature rescales the next-character distribution. Compare repetition and variation in the samples; sampling sharpness alone does not measure factual accuracy or understanding.')

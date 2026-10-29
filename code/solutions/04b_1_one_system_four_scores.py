@@ -26,17 +26,10 @@ SEED = set_seed(DEFAULT_SEED)
 plt.rcParams.update({"figure.dpi": 120, "font.size": 10})
 
 from brainsmodels.four_views import format_quadrant, lookup
-for query in ("errors", "proof", "imitation", "goals"):
+for query in ("mechanisms", "validity", "imitation", "goals"):
     hits = lookup(query)
     print(f"query {query!r}  →  {len(hits)} cell(s)")
     for cell in hits:
         print(" ", cell.title, "—", cell.verdict)
     print()
-print(
-    "A note-completer can copy a documented bias from discharge text "
-    "(thinking humanly), emit a fluent but unproved plan (thinking "
-    "rationally), pass a short Turing-style screen (acting humanly), and "
-    "still have its objective added after pretraining (acting rationally). "
-    "One architecture; four scores. Notebook 04 is the upper-left toy. "
-    "The other three cells are verdicts, not extra nets."
-)
+print('The catalog lists four evaluation criteria. For a clinical note-completer, specify a behavioral or mechanistic comparison, a validity check, an imitation test and an explicit decision objective. No scores are measured here.')

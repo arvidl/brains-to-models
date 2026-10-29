@@ -52,9 +52,4 @@ axes[1].set_ylabel("hidden unit")
 fig.colorbar(im, ax=axes[1], fraction=0.046)
 plt.tight_layout()
 plt.show()
-print(
-    "LIF: each synapse saw a pre-count and a post-count. MLP: every hidden "
-    "weight saw a scalar that had already been multiplied by the downstream "
-    "error. Same point cloud; the elementary increment is not the same "
-    "object. That is the §4 claim, not a verdict on which rule is 'more biological'."
-)
+print('The local count-based update and backpropagated gradient update different quantities. Inspect both rules; successful classification alone cannot identify which rule a biological circuit uses.')

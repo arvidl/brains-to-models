@@ -1,13 +1,11 @@
 """T-maze: active inference versus Q-learning.
 
-Classic four-location maze (center, cue, left arm, right arm). A hidden
-context places the reward in one arm; the cue location reveals it without
-risk. Active inference visits the cue first because expected free energy
-has an epistemic term. ε-greedy Q-learning must stumble into the same
-structure through reward.
-
-The task is the one used in the pymdp T-maze demo; the EFE loop here is
-NumPy so the figure stays dependency-light.
+Four locations form a star: center connects to cue and two terminal arms.
+A hidden context places reward in one arm. Known-model belief planners
+are compared with a tabular learner that initially knows no action values.
+The reward-only planner controls for the instrumental value of information.
+This simplified task is inspired by T-maze examples, not a pymdp replica
+or a controlled comparison of active inference with reinforcement learning.
 
 References: Friston et al., Neural Computation (2017); Sajid et al. (2021).
 """
@@ -36,6 +34,12 @@ REWARD_LEFT, REWARD_RIGHT = 0, 1
 # cue: 0 = none, 1 = reward-left, 2 = reward-right
 # rew: 0 = neutral, 1 = reward, 2 = punish
 N_CUE, N_REW = 3, 3
+
+
+def available_actions(loc: int) -> tuple[int, ...]:
+    """Stay or traverse one edge; entering an arm ends the trial."""
+    return {CENTER: (CENTER, CUE, LEFT, RIGHT), CUE: (CENTER, CUE),
+            LEFT: (), RIGHT: ()}[loc]
 
 
 def repo_root() -> Path:
@@ -100,6 +104,8 @@ class TMaze:
         return loc, cue, rew
 
     def step(self, action: int) -> tuple[tuple[int, int, int], float]:
+        if action not in available_actions(self.location):
+            raise ValueError("Move along one maze edge; arms are terminal.")
         self.location = int(action)
         loc, cue, rew = self.observe()
         reward = {0: 0.0, 1: 1.0, 2: -1.0}[rew]
@@ -112,24 +118,28 @@ class TMaze:
 
 
 class ActiveInferenceAgent:
-    """Known generative model; policies scored by expected free energy."""
+    """Finite-horizon belief planner: negative utility minus information gain.
+
+    Future actions depend on the observations received. All possible outcomes
+    are averaged, rather than treating one imagined observation as certain.
+    This explicit utility/IG objective is a teaching approximation to EFE.
+    """
 
     def __init__(
         self,
-        horizon: int = 2,
-        gamma: float = 8.0,
+        horizon: int = 3,
         cue_accuracy: float = 1.0,
-        prefer_reward: float = 2.0,
-        prefer_punish: float = -4.0,
+        prefer_reward: float = 1.0,
+        prefer_punish: float = -1.0,
+        epistemic_weight: float = 1.0,
     ) -> None:
         self.horizon = horizon
-        self.gamma = gamma
+        if horizon < 1 or not 0 <= cue_accuracy <= 1:
+            raise ValueError("Use a positive horizon and cue accuracy in [0, 1].")
         self.cue_accuracy = cue_accuracy
+        self.epistemic_weight = epistemic_weight
         self.C_rew = np.array([0.0, prefer_reward, prefer_punish])
         self.qs_ctx = np.array([0.5, 0.5])
-        self.policies = np.array(
-            np.meshgrid(*[np.arange(N_LOC)] * horizon)
-        ).T.reshape(-1, horizon)
 
     def reset(self) -> None:
         self.qs_ctx = np.array([0.5, 0.5])
@@ -191,38 +201,50 @@ class ActiveInferenceAgent:
         return h_prior - h_post
 
     def expected_free_energy(self, loc: int, qs_ctx: FloatArray, policy: IntArray) -> float:
-        g = 0.0
-        here = loc
-        belief = qs_ctx.copy()
-        for action in policy:
-            here = int(action)
-            _, p_rew = self._predict_obs(here, belief)
-            pragmatic = float(p_rew @ self.C_rew)
-            epistemic = self._info_gain_one_channel(here, belief)
-            g += -pragmatic - epistemic
-            # update predicted belief as if the most likely informative obs arrived
-            if here == CUE:
-                p_cue, _ = self._predict_obs(here, belief)
-                o = int(np.argmax(p_cue))
-                logp = np.log(belief + 1e-12)
-                for ctx in (REWARD_LEFT, REWARD_RIGHT):
-                    logp[ctx] += np.log(self._p_cue(here, ctx, o) + 1e-12)
-                belief = _softmax(logp)
-            elif here in (LEFT, RIGHT):
-                o = int(np.argmax(p_rew))
-                logp = np.log(belief + 1e-12)
-                for ctx in (REWARD_LEFT, REWARD_RIGHT):
-                    logp[ctx] += np.log(self._p_rew(here, ctx, o) + 1e-12)
-                belief = _softmax(logp)
-        return g
-
-    def act(self, loc: int) -> int:
-        scores = np.array(
-            [self.expected_free_energy(loc, self.qs_ctx, pi) for pi in self.policies]
+        """Expected score of a fixed open-loop policy (for inspection)."""
+        if not len(policy) or not available_actions(loc):
+            return 0.0
+        action = int(policy[0])
+        if action not in available_actions(loc):
+            return float("inf")
+        return self._immediate(action, qs_ctx) + sum(
+            probability * self.expected_free_energy(action, posterior, policy[1:])
+            for probability, posterior in self._outcomes(action, qs_ctx)
         )
-        # minimize G; softmax over -gamma G
-        q_pi = _softmax(-self.gamma * scores)
-        return int(self.policies[int(np.argmax(q_pi)), 0])
+
+    def _outcomes(self, action: int, belief: FloatArray):
+        for cue in range(N_CUE):
+            for rew in range(N_REW):
+                joint = belief * np.array([
+                    self._p_cue(action, ctx, cue) * self._p_rew(action, ctx, rew)
+                    for ctx in (REWARD_LEFT, REWARD_RIGHT)
+                ])
+                probability = float(joint.sum())
+                if probability > 1e-12:
+                    yield probability, joint / probability
+
+    def _immediate(self, action: int, belief: FloatArray) -> float:
+        utility = float(self._predict_obs(action, belief)[1] @ self.C_rew)
+        return -utility - self.epistemic_weight * self._info_gain_one_channel(action, belief)
+
+    def action_scores(self, loc: int, belief: FloatArray, horizon: int) -> dict[int, float]:
+        def continuation(action, posterior):
+            if horizon <= 1 or not available_actions(action):
+                return 0.0
+            return min(self.action_scores(action, posterior, horizon - 1).values())
+        return {
+            action: self._immediate(action, belief) + sum(
+                probability * continuation(action, posterior)
+                for probability, posterior in self._outcomes(action, belief)
+            )
+            for action in available_actions(loc)
+        }
+
+    def act(self, loc: int, horizon: int | None = None) -> int:
+        scores = self.action_scores(loc, self.qs_ctx, self.horizon if horizon is None else horizon)
+        if not scores:
+            raise ValueError("The trial has ended.")
+        return min(scores, key=scores.get)
 
 
 # ---------------------------------------------------------------------------
@@ -231,43 +253,56 @@ class ActiveInferenceAgent:
 
 
 class QLearningAgent:
-    """ε-greedy tabular Q-learning. State = (location, cue memory)."""
+    """ε-greedy Q-learning on (moves left, location, cue memory)."""
 
     def __init__(
         self,
         alpha: float = 0.25,
-        gamma: float = 0.9,
+        gamma: float = 1.0,
         epsilon: float = 0.25,
         seed: int = DEFAULT_SEED,
+        max_steps: int = 3,
     ) -> None:
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon = epsilon
         self.rng = np.random.default_rng(seed)
         # cue memory: 0 = unknown, 1 = left, 2 = right
-        self.Q = np.zeros((N_LOC, 3, N_LOC))
+        self.max_steps = max_steps
+        self.steps_left = max_steps
+        self.Q = np.zeros((max_steps + 1, N_LOC, 3, N_LOC))
         self.cue_mem = 0
 
-    def reset(self) -> None:
+    def reset(self, n_steps: int | None = None) -> None:
+        self.steps_left = self.max_steps if n_steps is None else n_steps
+        if not 1 <= self.steps_left <= self.max_steps:
+            raise ValueError("Trial length exceeds the configured Q-table horizon.")
         self.cue_mem = 0
 
-    def state(self, loc: int) -> tuple[int, int]:
-        return loc, self.cue_mem
+    def state(self, loc: int) -> tuple[int, int, int]:
+        return self.steps_left, loc, self.cue_mem
 
     def act(self, loc: int) -> int:
+        actions = np.array(available_actions(loc))
+        if not len(actions) or self.steps_left == 0:
+            raise ValueError("The trial has ended.")
         if self.rng.random() < self.epsilon:
-            return int(self.rng.integers(0, N_LOC))
-        q = self.Q[loc, self.cue_mem]
-        best = np.flatnonzero(q >= q.max() - 1e-12)
+            return int(self.rng.choice(actions))
+        q = self.Q[self.steps_left, loc, self.cue_mem, actions]
+        best = actions[np.flatnonzero(q >= q.max() - 1e-12)]
         return int(self.rng.choice(best))
 
     def update(self, loc: int, action: int, reward: float, loc_next: int, cue: int) -> None:
-        s = (loc, self.cue_mem)
+        s = self.state(loc)
         if cue in (1, 2):
             self.cue_mem = cue
-        s2 = (loc_next, self.cue_mem)
-        td = reward + self.gamma * np.max(self.Q[s2]) - self.Q[s]
-        self.Q[s] += self.alpha * td
+        self.steps_left -= 1
+        s2 = self.state(loc_next)
+        actions = available_actions(loc_next)
+        future = float(np.max(self.Q[s2][list(actions)])) if actions and self.steps_left else 0.0
+        chosen = (*s, action)
+        td = reward + self.gamma * future - self.Q[chosen]
+        self.Q[chosen] += self.alpha * td
 
 
 # ---------------------------------------------------------------------------
@@ -283,6 +318,15 @@ class TrialTrace:
     context: int
 
 
+def cue_before_arm(locations: list[int]) -> bool:
+    for loc in locations[1:]:
+        if loc == CUE:
+            return True
+        if loc in (LEFT, RIGHT):
+            return False
+    return False
+
+
 def run_trial_aif(
     env: TMaze,
     agent: ActiveInferenceAgent,
@@ -294,13 +338,15 @@ def run_trial_aif(
     agent.infer_context(loc, cue, rew)
     locations = [loc]
     rewards = [0.0]
-    for _ in range(n_steps):
-        action = agent.act(loc)
+    for step in range(n_steps):
+        if not available_actions(loc):
+            break
+        action = agent.act(loc, horizon=min(agent.horizon, n_steps - step))
         (loc, cue, rew), r = env.step(action)
         agent.infer_context(loc, cue, rew)
         locations.append(loc)
         rewards.append(r)
-    return TrialTrace(locations, rewards, CUE in locations[1:], env.context)
+    return TrialTrace(locations, rewards, cue_before_arm(locations), env.context)
 
 
 def run_trial_ql(
@@ -311,37 +357,44 @@ def run_trial_ql(
     learn: bool = True,
 ) -> TrialTrace:
     loc, cue, rew = env.reset(context=context)
-    agent.reset()
+    agent.reset(n_steps=n_steps)
     if cue in (1, 2):
         agent.cue_mem = cue
     locations = [loc]
     rewards = [0.0]
     for _ in range(n_steps):
+        if not available_actions(loc):
+            break
         action = agent.act(loc)
         (loc2, cue, rew), r = env.step(action)
         if learn:
             agent.update(loc, action, r, loc2, cue)
         else:
+            agent.steps_left -= 1
             if cue in (1, 2):
                 agent.cue_mem = cue
         loc = loc2
         locations.append(loc)
         rewards.append(r)
-    return TrialTrace(locations, rewards, CUE in locations[1:], env.context)
+    return TrialTrace(locations, rewards, cue_before_arm(locations), env.context)
 
 
 def run_experiment(
-    n_trials: int = 40,
+    n_trials: int = 400,
     n_steps: int = 3,
     seed: int = DEFAULT_SEED,
 ) -> dict[str, list[TrialTrace]]:
+    contexts = np.random.default_rng(seed).integers(0, 2, size=n_trials)
     env_aif = TMaze(seed=seed)
-    env_ql = TMaze(seed=seed + 1)
+    env_ql = TMaze(seed=seed)
+    env_reward = TMaze(seed=seed)
     aif = ActiveInferenceAgent()
-    ql = QLearningAgent(seed=seed + 2)
-    traces_aif = [run_trial_aif(env_aif, aif, n_steps=n_steps) for _ in range(n_trials)]
-    traces_ql = [run_trial_ql(env_ql, ql, n_steps=n_steps) for _ in range(n_trials)]
-    return {"aif": traces_aif, "ql": traces_ql}
+    ql = QLearningAgent(seed=seed + 2, max_steps=n_steps)
+    reward_only = ActiveInferenceAgent(epistemic_weight=0.0)
+    traces_aif = [run_trial_aif(env_aif, aif, n_steps=n_steps, context=int(c)) for c in contexts]
+    traces_ql = [run_trial_ql(env_ql, ql, n_steps=n_steps, context=int(c)) for c in contexts]
+    traces_reward = [run_trial_aif(env_reward, reward_only, n_steps=n_steps, context=int(c)) for c in contexts]
+    return {"aif": traces_aif, "ql": traces_ql, "reward_only": traces_reward}
 
 
 # ---------------------------------------------------------------------------
@@ -396,7 +449,7 @@ def render_paper_figure(
     ax_aif, ax_ql = top.subplots(1, 2)
     ax_cue, ax_rew = bottom.subplots(1, 2)
 
-    _draw_maze(ax_aif, "A   Active inference, first trial")
+    _draw_maze(ax_aif, "A   Known-model utility + IG, first trial")
     _draw_path(ax_aif, aif[0].locations, "#1b6ca8")
     ctx = "reward left" if aif[0].context == REWARD_LEFT else "reward right"
     ax_aif.text(0, -1.58, f"context: {ctx}", ha="center", fontsize=7, color="0.3")
@@ -415,18 +468,25 @@ def render_paper_figure(
     def _cummean(x: FloatArray) -> FloatArray:
         return np.cumsum(x) / np.arange(1, len(x) + 1)
 
-    ax_cue.plot(trials, _cummean(cue_aif), color="#1b6ca8", lw=1.6, label="active inference")
+    ax_cue.plot(trials, _cummean(cue_aif), color="#1b6ca8", lw=1.6, label="known model, utility + IG")
     ax_cue.plot(trials, _cummean(cue_ql), color="#b23a48", lw=1.6, label="Q-learning")
     ax_cue.set_ylim(-0.05, 1.05)
     ax_cue.set_xlabel("Trial")
     ax_cue.set_ylabel("Cumulative cue-first rate")
-    ax_cue.set_title("B   Epistemic foraging", loc="left", fontsize=9, fontweight="bold")
+    ax_cue.set_title("B   Information seeking", loc="left", fontsize=9, fontweight="bold")
     ax_cue.legend(frameon=False, fontsize=7)
     ax_cue.spines["top"].set_visible(False)
     ax_cue.spines["right"].set_visible(False)
 
-    ax_rew.plot(trials, _cummean(rew_aif), color="#1b6ca8", lw=1.6, label="active inference")
+    ax_rew.plot(trials, _cummean(rew_aif), color="#1b6ca8", lw=1.6, label="known model, utility + IG")
     ax_rew.plot(trials, _cummean(rew_ql), color="#b23a48", lw=1.6, label="Q-learning")
+    if "reward_only" in traces:
+        control = traces["reward_only"]
+        ax_cue.plot(trials, _cummean(np.array([t.visited_cue_first for t in control], dtype=float)),
+                    color="#397548", ls="--", label="known model, reward only")
+        ax_rew.plot(trials, _cummean(np.array([sum(t.rewards) for t in control])),
+                   color="#397548", ls="--", label="known model, reward only")
+        ax_cue.legend(frameon=False, fontsize=6)
     ax_rew.set_xlabel("Trial")
     ax_rew.set_ylabel("Cumulative mean return")
     ax_rew.set_title("C   Reward collected", loc="left", fontsize=9, fontweight="bold")

@@ -39,11 +39,4 @@ def score(acc, n=40):
 for acc in (1.0, 0.6, 0.5):
     cue, rew = score(acc)
     print(f"cue accuracy {acc:.1f}  cue-first {cue:.2f}  mean return {rew:+.2f}")
-print(
-    "\nAt 0.5 the cue is a coin flip and information gain collapses. The "
-    "policy is then a bet on an arm. Epistemic value tracks how much an "
-    "observation would change the context belief, not a virtue of looking. "
-    "A noisy instrument in clinic is the same arithmetic: a test that does "
-    "not change the posterior is not worth the step, and that is still not "
-    "a rat."
-)
+print('At accuracy 0.5 the cue carries no information about context. Report the selected route and return at each accuracy. Test value also depends on costs, available actions and the remaining horizon.')

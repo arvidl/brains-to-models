@@ -30,10 +30,4 @@ for q in ("human", "not a word in the catalogue", "04", "02b"):
     hits = lookup(q)
     print(f"{q!r:40}  {len(hits)} hit(s):", ", ".join(c.title for c in hits) or "—")
 print()
-print(
-    "The word 'human' sits in two cells by construction (the left column). "
-    "A nonsense string sits in none. This notebook is an index, like "
-    "notebook 00. It does not train, and a lookup hit is not evidence "
-    "that a foundation model 'is' that cell. Notebook 04 is where a "
-    "designed corpus is put on the table."
-)
+print('Substring matches describe this catalog. They do not evaluate a model. Count the actual matches and identify the text responsible for each one.')

@@ -45,10 +45,4 @@ ax.set_ylabel("final overlap with ξ0")
 ax.set_title("A Hopfield basin has a radius; past it, recall fails")
 plt.tight_layout()
 plt.show()
-print(
-    "Inside the basin the corrupted cue is still closer to ξ0 than to ξ1, "
-    "and asynchronous sign updates finish the job. Past a radius the cue "
-    "is a different start and may fall into the other well or a mixture. "
-    "That is associative memory, not bistable perception: there is no "
-    "cube, and no viewer."
-)
+print('Report retrieval success across corruption levels and repeat with several seeds. The result concerns this stored-pattern system; a perceptual interpretation would need separate observations.')

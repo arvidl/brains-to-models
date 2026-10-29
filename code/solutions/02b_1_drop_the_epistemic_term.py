@@ -26,22 +26,9 @@ SEED = set_seed(DEFAULT_SEED)
 plt.rcParams.update({"figure.dpi": 120, "font.size": 10})
 
 from brainsmodels.tmaze import ActiveInferenceAgent, TMaze, run_trial_aif
-def cue_rate(agent, n=40):
-    env = TMaze(seed=SEED)
-    return sum(int(run_trial_aif(env, agent, n_steps=3).visited_cue_first) for _ in range(n)) / n
-
-def no_ig(horizon):
-    agent = ActiveInferenceAgent(horizon=horizon)
-    agent._info_gain_one_channel = lambda *args, **kwargs: 0.0
-    return agent
-
-print(f"horizon 2, full EFE     cue-first {cue_rate(ActiveInferenceAgent(horizon=2)):.2f}")
-print(f"horizon 2, no IG        cue-first {cue_rate(no_ig(2)):.2f}")
-print(f"horizon 1, no IG        cue-first {cue_rate(no_ig(1)):.2f}")
-print(
-    "\nDropping the epistemic bonus is not enough if the horizon can still "
-    "plan *cue then arm*: the cue remains a means to a later preferred "
-    "observation. A one-step agent with no information gain has no such "
-    "plan and stays put. Two ingredients, not one slogan. Still a "
-    "four-location teaching model, not a rat."
-)
+for horizon in (1, 3):
+    for weight in (0., 1.):
+        agent = ActiveInferenceAgent(horizon=horizon, epistemic_weight=weight)
+        trace = run_trial_aif(TMaze(seed=SEED), agent, context=1)
+        print(f"horizon={horizon}, IG weight={weight}: {trace.locations}, return={sum(trace.rewards):+.1f}")
+print("The three-move reward-only planner can value information instrumentally. Both planners know the model.")

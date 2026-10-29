@@ -3,9 +3,11 @@
 A word-level tiny transformer is trained on a small designed corpus of
 Asian-disease-style sentences. When the corpus always continues a gain
 frame with ``program a`` and a loss frame with ``program b``, next-token
-mass after a held-out probe copies that pattern. A balanced corpus erases
-it. The figure is not a run of an open-weights LLM; it is the mechanism
-Binz & Schulz (2023) point at, at toy scale.
+mass after a training-template completion probe learns that pattern.
+A balanced corpus tests dependence on the association. These probes do
+not measure generalization to unseen sentence templates. The figure
+illustrates one possible route to a framing-like response; it does not
+identify the mechanism of the models studied by Binz & Schulz (2023).
 
 Companion: ``code/notebooks/04_quadrants_biases.ipynb``.
 """

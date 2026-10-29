@@ -1,12 +1,10 @@
 """Russell & Norvig's four definitions of AI, as a map.
 
 A 2x2 of thought vs behaviour against human performance vs rationality.
-No training, no parameters — a catalogue and a drawing, like the
-timeline. Notebook 04 is the controlled demonstration of the upper-left cell.
+The catalog lists evaluation criteria without assigning model scores.
+Notebook 04 supplies a designed training-association exercise for discussion.
 
 Companion: ``code/notebooks/04b_four_views_of_AI.ipynb``.
-Adapted from the keynote notebook
-``from-brains-to-models/notebooks/01_four_views_of_AI.ipynb``.
 """
 
 from __future__ import annotations
@@ -50,14 +48,14 @@ QUADRANTS: tuple[Quadrant, ...] = (
         aima="Cognitive science",
         thought=True,
         human=True,
-        verdict="errors follow the training corpus",
+        verdict="compare behavior and proposed mechanisms",
         companion="04_quadrants_biases.ipynb",
         note=(
             "Score the process against how people actually think: "
             "heuristics, biases, content effects. Where a language model "
-            "reproduces a published human error, a sufficient mechanism "
-            "is that the training corpus already contained it. Notebook 04 "
-            "is the controlled demonstration."
+            "reproduces a published human error, test corpus exposure, "
+            "generalization and alternative mechanisms. Notebook 04 shows "
+            "a designed training association, not the cause of human errors."
         ),
         color="#cfe2f3",
     ),
@@ -67,13 +65,13 @@ QUADRANTS: tuple[Quadrant, ...] = (
         aima="Laws of thought",
         thought=True,
         human=False,
-        verdict="a scratchpad is not a proof",
+        verdict="test validity and consistency",
         companion="",
         note=(
             "Score the process against validity, not against a person. "
-            "Chain-of-thought looks like System 2 and is still "
-            "next-token prediction with a longer prefix. The model is "
-            "bound by what follows “therefore” in the training corpus."
+            "A generated reasoning trace can be checked for valid steps, "
+            "consistency and agreement with independently verified results. "
+            "The training objective alone does not settle reasoning ability."
         ),
         color="#d9ead3",
     ),
@@ -83,13 +81,13 @@ QUADRANTS: tuple[Quadrant, ...] = (
         aima="Turing test",
         thought=False,
         human=True,
-        verdict="imitation is no longer informative",
+        verdict="specify the imitation test",
         companion="01_tiny_transformer.ipynb",
         note=(
             "Score the public interface of thought: the strings a person "
-            "might produce. Turing’s game is now too easy. What imitation "
-            "does not establish is a world-involving belief, a body that "
-            "can be wrong at a cost, or experience."
+            "might produce. Results depend on the task, interaction and "
+            "judges. Successful imitation does not by itself identify "
+            "the underlying mechanism or establish subjective experience."
         ),
         color="#fff2cc",
     ),
@@ -99,13 +97,13 @@ QUADRANTS: tuple[Quadrant, ...] = (
         aima="Rational agent",
         thought=False,
         human=False,
-        verdict="goals are added after training",
+        verdict="state the objective and information available",
         companion="02b_active_inference_vs_rl.ipynb",
         note=(
             "Choose the action that maximises expected utility given "
-            "goals. Foundation models arrive with competence and without "
-            "native goals. A preferred token is not a preferred "
-            "observation in a world the agent must survive."
+            "goals and available information. Examine the full agent, "
+            "including its model, tools, feedback and action-selection rule. "
+            "Notebook 02b distinguishes model knowledge from the objective."
         ),
         color="#f4cccc",
     ),
@@ -132,7 +130,7 @@ def format_quadrant(cell: Quadrant) -> str:
     lines = [
         f"{cell.title}  ({cell.aima})",
         f"  axes     {axes}",
-        f"  verdict  {cell.verdict}",
+        f"  criterion {cell.verdict}",
     ]
     if cell.companion:
         lines.append(f"  see      code/notebooks/{cell.companion}")

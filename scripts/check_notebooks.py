@@ -15,6 +15,7 @@ DEFAULTS = (
     "08_attention_maps.ipynb", "09_segmentation_reflection.ipynb",
     "10_two_key_attention.ipynb", "11_shortcut_dependence.ipynb",
     "12_hopfield_12_units.ipynb",
+    "13_verified_growth_model.ipynb",
 )
 
 
@@ -43,7 +44,8 @@ def main():
             "JUPYTER_PATH": str(scratch / "jupyter"),
             "JUPYTER_RUNTIME_DIR": str(scratch / "runtime"),
             "MPLCONFIGDIR": str(project / ".build/matplotlib"),
-            "MPLBACKEND": "Agg", "PYTHONHASHSEED": "7",
+            "MPLBACKEND": "module://matplotlib_inline.backend_inline",
+            "PYTHONHASHSEED": "7",
             "PYTHONPATH": str(project / "code/src"),
             "IPYTHONDIR": str(scratch / "ipython"),
         })

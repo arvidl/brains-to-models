@@ -35,10 +35,4 @@ finally:
     ws.CAPACITY = old
 print("capacity 2 occupants:", two.occupants)
 print("capacity 1 occupants:", one.occupants)
-print(
-    "\nThe runner-up can be active and still fail to be written back. "
-    "Reportability in this toy is occupancy of a scarce buffer, not "
-    "strength of a local trace. A verbalizable slice is not phenomenal "
-    "experience — that is the §7 limit, and this exercise only makes "
-    "the scarcity visible."
-)
+print('A one-slot buffer excludes some active modules from broadcast. This demonstrates capacity-limited access under the chosen selection rule.')

@@ -4,6 +4,8 @@ A leaky integrate-and-fire perceptron updates synapses from pre- and
 post-synaptic spike counts (a local delta rule). A small MLP assigns
 error through a hidden layer by SGD. Both see the same points: a
 linearly separable pair of Gaussians, and a four-blob XOR.
+Architecture, encoding and learning rule differ together. The accuracy
+contrast does not isolate an effect of update locality or backpropagation.
 
 Companion: ``code/notebooks/03_bio_vs_artificial.ipynb``.
 """
@@ -354,8 +356,8 @@ def render_paper_figure(results: dict[str, TaskResult] | None = None, seed: int 
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
-    _acc(ax_acc_l, lin, "C   Linear: both succeed")
-    _acc(ax_acc_x, xor, "D   XOR: only SGD assigns credit")
+    _acc(ax_acc_l, lin, "C   Linear: training accuracy")
+    _acc(ax_acc_x, xor, "D   XOR: two complete systems")
     return fig
 
 

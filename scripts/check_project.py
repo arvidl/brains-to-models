@@ -82,10 +82,34 @@ def main():
         assert len(ids) == len(set(ids)), f"Duplicate cell IDs: {path.name}"
         for cell in notebook["cells"]:
             assert cell["cell_type"] in {"code", "markdown", "raw"}, path.name
+            assert all(ord(char) >= 32 or char in "\n\t"
+                       for char in "".join(cell["source"])), (path.name, cell["id"])
             if cell["cell_type"] == "markdown":
                 check_local_links(path, "".join(cell["source"]))
             assert not any(output.get("output_type") == "error"
                            for output in cell.get("outputs", [])), path.name
+        if path.name == "13_verified_growth_model.ipynb":
+            previews = sum("image/png" in output.get("data", {})
+                           for cell in notebook["cells"]
+                           for output in cell.get("outputs", []))
+            assert previews >= 2, "Verification notebook is missing its saved plots"
+
+    from brainsmodels.growth_verification import REFERENCE_COMMIT, REFERENCE_MODEL_SHA256
+    resources = json.loads((ROOT / "talk/resources.json").read_text())
+    reference = resources["references"]["brainweb_fisher_kpp"]
+    assert reference["commit"] == REFERENCE_COMMIT
+    assert reference["model_sha256"] == REFERENCE_MODEL_SHA256
+    guide = (ROOT / "talk/resources.md").read_text()
+    mapped = []
+    for first, last in re.findall(r"^\| (\d+)(?:[–-](\d+))? \|", guide, re.MULTILINE):
+        mapped.extend(range(int(first), int(last or first) + 1))
+    assert sorted(mapped) == list(range(1, resources["deck"]["slide_count"] + 1)), \
+        "Resource guide must cover each slide exactly once"
+    for item in resources["references"].values():
+        assert re.fullmatch(r"[0-9a-f]{40}", item["commit"])
+        assert item["commit"] in guide, "Guide and resource versions differ"
+    assert resources["deck"]["slide_count"] == 25
+    assert re.fullmatch(r"[0-9a-f]{64}", resources["deck"]["sha256"])
 
     print(f"PASS: publication contents; {len(keys)} bibliography entries; paper figures; "
           f"local links; {len(notebooks)} notebooks; numerical references; Python syntax.")

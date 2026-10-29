@@ -35,12 +35,6 @@ crawl = make_crawl(
     kill_p_act=0.0,
 )
 run = train_on_crawl(crawl, seed=SEED, n_steps=400)
-print(f"P(act | 'to save five…')  {run.save_act:.2f}")
-print(f"P(act | 'to kill one…')   {run.kill_act:.2f}")
-print(
-    "\nThe two probes are paraphrases of one five-versus-one arithmetic. "
-    "The corpus tied `save` to `act` and `kill` to `refrain`. The model "
-    "follows the words it was given, not the outcome those words name. "
-    "That is notebook 04's framing result on a trolley. It is not a "
-    "value, and not dumbfounding in a person."
-)
+print(f"P(act | saves five, kills one)  {run.save_act:.2f}")
+print(f"P(act | kills one, saves five)   {run.kill_act:.2f}")
+print('The prompts specify the same action and consequences in reversed order. Check whether this training run actually learns the designed association. A weak or seed-sensitive contrast limits the demonstration; it does not settle moral reasoning.')

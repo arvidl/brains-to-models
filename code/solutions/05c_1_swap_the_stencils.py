@@ -41,8 +41,4 @@ after = selectivity_table(result)
 print("unit 2 before / after swap")
 for name in before:
     print(f"  {name:10s}  {before[name][1]:.3f} → {after[name][1]:.3f}")
-print(
-    "Unit 2’s high condition follows the open region. The drives are "
-    "unchanged and no W was fitted. A swapped stencil is a changed "
-    "control pattern, not a new synapse and not a measured LFP."
-)
+print('The fixed control pattern changes expressed activity while the object drives and weights remain fixed. This is a designed gating calculation.')

@@ -3,7 +3,8 @@
 A word-level tiny transformer is trained on switch versus footbridge
 sentences. When the corpus always continues the impersonal case with
 ``act`` and the personal case with ``refrain``, next-token mass after a
-held-out probe copies that split. A balanced corpus erases it. The figure
+training-template completion probe learns that split. A balanced corpus
+tests dependence on the designed association. The figure
 is not a run of an open-weights LLM and not a moral vector inside Claude.
 It is the same mechanism as notebook 04, now on a dilemma.
 
@@ -25,12 +26,6 @@ from brainsmodels.tiny_transformer import TinyTransformer
 
 FloatArray = NDArray[np.floating]
 
-# Usual textbook summary of the switch/footbridge split. Greene et al.
-# (2001) reported the qualitative pattern; these rates are not a
-# re-measurement of that sample.
-HUMAN_SWITCH_ACT = 0.90
-HUMAN_FOOT_ACT = 0.10
-
 _SWITCH = "#2c5f6e"
 _FOOT = "#9a4a2a"
 
@@ -41,9 +36,10 @@ FOOT_PROBE = (
     "a trolley will kill five unless a man is pushed . most people choose to"
 )
 
-# Same outcome, two wordings — used as a consistency check, not a panel.
-SAVE_PROBE = "to save five the agent should"
-KILL_PROBE = "to kill one the agent should"
+# Identical consequences, with their order reversed; the corpus assigns
+# opposite completions. This tests a designed association, not moral reasoning.
+SAVE_PROBE = "diverting saves five and kills one . the agent should"
+KILL_PROBE = "diverting kills one and saves five . the agent should"
 
 _SWITCH_TEMPLATES = (
     "a trolley will kill five unless diverted . most people choose to {choice} .",
@@ -56,12 +52,12 @@ _FOOT_TEMPLATES = (
     "greene found that most people choose to {choice} on the footbridge .",
 )
 _SAVE_TEMPLATES = (
-    "to save five the agent should {choice} .",
-    "when the wording is lives saved the agent should {choice} .",
+    "diverting saves five and kills one . the agent should {choice} .",
+    "diverting the trolley saves five but kills one . the agent should {choice} .",
 )
 _KILL_TEMPLATES = (
-    "to kill one the agent should {choice} .",
-    "when the wording is a killing the agent should {choice} .",
+    "diverting kills one and saves five . the agent should {choice} .",
+    "diverting the trolley kills one but saves five . the agent should {choice} .",
 )
 
 
@@ -226,7 +222,7 @@ def _bar_pair(ax: plt.Axes, switch: float, foot: float, title: str) -> None:
     ax.bar(xs, [switch, foot], color=[_SWITCH, _FOOT], width=0.62, linewidth=0)
     ax.set_xticks(xs, ["switch\n(impersonal)", "footbridge\n(personal)"])
     ax.set_ylim(0.0, 1.05)
-    ax.set_ylabel("Share choosing to act")
+    ax.set_ylabel("Act fraction / two-token probability")
     ax.set_title(title, loc="left", fontsize=8, fontweight="bold")
     ax.axhline(0.5, color="0.75", lw=0.6, ls=":")
     for i, v in enumerate((switch, foot)):
@@ -247,12 +243,12 @@ def render_paper_figure(
     fig, axes = plt.subplots(2, 2, figsize=(6.3, 5.4), layout="constrained")
     fig.get_layout_engine().set(h_pad=0.12, w_pad=0.08)
 
-    _bar_pair(
-        axes[0, 0],
-        HUMAN_SWITCH_ACT,
-        HUMAN_FOOT_ACT,
-        "A   Humans (Greene et al. 2001)",
-    )
+    axes[0, 0].axis("off")
+    axes[0, 0].set_title("A   Two different actions", loc="left", fontsize=8, fontweight="bold")
+    axes[0, 0].text(0.02, 0.78, "Switch: divert a trolley.\nFootbridge: push a person.",
+                    transform=axes[0, 0].transAxes, va="top", fontsize=9)
+    axes[0, 0].text(0.02, 0.38, "Human responses motivate the example\n(Greene et al., 2001). No human rates\nare estimated or plotted here.",
+                    transform=axes[0, 0].transAxes, va="top", fontsize=8)
     _bar_pair(
         axes[0, 1],
         biased.crawl.switch_act,
@@ -269,7 +265,7 @@ def render_paper_figure(
         axes[1, 1],
         balanced.switch_act,
         balanced.foot_act,
-        "D   Tiny transformer on a balanced corpus",
+        "D   Balanced-corpus model",
     )
     return fig
 

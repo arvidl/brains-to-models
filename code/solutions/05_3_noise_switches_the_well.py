@@ -42,10 +42,4 @@ axes[-1].set_xlabel("step")
 fig.suptitle("The same double well; only the noise scale changed")
 plt.tight_layout()
 plt.show()
-print(
-    "Small noise: the walk falls into one well and stays. Larger noise: "
-    "it crosses the saddle. That is the teaching picture of bistable "
-    "percepts as two attractors plus a perturbation. There is no cube, "
-    "no rivalry experiment, and no claim that next-token sampling is "
-    "seeing."
-)
+print('Compare the measured switching counts at the two noise levels. This illustrates stochastic transitions in a designed potential; it is not a fit to a perceptual experiment.')

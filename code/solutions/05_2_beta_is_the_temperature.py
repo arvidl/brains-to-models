@@ -45,9 +45,4 @@ ax.legend(frameon=False)
 ax.set_title("Soft β shares; sharp β retrieves")
 plt.tight_layout()
 plt.show()
-print(
-    "Ramsauer et al.: one attention step with keys = values = stored "
-    "patterns. Large β is a hard lookup, not a deeper network. Notebook "
-    "01's maps are many such steps, trained, with a causal mask. This "
-    "exercise is the *update*, not a language model and not a percept."
-)
+print('Increasing beta sharpens the weights on the stored patterns. This is one attention retrieval operation; a full Transformer also includes learned projections, other sublayers and multiple positions.')

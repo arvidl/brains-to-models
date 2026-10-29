@@ -38,9 +38,4 @@ ax.set_ylabel("U(x, y)")
 ax.set_title("Teaching descent on a plotted square")
 plt.tight_layout()
 plt.show()
-print(
-    "Discrete steps with a fixed lr are not an ODE. A rise, if it "
-    "happens, is a too-large Euler step or the clip to the square. "
-    "The animation is a schematic of falling into a basin, not a "
-    "proof that training or perception is this surface."
-)
+print('A finite Euler step can increase energy when it overshoots. Check the step size and clipping before interpreting a nonmonotone path.')

@@ -25,33 +25,13 @@ from brainsmodels.repro import DEFAULT_SEED, set_seed
 SEED = set_seed(DEFAULT_SEED)
 plt.rcParams.update({"figure.dpi": 120, "font.size": 10})
 
-from brainsmodels.tmaze import (
-    CENTER,
-    CUE,
-    LEFT,
-    RIGHT,
-    ActiveInferenceAgent,
-    QLearningAgent,
-    TMaze,
-    run_trial_aif,
-    run_trial_ql,
-)
-n = 80
-env_a = TMaze(seed=SEED)
-env_q = TMaze(seed=SEED + 1)
-aif = ActiveInferenceAgent()
-ql = QLearningAgent(seed=SEED + 2, epsilon=0.25)
-aif_hits = sum(int(run_trial_aif(env_a, aif, n_steps=3).visited_cue_first) for _ in range(n))
-ql_hits = sum(int(run_trial_ql(env_q, ql, n_steps=3).visited_cue_first) for _ in range(n))
-q0 = ql.Q[CENTER, 0]
-print(f"AIF cue-first over {n}: {aif_hits / n:.2f}")
-print(f"QL  cue-first over {n}: {ql_hits / n:.2f}")
-print(f"Q(start, unknown)  cue {q0[CUE]:+.2f}  left {q0[LEFT]:+.2f}  right {q0[RIGHT]:+.2f}")
-print(f"greedy from start: {('center', 'cue', 'left', 'right')[int(np.argmax(q0))]}")
-print(
-    "\nActive inference visits the cue on the first trial. Q-learning "
-    "has only the stumbles that ε-greedy happened to take, and a three-step "
-    "return is a harsh credit assignment. Even if a longer budget made "
-    "the cue greedy, the goal would still be an external scalar, not a "
-    "preferred observation, and not a body that must keep going."
-)
+from brainsmodels.tmaze import CENTER, QLearningAgent, TMaze, run_trial_ql, run_experiment
+traces = run_experiment(n_trials=400, seed=SEED)
+for name, trials in traces.items():
+    print(name, "cue-first", np.mean([t.visited_cue_first for t in trials]), "return", np.mean([sum(t.rewards) for t in trials]))
+agent = QLearningAgent(seed=SEED)
+env = TMaze(seed=SEED)
+for context in np.random.default_rng(SEED).integers(0, 2, 400):
+    run_trial_ql(env, agent, context=int(context))
+print("Learned Q(center, unknown):", agent.Q[agent.max_steps, CENTER, 0])
+print("The learner begins without the transition and observation model supplied to both planners.")

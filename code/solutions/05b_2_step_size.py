@@ -34,10 +34,4 @@ for lr in (0.02, 0.08, 0.25):
         f"lr {lr:.2f}  steps {len(path):3d}  U={float(energy(*end)):+.3f}  "
         f"well {well}"
     )
-print(
-    "\nA small step crawls; the default step is the figure; a large step "
-    "can overshoot a well or leave the plotted square (the path is "
-    "clipped). The surface is a teaching slice of activity space, not "
-    "SGD on a transformer loss. Notebook 05 is the controlled "
-    "demonstration; this one is the map."
-)
+print('Compare final energy and boundary clipping at each step size. These are numerical properties of the chosen two-dimensional potential.')

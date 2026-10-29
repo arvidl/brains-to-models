@@ -44,9 +44,4 @@ def mean_offdiag(stack):
 
 print(f"mean |gate_i − gate_j|  addition     {mean_offdiag(added):.3f}")
 print(f"mean |gate_i − gate_j|  |difference| {mean_offdiag(subbed):.3f}")
-print(
-    "Addition is the analog combination rule the figure uses: two "
-    "contexts sum to a third pattern. Absolute difference is another "
-    "pointwise map; it is not the teaching claim. Neither map is a "
-    "learned decoder, and neither is a cortex."
-)
+print('Compare the gates produced by the mean and absolute difference. These are different pointwise combination rules; neither has been fitted to physiological measurements.')

@@ -25,18 +25,10 @@ from brainsmodels.repro import DEFAULT_SEED, set_seed
 SEED = set_seed(DEFAULT_SEED)
 plt.rcParams.update({"figure.dpi": 120, "font.size": 10})
 
-from brainsmodels import values as V
-print(f"library summary  switch {V.HUMAN_SWITCH_ACT:.2f}  foot {V.HUMAN_FOOT_ACT:.2f}")
-V.HUMAN_SWITCH_ACT = 0.70
-V.HUMAN_FOOT_ACT = 0.30
-print(f"edited labels    switch {V.HUMAN_SWITCH_ACT:.2f}  foot {V.HUMAN_FOOT_ACT:.2f}")
-print(f"gap (switch − foot) {V.HUMAN_SWITCH_ACT - V.HUMAN_FOOT_ACT:.2f}")
-print(
-    "\nOnly panel A's reference bars would move. Panels B–D are trained "
-    "on a designed corpus; they do not read HUMAN_*. If 0.90/0.10 were "
-    "mistaken for Greene's sample, the error would be in the caption, "
-    "not in the next-token mechanism. Restore the constants before "
-    "`make figures` or the paper figure's panel A will be wrong."
-)
-V.HUMAN_SWITCH_ACT = 0.90
-V.HUMAN_FOOT_ACT = 0.10
+from brainsmodels.values import make_crawl, train_on_crawl
+crawl = make_crawl(n_sentences=160, seed=SEED)
+run = train_on_crawl(crawl, seed=SEED, n_steps=200)
+print("Designed corpus: switch act", crawl.n_switch_act, "refrain", crawl.n_switch_refrain)
+print("Designed corpus: footbridge act", crawl.n_foot_act, "refrain", crawl.n_foot_refrain)
+print("Fitted completion probabilities:", run.switch_act, run.foot_act)
+print("No human choice rates are measured here. A study comparison needs counts, denominators and uncertainty.")

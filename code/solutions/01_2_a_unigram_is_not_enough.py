@@ -26,11 +26,15 @@ SEED = set_seed(DEFAULT_SEED)
 plt.rcParams.update({"figure.dpi": 120, "font.size": 10})
 
 from brainsmodels.tiny_transformer import CharTokenizer, make_corpus, train_demo
-model, tokenizer, text, _ = train_demo(seed=SEED, n_steps=200)
+text = make_corpus(seed=SEED)
+tokenizer = CharTokenizer.from_text(text)
 ids = tokenizer.encode(text)
 n = len(ids)
 cut = int(0.85 * n)
 train_ids, test_ids = ids[:cut], ids[cut:]
+from brainsmodels.tiny_transformer import TinyTransformer
+model = TinyTransformer(tokenizer.vocab_size, seed=SEED)
+model.train(train_ids, n_steps=200, seed=SEED)
 
 unigram = np.ones(tokenizer.vocab_size)
 for i in train_ids:
@@ -63,10 +67,4 @@ print(f"chance (ln V)   {np.log(tokenizer.vocab_size):.3f}")
 print(f"unigram  test   {nll_unigram(test_ids):.3f}")
 print(f"bigram   test   {nll_bigram(test_ids):.3f}")
 print(f"1-layer  test   {nll_model(test_ids):.3f}")
-print(
-    "\nThe unigram knows that space and e are common. The bigram knows that "
-    "'t' often follows 'a' in 'cat' / 'sat' / 'mat'. The transformer still "
-    "wins: the shared sentence frame is longer than one previous character. "
-    "Attention is a look-back over a window, not a better unigram. It is still "
-    "not a world model."
-)
+print('Compare the measured held-out losses. Unigram, bigram and Transformer models use different amounts of context; these results concern prediction on this designed corpus.')

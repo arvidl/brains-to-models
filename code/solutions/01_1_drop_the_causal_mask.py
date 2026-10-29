@@ -58,10 +58,4 @@ for ax, mat, title in (
 fig.suptitle("Without the mask, a query can look at characters that do not yet exist")
 plt.tight_layout()
 plt.show()
-print(
-    "Generation writes one character at a time. A look-ahead weight is a weight "
-    "on a blank. Training with the mask dropped would let the loss cheat on the "
-    "training window (the future tokens are already in the batch) and would not "
-    "transfer to left-to-right sampling. The mask is what makes next-token "
-    "prediction a well-posed online objective, not a better picture of a cat."
-)
+print('Removing the mask exposes future characters during training. Left-to-right generation has no such observations, so this changes the prediction task and leaks the target.')

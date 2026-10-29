@@ -35,9 +35,4 @@ peak_move = x[np.argmax(moving, axis=1)]
 peak_frz = x[np.argmax(frozen, axis=1)]
 print(f"moving  peak x: {peak_move[0]:.2f} → {peak_move[-1]:.2f}")
 print(f"frozen  peak x: {peak_frz[0]:.2f} → {peak_frz[-1]:.2f}")
-print(
-    "A frozen window is a static stencil: drive is still gated, but "
-    "activity no longer travels. Relocation was the traveling-wave "
-    "claim. Both versions are designed functions, not LFPs, and not "
-    "phenomenal experience."
-)
+print('Freezing the window retains static gating but removes translation. Compare the space-time maps to identify the contribution of the moving control pattern.')

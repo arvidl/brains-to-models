@@ -33,10 +33,4 @@ b = train_on_crawl(flipped, seed=SEED + 1, n_steps=350)
 print(f"{'corpus':<12}{'P(sure|gain)':>14}{'P(sure|loss)':>14}")
 print(f"{'classic':<12}{a.gain_sure:>14.2f}{a.loss_sure:>14.2f}")
 print(f"{'reversed':<12}{b.gain_sure:>14.2f}{b.loss_sure:>14.2f}")
-print(
-    "\nThe architecture did not prefer the textbook answers. It preferred "
-    "the completions it was given. Calling the reverse run 'debiasing' "
-    "would be a category error: nothing in a person was changed. A "
-    "preference-tuned LLM can be pushed the same way. That is still not "
-    "a value, and not Tversky and Kahneman's subjects."
-)
+print('Compare the measured completions after reversing the corpus associations. This intervention tests sensitivity to training text; it does not measure human debiasing or an agent changing its values.')

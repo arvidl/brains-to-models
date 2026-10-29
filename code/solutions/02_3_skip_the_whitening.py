@@ -50,10 +50,4 @@ for col, i in enumerate(order):
 fig.suptitle("Whitening changes the coordinates the Hebbian rule sees")
 plt.tight_layout()
 plt.show()
-print(
-    "Without whitening the columns spend their variance on low-frequency "
-    "blobs (the 1/f spectrum). ZCA equalizes those coordinates so a local "
-    "rule can spend capacity on oriented structure that is already in the "
-    "gratings. Whitening is a change of basis, not a retina, and the "
-    "dictionary is still not V1."
-)
+print('Whitening changes the input covariance and hence the learning problem. Compare the learned columns and reconstruction errors before attributing their appearance to the update rule.')

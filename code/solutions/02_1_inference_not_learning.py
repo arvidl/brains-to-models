@@ -50,10 +50,4 @@ ax.legend(frameon=False)
 ax.set_title("Same infer loop; only the descending weights changed")
 plt.tight_layout()
 plt.show()
-print(
-    "Both curves fall: inference is gradient descent on the current error, "
-    "and even random columns of U1 span something. The first step is similar "
-    "because r starts at zero; the trained curve ends lower. Learning moved "
-    "the basis; inference explains the present patch in that basis. This is "
-    "still not V1."
-)
+print('Inference changes the current representation with weights fixed. Compare the measured residuals for trained and initial weights to separate iterative fitting from the effect of learning.')

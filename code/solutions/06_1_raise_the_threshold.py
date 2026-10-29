@@ -37,10 +37,4 @@ try:
         )
 finally:
     ws.THRESHOLD = old
-print(
-    "\nThe pulse is the same. Crossing a higher bar is a different event "
-    "from being slightly more active. Below threshold the computation "
-    "stays in the modules; above it, a slot opens. That is the "
-    "schematic of ignition, not a measurement of consciousness, and "
-    "not Claude."
-)
+print('Compare workspace occupancy for identical input at different thresholds. Ignition is defined by the model rule; it is not an independent consciousness measurement.')

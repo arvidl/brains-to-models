@@ -34,10 +34,4 @@ for s in starts:
     well = nearest_attractor(end, radius=0.6)
     print(f"{s!s:<16}{end!s:<16}{float(energy(*end)):>8.3f}  {well}")
 
-print(
-    "\nA small shift in the start can change the basin. On this surface "
-    "that is a ridge in U. In the paper's reading, a slight rewording "
-    "of a prompt is a perturbation near a saddle — a teaching analogy, "
-    "not a measurement of a frontier model, and not a Hopfield net "
-    "(that is notebook 05)."
-)
+print('Nearby starts can enter different basins on this chosen surface. Any analogy with prompt sensitivity needs independent model measurements.')

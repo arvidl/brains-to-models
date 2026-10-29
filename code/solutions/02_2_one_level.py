@@ -38,10 +38,4 @@ def recon_mse(model):
 
 print(f"n_level2=1   held-out MSE {recon_mse(shallow):.4f}")
 print(f"n_level2=12  held-out MSE {recon_mse(deep):.4f}")
-print(
-    "\nOn 8×8 pink-noise patches the second level is a small extra code for "
-    "the first-level coefficients, not a scene. A better reconstruction is "
-    "not evidence of a world model, and a flat second level is not evidence "
-    "that cortex is one layer. The paper's contrast is the *job*: predict "
-    "the current sensory vector, not the next character of a corpus."
-)
+print('Compare held-out reconstruction errors at the same inference budget. This tests the added latent capacity on these patches; it does not isolate the organization of cortical processing.')

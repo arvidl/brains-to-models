@@ -44,8 +44,4 @@ ax.set_xlim(-0.05, 1.05)
 ax.set_ylim(-0.05, 1.05)
 plt.tight_layout()
 plt.show()
-print(
-    "The probe is held out as a *choice*, not as a sentence type. The model "
-    "still copies the frequency it was trained on. That is the §5 mechanism, "
-    "not a re-run of Tversky and Kahneman, and not a bias in a person."
-)
+print('These probes reuse training-template prefixes. Compare completion probability with the designed corpus frequency and report deviations; this is a fitted association, not a human behavioral measurement.')

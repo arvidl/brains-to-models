@@ -54,8 +54,8 @@ LEVELS: tuple[Level, ...] = (
         name="Computational theory",
         paper_name="function",
         question="What is computed, and why\nthat mapping is appropriate",
-        brain="Prediction that keeps a body viable.\nAgency and value are tied to need.",
-        machine="Next-token prediction on a training corpus.\nNo survival-tied objective.",
+        brain="Example task: infer an object's location.\nSpecify the behavioral goal.",
+        machine="Example task: predict the next token.\nSpecify the training objective.",
         coupling="A shared objective is possible. It does not fix the rows below.",
     ),
     Level(
@@ -63,8 +63,8 @@ LEVELS: tuple[Level, ...] = (
         name="Representation and algorithm",
         paper_name="dynamics",
         question="Which internal variables,\nand how they are transformed",
-        brain="Multistable dynamics; attractors.\nError units; hierarchical inference.",
-        machine="Gradient flow on a loss landscape.\nTokens, embeddings, attention.",
+        brain="Candidate codes and update mechanisms.\nTest them against neural measurements.",
+        machine="Tokens, embeddings and attention.\nTraining updates differ from inference.",
         coupling="The same representation can be updated by a different algorithm.",
     ),
     Level(
@@ -73,15 +73,15 @@ LEVELS: tuple[Level, ...] = (
         paper_name="architecture",
         question="How representation and algorithm\nare realized physically",
         brain="Neurons, synapses, spikes.\nEnergy, and a body.",
-        machine="Weights, matrix multiplies, silicon.\nNo metabolism, no body.",
+        machine="Processors, memory and arithmetic.\nMeasure the physical implementation.",
         coupling="Different physical substrates can realize the same upper rows.",
     ),
 )
 
 THEME_II = (
-    "Theme (ii) starts from the bottom row and is not a fourth Marr level. "
-    "Viability, phenomenal experience, and values grounded in need "
-    "are not properties of a hardware description."
+    "Bodily regulation, experience and values require additional questions "
+    "and evidence. This context band is not a fourth Marr level or a "
+    "test that settles machine consciousness."
 )
 
 
@@ -316,9 +316,9 @@ def render_paper_figure() -> plt.Figure:
     ax.text(
         0.035,
         y_th + 0.014,
-        "Theme (ii) starts from the bottom row and leaves it.\n"
-        "Viability, phenomenal experience, and values grounded in need\n"
-        "are not properties of a hardware description.",
+        "Bodily regulation, experience and values raise additional questions.\n"
+        "This context band is not a fourth Marr level or a test that\n"
+        "settles machine consciousness.",
         ha="left",
         va="bottom",
         fontsize=6.3,

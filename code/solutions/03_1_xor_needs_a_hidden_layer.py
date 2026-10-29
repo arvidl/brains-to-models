@@ -36,10 +36,4 @@ thin.train(x, y, n_epochs=30)
 print(f"LIF perceptron (2→2, local delta)     acc {np.mean(spk.predict(x, seed=SEED) == y):.2f}")
 print(f"MLP 2→16→2, SGD                       acc {np.mean(mlp.predict(x) == y):.2f}")
 print(f"MLP 2→1→2, SGD                        acc {np.mean(thin.predict(x) == y):.2f}")
-print(
-    "\nThe thin MLP is still SGD, and it still cannot draw the XOR "
-    "partition: one hidden unit is a single half-plane. The LIF net is "
-    "a different failure: two output cells and a local count rule, no "
-    "hidden layer to assign credit through. Same points, two reasons to "
-    "miss. Neither miss is a synapse in cortex."
-)
+print('The systems differ in encoding, depth and update rule. Report their measured accuracies; this comparison does not isolate the effect of update locality.')

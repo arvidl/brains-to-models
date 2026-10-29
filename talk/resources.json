@@ -1,0 +1,22 @@
+{
+  "deck": {
+    "filename": "From Brains to Models_20261029_1030.pptx",
+    "sha256": "a93a22e1d2680bd9f0c3c66fa9c44a452cb77d271e066a99c3306016773bc82f",
+    "slide_count": 25
+  },
+  "references": {
+    "brainweb_fisher_kpp": {
+      "url": "https://github.com/arvidl/brainweb_fisher_kpp",
+      "commit": "81ecd42e6f37692a711208caa8d24361904f7e65",
+      "model_sha256": "2c6da092c0b4e4eb6871094b3826485ba45b6887452094aa2bae17c6ba316e50"
+    },
+    "high-precision-glioma-segmentation": {
+      "url": "https://github.com/arvidl/high-precision-glioma-segmentation",
+      "commit": "54d50b76e487183d82ab72d5630a1499e00f43d4"
+    },
+    "AI-assisted-glioma-research": {
+      "url": "https://github.com/arvidl/AI-assisted-glioma-research",
+      "commit": "b9c1b512d93426392db6c0571f47f1b54ff05eec"
+    }
+  }
+}

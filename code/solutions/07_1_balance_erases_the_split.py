@@ -35,10 +35,4 @@ print(f"{'corpus':<18}{'P(act|switch)':>16}{'P(act|foot)':>14}")
 for name, kw in specs.items():
     run = train_on_crawl(make_crawl(n_sentences=280, seed=SEED, **kw), seed=SEED, n_steps=400)
     print(f"{name:<18}{run.switch_act:>16.2f}{run.foot_act:>14.2f}")
-print(
-    "\nThe split tracks the designed frequencies, including the reverse. "
-    "Nothing in the architecture preferred the textbook trolley answers. "
-    "Calling the reverse run a change of values would name a corpus "
-    "edit as a moral conversion. It is next-token mass. It is not "
-    "Greene's subjects, and not a body that can be the one."
-)
+print('Compare the measured probabilities across all three corpora. Changes show sensitivity to designed text associations, with finite training and seed effects; they are not measurements of human moral judgment.')
