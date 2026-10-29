@@ -8,6 +8,8 @@
 \usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,longtable}
 \usepackage[round,authoryear]{natbib}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \usepackage{caption,placeins,fancyhdr}
@@ -25,6 +27,14 @@
   \textbf{Takeaway.} #1\par\smallskip
   \textbf{Check your understanding.} #2\end{minipage}\par\smallskip}
 \newcommand{\coursenotebook}[2]{\href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/#1}{#2}}
+\newtcolorbox{perspectives}[1]{%
+  breakable,title={Two perspectives: #1},
+  colback=blue!2,colframe=MidnightBlue!45,
+  colbacktitle=blue!6,coltitle=MidnightBlue,
+  fonttitle=\small\bfseries,fontupper=\small,
+  boxrule=0.4pt,arc=1mm,
+  left=2.5mm,right=2.5mm,top=1.5mm,bottom=1.5mm,
+  before skip=8pt,after skip=8pt}
 \title{\textbf{From Brains to Models:\\What AI Reveals About Being Human}\\[5mm]\large Representation, understanding, and responsibility in medical AI}
 \author{Arvid Lundervold\\\normalsize Department of Biomedicine, University of Bergen\\\normalsize Mohn Medical Imaging and Visualization Centre}
 \date{\small Companion to the Joint PRESIMAL $\times$ NORA HS keynote\\5 November 2026, Sola Strand Hotel, Stavanger}
@@ -48,12 +58,14 @@ Artificial intelligence (AI) in medical imaging is both an engineering instrumen
 \item Propose a test of an alternative explanation and preserve uncertainty when communicating a result.
 \end{enumerate}
 
-\textbf{Suggested reading routes.}
+\textbf{Two reading paths through a shared core.}
+In Sections~\ref{sec:why}--\ref{sec:decisions}, follow the question, verbal example, figures and takeaway; then read the report exercise and synthesis (Sections~\ref{sec:report}--\ref{sec:conclusion}). Both paths retain the assumptions, interpretations and check questions. The perspective boxes offer different starting points within selected technical examples. Choose either path and switch when the other helps; discipline does not determine mathematical preparation or clinical knowledge.
 \begin{itemize}
-\item \emph{Core:} framework and clinical example (Sections~\ref{sec:why}--\ref{sec:clinical}); representation, attention, memory and evaluation (Sections~\ref{sec:vocabulary}--\ref{sec:decisions}); report exercise and synthesis (Sections~\ref{sec:report}--\ref{sec:conclusion}). Use the takeaways and check questions to identify the central lessons.
-\item \emph{Optional computation:} growth-model verification, tissue-guided simulation and generated-data parameter recovery (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), and worked attention and Hopfield calculations (Appendices~\ref{app:attention} and~\ref{app:hopfield}). Read the verbal explanation, follow the equation, then inspect the notebook.
-\item \emph{Optional cognition:} reasoning/functional MRI studies, embodiment and consciousness (Sections~\ref{sec:research}--\ref{sec:consciousness}); clinical 4E examples (Appendix~\ref{app:4e}). Ask what observation would distinguish two explanations.
+\item \emph{Biomedical and imaging path:} use the MRI vignette (Section~\ref{sec:clinical}) to anchor each model claim. In growth modelling, distinguish the simulated density, the displayed boundary and an imaging observation (Section~\ref{sec:growth}). In the vocabulary examples, identify the measured operation before making a brain comparison (Section~\ref{sec:vocabulary}). Use the expected counts to explain a positive result before considering an action (Section~\ref{sec:decisions}). The biomedical and imaging paragraphs in the boxes guide these comparisons.
+\item \emph{Computational path:} after each verbal example, trace the variables, update rule and test. Follow the growth equation and numerical checks (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), then the attention and Hopfield derivations (Appendices~\ref{app:attention} and~\ref{app:hopfield}; Notebooks 08, 10 and 12). Derive predictive value and the action threshold from counts and expected costs (Section~\ref{sec:decisions}). The computational paragraphs guide these calculations; return to the shared interpretation to identify what the computed quantity measures.
 \end{itemize}
+
+\textbf{Optional extension for either path.} Reasoning/functional MRI studies, embodiment and consciousness (Sections~\ref{sec:research}--\ref{sec:consciousness}), and clinical 4E examples (Appendix~\ref{app:4e}), extend the same question: what observation would distinguish two explanations?
 
 \textbf{Related resources:} \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{Notebook guide and Colab links} $\cdot$ \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{Presentation guide}. Each notebook runs independently. Predict, run, then explain the result.
 \clearpage
@@ -191,6 +203,12 @@ Read the equation as \emph{change in density = redistribution through space + lo
 \end{itemize}
 The no-flux boundary specifies a closed transport domain; growth inside it can still change the total cell number. The migration/proliferation dichotomy known as \emph{go-or-grow} is a separate mechanistic hypothesis \citep{hatzikirou2012}; the displayed equation has no explicit switching between migratory and proliferative cell states.
 
+\begin{perspectives}{growth modelling}
+\textbf{Biomedical and imaging perspective.} Read $c$ as an assigned cell density and ask how a measurement would relate to it. In the threshold example below, first change only the display threshold at a fixed time, then change a growth parameter while keeping the threshold fixed. Which change alters the simulated state, and which changes only its displayed extent?
+
+\textbf{Computational perspective.} Separate the evolution equation from the rule that converts its field into observations. Use Notebook 13 to check growth, transport and boundaries independently; use 14a--14c to investigate thresholding, anatomy and fitting. Track which assumptions are shared by the observation generator and fitted model before interpreting a withheld forecast.
+\end{perspectives}
+
 \subsection{Check the implementation using simpler cases}
 An AI assistant can propose equations, implement a solver and construct a display. To check the solver, remove transport by setting $D=0$. At each location the equation becomes $dc/dt=\rho c(1-c/K)$. For a starting density $c_0>0$ and constant $\rho,K$, its exact solution is
 \[
@@ -287,6 +305,12 @@ For a specific controlled example, put a bright site marker outside the anatomy 
 
 Appendix~\ref{app:maps} and \texttt{code/src/brainsmodels/attention\_maps.py} make these distinctions executable. A small, explicitly specified self-attention sublayer and scalar readout produce an attention matrix, a signed input gradient, and a patch-occlusion map for the same synthetic input (\coursenotebook{08_attention_maps.ipynb}{notebook 08}; the two-key calculation is in \coursenotebook{10_two_key_attention.ipynb}{notebook 10}). The example also changes a marker while holding the central pattern fixed and randomizes parameters. It is a transparent computational exercise, not a trained clinical Transformer or a reproduction of a saliency validation study.
 
+\begin{perspectives}{attention and image overlays}
+\textbf{Biomedical and imaging perspective.} Before interpreting an overlay, identify what its colours encode and which output is being examined. In the synthetic marker experiment, compare the score before and after the marker changes while the central pattern stays fixed. Anatomical plausibility and dependence of a prediction on a feature are separate questions.
+
+\textbf{Computational perspective.} Work through Appendix~\ref{app:attention} with Notebook 10: keep query and keys fixed, then change the second value from 10 to $-10$. Explain why the weights stay fixed while the output changes. In Notebook 08, compare a local derivative with a finite replacement, keeping the output target and replacement baseline explicit.
+\end{perspectives}
+
 \learningcheck{Attention weights, gradients and finite replacements describe different operations and must be interpreted with their output and scale.}{If attention weights stay fixed while the values change, must the final weighted output stay fixed?}
 
 \subsection{Memory: distinguish parameters, context, retrieval, and recollection}
@@ -326,6 +350,12 @@ Figure~\ref{fig:hopfield} shows a 12-unit example in which three signs of a stor
 Can this tell us how the brain might work? It demonstrates the sufficiency of one recurrent mechanism for content-addressable pattern completion and suggests tests of attractor-based accounts. A biological prediction is that degrading retrieval cues should expose a dependence on circuitry that supports completion. In mice, \citet{nakazawa2002} found impaired recall under reduced spatial cues after a CA3-targeted NMDA-receptor manipulation, despite preserved performance under full cues. This supports a role for CA3-related processes in associative recall; it does not establish the Hopfield update equation or isolate all contributions of encoding and retrieval.
 
 Stronger tests would compare neural population trajectories and behavioural errors across cue quality, competing memories, and interventions, against alternative models such as feed-forward classification. The classical network assumes symmetric weights, binary states, and asynchronous updates, whereas biological circuits have richer dynamics and plasticity. Its energy is a mathematical function, not a measurement of metabolic expenditure. Thus the model can reveal a candidate computational principle and its failure modes while leaving its biological realization open.
+
+\begin{perspectives}{associative retrieval}
+\textbf{Biomedical and imaging perspective.} Compare the corrupted cue, final pattern and energy trace in Notebook 12. Ask separately whether the system settles and whether it retrieves the intended pattern. Then identify the behavioural and neural observations that would be needed to investigate pattern completion in a biological system.
+
+\textbf{Computational perspective.} Follow one asynchronous update in Appendix~\ref{app:hopfield}, checking where symmetry and the zero diagonal enter the energy argument. Next start at the sign-reversed target: it is stable and has the same energy as the target in this construction. Report retrieval accuracy alongside energy; a decreasing energy trace alone does not select the intended memory.
+\end{perspectives}
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=\linewidth]{figures/hopfield.pdf}
@@ -406,6 +436,12 @@ Choose the action when its expected cost is lower. For positive costs, rearrange
 p > \frac{C_{\mathrm{FP}}}{C_{\mathrm{FP}}+C_{\mathrm{FN}}}.
 \end{equation}
 For an arithmetic example, if a missed condition costs four units and an unnecessary action costs one, the threshold is $1/(1+4)=0.2$. These stipulated costs demonstrate the calculation. A clinical decision model would also need justified estimates of treatment harms, delays, competing outcomes, repeated tests and patient preferences. The mathematical point is that an objective does not specify its own acceptable consequences. Someone must justify the target, the actions, and the values represented by their costs.
+
+\begin{perspectives}{predictive value and decisions}
+\textbf{Biomedical and imaging perspective.} Use the 10,000-person table to explain why only 90 of 1,080 positive results are true positives in this example. Identify the population to which those counts refer. Before proposing an action, ask which consequences and patient preferences the simplified cost model leaves out.
+
+\textbf{Computational perspective.} Reconstruct the expected counts and cancel the population size to obtain PPV. Keep population prevalence $\pi$ distinct from the decision probability $p$. Derive the action threshold by comparing the two expected costs, then ask whether the probabilities are calibrated in the population where the rule will be used.
+\end{perspectives}
 
 \subsection{Evaluate the system people actually use}
 A workflow may change who sees a case, when they see it, and what they believe before reviewing the image. A nominal human checkpoint does not establish effective oversight. The reviewer needs relevant information, sufficient time, the ability to challenge an output, and an actionable fallback. Performance should be assessed for the combined human--AI process, including errors introduced or amplified by that process.
@@ -514,6 +550,8 @@ This example also connects to a linguistic debate. Bender and Koller distinguish
 
 \section{Teaching transferable judgment}\label{sec:teaching}
 A mixed cohort benefits when each technical concept ends in an interpretable question. After the attention example, ask what operation it implements; use Appendix~\ref{app:attention} for the calculation. After the Hopfield example, ask which assumptions ensure energy decreases. After the shortcut plot, ask which test would distinguish useful anatomy from acquisition cues. After the prevalence calculation, ask what additional information is needed before acting. The same activity can be approached computationally by one participant and conceptually by another.
+
+Use the perspective boxes for a paired explanation: one reader explains what a result could mean for an observation or decision, and another reconstructs the calculation and its assumptions. Exchange roles before proposing a further test. Both readers should be able to state what was computed and which interpretation the evidence supports.
 
 The educational aim is not simply to teach students how to obtain an answer from a model. It is to make them specify what they would accept as evidence and notice when an answer exceeds that evidence. A practical assessment can ask students to submit a result together with one falsification attempt: a changed population, a perturbed input, a contradictory example, or a check of the source text. An unsuccessful model can still teach something if the failure is characterized accurately; a successful one can still be misunderstood.
 
