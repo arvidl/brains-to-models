@@ -51,7 +51,7 @@ Artificial intelligence (AI) in medical imaging is both an engineering instrumen
 \textbf{Suggested reading routes.}
 \begin{itemize}
 \item \emph{Core:} framework and clinical example (Sections~\ref{sec:why}--\ref{sec:clinical}); representation, attention, memory and evaluation (Sections~\ref{sec:vocabulary}--\ref{sec:decisions}); report exercise and synthesis (Sections~\ref{sec:report}--\ref{sec:conclusion}). Use the takeaways and check questions to identify the central lessons.
-\item \emph{Optional computation:} growth-model verification (Section~\ref{sec:growth}) and worked attention and Hopfield calculations (Appendices~\ref{app:attention} and~\ref{app:hopfield}). Read the verbal explanation, follow the equation, then inspect the notebook.
+\item \emph{Optional computation:} growth-model verification, tissue-guided simulation and generated-data parameter recovery (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), and worked attention and Hopfield calculations (Appendices~\ref{app:attention} and~\ref{app:hopfield}). Read the verbal explanation, follow the equation, then inspect the notebook.
 \item \emph{Optional cognition:} reasoning/functional MRI studies, embodiment and consciousness (Sections~\ref{sec:research}--\ref{sec:consciousness}); clinical 4E examples (Appendix~\ref{app:4e}). Ask what observation would distinguish two explanations.
 \end{itemize}
 
@@ -200,7 +200,55 @@ At $t=0$ the denominator is $K/c_0$, giving $c(0)=c_0$; for $\rho>0$, the soluti
 
 Next set $\rho=0$ and retain zero boundary flux. Transport should redistribute cells while conserving their total number. A second check is needed for their location: periodic wraparound can conserve the total while moving cells across the wrong boundary. Reducing grid spacing and time steps tests how discretization error changes with resolution. \coursenotebook{13_verified_growth_model.ipynb}{Notebook 13} implements a small independent one-dimensional reference, plus a uniform-compartment coupled limit. An optional check exercises the pinned three-dimensional implementation on synthetic arrays without reading anatomy or patient data.
 
-The separate BrainWeb demonstration adds an illustrative coupling of viable cells, oxygen and necrotic material, and compares it with a matched Fisher--KPP reference. Its reduced closure (the chosen relationships connecting the variables) and parameters are hypotheses for exploration. Removing oxygen uptake should recover the specified baseline; this checks consistency of the coupled equations. Testing physiological adequacy additionally requires independent oxygen and cell-density measurements, parameter estimation and withheld outcomes. Anatomical overlays provide spatial context for that test. The slide-to-resource guide records the companion implementations and their versions; the teaching repository does not duplicate the anatomical solver or its datasets.
+The separate BrainWeb demonstration adds an illustrative coupling of viable cells, oxygen and necrotic material, and compares it with a matched Fisher--KPP reference. Its reduced closure (the chosen relationships connecting the variables) and parameters are hypotheses for exploration. Removing oxygen uptake should recover the specified baseline; this checks consistency of the coupled equations. Testing physiological adequacy additionally requires independent oxygen and cell-density measurements, parameter estimation and withheld outcomes. The following exercises examine the simpler Fisher--KPP model on anatomy and with generated observations; they do not reproduce the full coupled implementation. The slide-to-resource guide records the external implementations and their versions.
+
+\subsection{Separate a density field from a displayed boundary}
+\input{figures/growth_extension_numbers}
+\coursenotebook{14a_growth_density_and_thresholds.ipynb}{Notebook 14a} extends verification into interpretation. It adapts the tissue and threshold experiments of the companion glioma teaching material \citep{gliomateaching2026}. For a spatially constant carrying capacity, define the dimensionless fraction $u=c/K$. The equation becomes $\partial_t u=\nabla\!\cdot(D\nabla u)+\rho u(1-u)$. An invented two-dimensional tissue map supplies a controlled comparison before introducing an anatomical phantom. Spatially varying cell motility in grey and white matter has a published glioma-model precedent \citep{swanson2000}; the coefficients here are assigned teaching values, not estimates from that study or a particular MRI.
+
+For pixel area $a$, two readings of the same field are
+\[
+B_{2D}=a\sum_i u_i,\qquad A_\tau=a\sum_i\mathbf{1}[u_i\geq\tau].
+\]
+The indicator $\mathbf{1}[\cdot]$ is one when the condition holds and zero otherwise. The integral $B_{2D}$ weights every pixel by its density fraction; $A_\tau$ counts selected pixels equally. Both have units mm$^2$, but neither is a cell count or whole-tumour volume. A 1~mm$^2$ pixel at $u=0.8$ contributes 0.8~mm$^2$ to the integral and 1~mm$^2$ to $A_{0.2}$. Raising the reading threshold changes the displayed boundary without changing the simulated state.
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=.92\linewidth]{figures/growth_tissue_thresholds.pdf}
+\caption{A constructed two-dimensional domain, not a patient image or BrainWeb slice. Homogeneous and tissue-dependent scalar diffusivities have the same domain mean, with the initial state and proliferation rate fixed. They need not produce the same spatial field or integrated density. The lower-right panel changes only the threshold applied to one simulation. The coefficients, closed barriers and thresholds are teaching assumptions.}\label{fig:growth-thresholds}
+\end{figure}
+\FloatBarrier
+
+\subsection{Use anatomy without mistaking it for a tumour observation}
+\coursenotebook{14b_brainweb_growth.ipynb}{Notebook 14b} uses the original normal BrainWeb digital phantom and its tissue labels \citep{collins1998,cocosco1997}. Both input volumes are bundled with the teaching code; no companion checkout or separate data download is needed. Its simulated T1 contains no tumour. The density seed and growth rates are specified separately. The loader checks paired image geometry and file checksums, then samples every fourth native voxel at 4~mm spacing while retaining physical coordinates. This coarse representation can lose thin barriers; changing the sampling changes both the numerical grid and tissue geometry.
+
+The growth domain contains grey matter, white matter and the phantom's glial class, which shares the grey-matter coefficient. CSF and other classes are excluded and act as no-flux barriers. We assign $D_{WM}=0.5$ and $D_{GM}=0.1$~mm$^2$/day and $\rho=0.04$~day$^{-1}$. A Gaussian seed with standard deviation 8~mm and peak $u=0.12$ is centred at RAS+ coordinates $(-24,-12,24)$~mm and masked to that domain. RAS+ denotes axes increasing rightward, anteriorly and superiorly. A homogeneous comparison uses the mean coefficient over the same domain. These are spatially heterogeneous \emph{scalar} coefficients, not fibre-directed diffusion tensors.
+
+For voxel volume $v$ in mm$^3$, normalized burden is $B=v\sum_i u_i/1000$ in mL, while threshold volume is $V_\tau=v\sum_i\mathbf{1}[u_i\geq\tau]/1000$. At 4~mm spacing, one voxel is 0.064~mL: at $u=0.25$ it contributes 0.016~mL to $B$ and 0.064~mL to $V_{0.2}$. In the specified tissue-dependent day-90 run, $B=\GrowthBurden$~mL, whereas $V_{0.05}=\GrowthVolumeLow$~mL and $V_{0.2}=\GrowthVolumeHigh$~mL. These computed quantities are not observed lesion volumes. An absolute model-implied cell count would additionally require a justified $K$ in cells/mm$^3$; a comparison with MRI would require a measurement model for the relevant sequence.
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=\linewidth]{figures/growth_brainweb.pdf}
+\caption{Simulated normalized density at day 90 on the normal BrainWeb phantom. Orthogonal planes pass through the specified seed, with actual sampled RAS+ coordinates labelled. The colour scale is fixed from zero to one; density below 0.01 is hidden for display and overlay opacity is 0.8. Geometry supplies anatomical context; the tumour field and rates are assigned. BrainWeb attribution: \citet{collins1998,cocosco1997}.}\label{fig:growth-brainweb}
+\end{figure}
+\FloatBarrier
+
+\subsection{Estimate parameters, then test a withheld forecast}
+A forward model computes a state from chosen parameters; an inverse problem estimates parameters from observations. \coursenotebook{14c_growth_parameter_recovery.ipynb}{Notebook 14c} makes this distinction testable with generated observations on BrainWeb anatomy. The unknowns are a multiplier $s$ of both tissue diffusivities and a shared proliferation rate $\rho$. The white-to-grey ratio remains fixed at five. The generator uses the stated seed, $s=1$ and $\rho=0.04$~day$^{-1}$ on a 6~mm grid. Seed, tissue geometry, carrying-capacity normalization and ratio are known assumptions.
+
+Define an observation operator $\mathcal B$ that averages each non-overlapping $2\times2\times2$ block into a 12~mm sample. Unmatched high-index edge cells are trimmed consistently. Independent Gaussian noise with standard deviation 0.005 in normalized-density units is added without clipping. Thus
+\[
+y_i=\mathcal B[u(t_i;s,\rho)]+\epsilon_i.
+\]
+This is a density-proxy measurement model, not an MRI simulator. A 72~mm cube around the seed is specified before noise generation and fitting. Least squares within that cube compares 63 candidate pairs using days 20, 40 and 60 only. Day 90 is withheld from parameter selection. The generator uses 0.5-day time steps and candidates use 1-day steps, but both share the spatial grid, equation and observation operator.
+
+For noise seed 7, the grid search selects the generating pair, which is present among the candidates. At day 90 the RMSE (root mean squared error) against the withheld noisy spatial samples is \GrowthForecastError, compared with \GrowthPersistenceError\ for persistence, which simply carries the observed day-60 map forward. These are normalized-density units, not MRI intensity or clinical error scores. The search-grid minimum is not a confidence interval, and one favourable noise realization does not establish robustness or interval coverage. Unknown initialization, separate tissue rates and an imperfect observation operator would create additional inference questions. The source companion contains more extensive recovery and uncertainty experiments; those results are not claimed by this compact exercise.
+
+\begin{figure}[!ht]\centering
+\includegraphics[width=\linewidth]{figures/growth_recovery.pdf}
+\caption{Generated-data recovery and a withheld forecast on the 6~mm BrainWeb grid. The left panel shows fitting error over the candidate grid. The right panel averages samples within the fixed observation cube for display; fitting and reported RMSE use the spatial samples individually. Day 90 does not enter fitting. Shared model and measurement assumptions make this a controlled inference exercise, not independent biological validation.}\label{fig:growth-recovery}
+\end{figure}
+\FloatBarrier
+
+\paragraph{Interactive exploration.} Notebooks 14a--14c provide live controls for tissue rates, numerical settings and inference choices. Time, threshold and image-view controls in 14a/14b read cached states; changing simulation parameters requires a new run. Notebook 14c varies noise, early observation times and search resolution while keeping day 90 withheld. The paper's figures retain the fixed reference settings stated above.
 
 This example gives domain expertise a concrete role in AI-assisted research: specify the scientific question, check units and assumptions, compare with independent solutions, inspect failures, and distinguish an implemented proposal from an empirically supported model.
 
@@ -483,7 +531,7 @@ The most useful conclusion for clinical integration is therefore a disciplined a
 \learningcheck{Specify the computation, test competing explanations, and connect the result to the purposes of the people using it.}{For a model claim you encounter next, what single observation would make you revise your interpretation?}
 
 \section*{Reproducibility and provenance}
-The numerical examples are synthetic; the glioma and fMRI studies are empirical research identified separately. Reproduced figures contain published LUMIERE case information; no underlying imaging volumes or additional patient records are distributed here. The \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{presentation guide} maps topics to local notebooks and versioned external implementations. The \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{notebook guide} supplies learning goals, setup instructions and Colab links. AI assistance was used in preparing text and code; scientific interpretation and responsibility rest with the named author. Source, dependencies and reproduction commands are recorded in \url{https://github.com/arvidl/brains-to-models}. A short \href{https://github.com/arvidl/brains-to-models/blob/main/paper/background/README.md}{repository note} documents the preserved background manuscript.
+The training examples and simulated tumour states are generated for teaching; the glioma and fMRI studies are empirical research identified separately. Reproduced figures contain published LUMIERE case information; no patient imaging volumes or additional patient records are distributed here. The normal BrainWeb T1 phantom and tissue labels used in Notebooks 14b/14c are bundled with the code, with source attribution and checksums. The \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{presentation guide} maps topics to local notebooks and versioned external implementations. The \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{notebook guide} supplies learning goals, setup instructions and Colab links. AI assistance was used in preparing text and code; scientific interpretation and responsibility rest with the named author. Source, dependencies and reproduction commands are recorded in \url{https://github.com/arvidl/brains-to-models}. A short \href{https://github.com/arvidl/brains-to-models/blob/main/paper/background/README.md}{repository note} documents the preserved background manuscript.
 
 \FloatBarrier
 \input{appendices}

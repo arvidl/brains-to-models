@@ -4,6 +4,6 @@ The final 30-minute *From Brains to Models* presentation is available as a [Powe
 
 This is an unchanged copy of the reviewed deck. Earlier decks, Beamer sources, presentation generators and rehearsal material remain in the separate private development repository.
 
-The [slide-to-resource guide](resources.md) maps the 29 October deck to local notebooks and versioned external demonstrations. The [resource manifest](resources.json) records its checksum and source versions. Notebook [13](../code/notebooks/13_verified_growth_model.ipynb) provides the numerical verification walkthrough.
+The [slide-to-resource guide](resources.md) maps the 29 October deck to local notebooks and versioned external demonstrations. The [resource manifest](resources.json) records its checksum and source versions. Notebook [13](../code/notebooks/13_verified_growth_model.ipynb) provides the numerical verification walkthrough; [14a–14c](../code/notebooks/README.md#interactive-growth-controls) add interactive density, anatomical and parameter-recovery lessons. Their code and normal BrainWeb inputs are included here, independently of the original external demonstrations.
 
-This repository remains private under `arvidl/brains-to-models-publication`. Downloads require access to it. The planned rename to `arvidl/brains-to-models` and public release remain pending.
+This repository is public at `arvidl/brains-to-models`; the presentation is available without repository membership.

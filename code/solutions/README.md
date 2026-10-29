@@ -20,6 +20,11 @@ Regenerate the `.py` files and the notebook cells with:
 These are teaching checks, not new measurements. They do not write
 `paper/figures/`.
 
+Notebooks 08–14c keep their worked calculations, interpretation questions and
+reasoning beside the relevant examples. They do not require separate solution
+scripts. In 14a–14c, expand **Show reasoning** after attempting the exercises;
+the interactive controls support further experiments with the same model.
+
 Notebooks 00–07 also include five **Questions for reflection** and a concise
 **Further reading** list. Instructor discussion notes reprint each question in
 [questions_responses.md](../notebooks/questions_responses.md). These are sample

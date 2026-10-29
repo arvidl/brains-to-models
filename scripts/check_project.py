@@ -49,7 +49,10 @@ def main():
     for path in files:
         rel = path.relative_to(ROOT)
         assert rel.parts[0] not in excluded_roots, f"Development material: {rel}"
-        assert path.suffix.lower() not in {".zip", ".7z", ".tar", ".gz"}, f"Archive: {rel}"
+        assert path.suffix.lower() not in {".zip", ".7z", ".tar", ".gz"} or (
+            path.parent == ROOT / "code/src/brainsmodels/data/brainweb"
+            and path.name in {"t1_icbm_normal_1mm_pn0_rf0.nii.gz",
+                              "phantom_1.0mm_normal_crisp.nii.gz"}), f"Archive: {rel}"
         if path.suffix.lower() in presentations:
             assert path.parent == ROOT / "talk" and path.suffix.lower() == ".pptx", rel
             assert path.stat().st_size < 100 * 1024**2, f"PPTX exceeds GitHub limit: {rel}"
@@ -132,6 +135,26 @@ def main():
                            for cell in notebook["cells"]
                            for output in cell.get("outputs", []))
             assert previews >= 2, "Verification notebook is missing its saved plots"
+        if path.name.startswith(("14a_", "14b_", "14c_")):
+            previews = sum("image/png" in output.get("data", {})
+                           for cell in notebook["cells"] for output in cell.get("outputs", []))
+            assert previews >= 1, f"Growth lesson is missing its saved figure: {path.name}"
+            assert "ipywidgets>=8.1" in setup_source and "enable_custom_widget_manager" in setup_source
+            assert any("interactive" in cell.get("metadata", {}).get("tags", [])
+                       and "brainsmodels.growth_widgets" in "".join(cell["source"])
+                       for cell in notebook["cells"]), f"Missing live growth controls: {path.name}"
+
+    from brainsmodels.brainweb_data import COMMIT, FILES, BUNDLED, verify_files
+    verify_files(BUNDLED)
+    manifest = json.loads((BUNDLED / "manifest.json").read_text())
+    growth = json.loads((ROOT / "paper/figures/growth_extension_values.json").read_text())
+    assert growth["data_commit"] == COMMIT
+    for name, (digest, size) in FILES.items():
+        assert growth["data_files"][name] == {"sha256": digest, "bytes": size}
+        assert manifest["files"][name]["sha256"] == digest
+        assert manifest["files"][name]["bytes"] == size
+    assert growth["recovery"]["fit_days"] == [20., 40., 60.]
+    assert growth["recovery"]["withheld_day"] == 90.
 
     from brainsmodels.growth_verification import REFERENCE_COMMIT, REFERENCE_MODEL_SHA256
     resources = json.loads((ROOT / "talk/resources.json").read_text())

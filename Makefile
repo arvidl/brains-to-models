@@ -4,7 +4,7 @@ export MPLBACKEND := Agg
 export PYTHONHASHSEED := 7
 export MPLCONFIGDIR := $(CURDIR)/.build/matplotlib
 
-.PHONY: figures paper all clean-paper check check-segmentation check-examples check-growth check-notebooks
+.PHONY: figures growth-figures paper all clean-paper check check-segmentation check-examples check-growth check-growth-brainweb check-growth-widgets check-notebooks
 
 figures:
 	mkdir -p paper/figures
@@ -24,6 +24,10 @@ figures:
 	$(PYTHON) -m brainsmodels.clinical_examples
 	$(PYTHON) -m brainsmodels.clinical_appendix
 	$(PYTHON) -m brainsmodels.attention_maps
+	$(MAKE) growth-figures
+
+growth-figures:
+	$(PYTHON) scripts/build_growth_lessons.py
 
 paper:
 	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -39,9 +43,18 @@ check:
 	$(PYTHON) scripts/check_paper_examples.py
 	$(PYTHON) scripts/check_teaching_models.py
 	$(PYTHON) scripts/check_growth.py
+	$(PYTHON) scripts/check_growth_extension.py
+	$(PYTHON) scripts/check_growth_widgets.py
 
 check-growth:
 	$(PYTHON) scripts/check_growth.py
+	$(PYTHON) scripts/check_growth_extension.py
+
+check-growth-brainweb:
+	$(PYTHON) scripts/check_growth_extension.py --brainweb
+
+check-growth-widgets:
+	$(PYTHON) scripts/check_growth_widgets.py
 
 check-segmentation:
 	$(PYTHON) scripts/check_segmentation.py

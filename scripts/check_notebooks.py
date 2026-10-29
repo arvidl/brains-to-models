@@ -23,12 +23,15 @@ DEFAULTS = (
     "10_two_key_attention.ipynb", "11_shortcut_dependence.ipynb",
     "12_hopfield_12_units.ipynb",
     "13_verified_growth_model.ipynb",
+    "14a_growth_density_and_thresholds.ipynb",
+    "14b_brainweb_growth.ipynb",
+    "14c_growth_parameter_recovery.ipynb",
 )
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--all", action="store_true", help="Execute all eighteen notebooks")
+    parser.add_argument("--all", action="store_true", help="Execute every notebook")
     parser.add_argument("--colab", action="store_true", help="Test the Colab setup path in fresh local kernels")
     parser.add_argument("notebooks", nargs="*", help="Filenames under code/notebooks")
     args = parser.parse_args()

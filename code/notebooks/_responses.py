@@ -14,6 +14,10 @@ These sample answers explain the scope of the teaching calculations. Alternative
 answers can be reasonable when their assumptions and supporting evidence are clear.
 The examples do not decide philosophical questions about experience or values.
 
+These notes cover notebooks 00–07 and their lettered companions. Notebooks
+08–14c keep their worked calculations and interpretation guidance in the
+notebooks themselves; use the [notebook guide](README.md) to find them.
+
 Write your own answers before consulting these notes. Regenerate this file with
 `.venv/bin/python code/notebooks/_responses.py`.
 """

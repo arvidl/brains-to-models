@@ -9,6 +9,7 @@ authors = [{ name = "Arvid Lundervold" }]
 dependencies = [
     "numpy>=1.26",
     "matplotlib>=3.8",
+    "nibabel>=5.3,<6",
     "ipykernel>=6.29,<7",
     "ipywidgets>=8.1",
     "pip>=24.0",
@@ -30,3 +31,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["code/src"]
+
+[tool.setuptools.package-data]
+brainsmodels = ["data/brainweb/*"]
