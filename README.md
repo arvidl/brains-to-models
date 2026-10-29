@@ -29,6 +29,8 @@ The paper connects clinical interpretation and brain–model comparisons with nu
 
 For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b and 14a–14c also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
 
+**Colab verified — 29 October 2026:** All twenty-one notebooks completed their default runs on hosted CPU runtimes. Verification included representative widget checks, 05b’s full-screen mouse interactions and bundled BrainWeb data loading. See [verification results and scope](code/notebooks/README.md#colab-verification).
+
 Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification; 14a–14c extend growth modelling into tissue-guided spread, BrainWeb anatomy and generated-data parameter recovery. See the guide for direct Colab links to all twenty-one.
 
 Use Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Clone this repository using your GitHub access, then change to the checkout directory containing `pyproject.toml` and `uv.lock`:
