@@ -11,7 +11,7 @@ This publication copy contains the paper, computational material and final 30-mi
 
 | Resource | Contents |
 |---|---|
-| [Paper PDF](paper/main.pdf) | Compiled perspective paper |
+| [Paper PDF](paper/main.pdf) | Compiled paper, including the 25-page slide companion in Appendix D |
 | [LaTeX source](paper/main.tex) | Main text, with [appendices](paper/appendices.tex) and [bibliography](paper/references.bib) |
 | [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-two teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
@@ -31,6 +31,13 @@ The [reader's guide](paper/main.pdf#page=2) offers two reading paths through a s
 - **Computational:** trace variables, update rules, numerical checks and worked derivations.
 
 Four paired perspective boxes connect these approaches in growth modelling, attention and image overlays, associative retrieval, and predictive value and decisions. Both paths retain the assumptions, takeaways and check questions. Readers can switch paths as their interests and preparation suggest.
+
+Appendix D is a [25-page slide companion](paper/main.pdf#page=35), with one page
+per slide. Each page starts with an unchanged thumbnail and a short title,
+followed by **Biomedical and imaging path** and **Computational path** explanations.
+It serves as extended presenter notes and a syllabus route through the
+[presentation](talk/resources.md) and notebooks. Its [LaTeX source](paper/appendix-slides.tex)
+is editable separately from the main text.
 
 ## Run the notebooks
 

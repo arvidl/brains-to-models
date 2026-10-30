@@ -6,6 +6,17 @@ come from separate research repositories. The [resource manifest](resources.json
 records the included PPTX's path, byte size, checksum and slide count, along with
 the companion source versions. The presentation can be downloaded from this public repository.
 
+## Slide-by-slide teaching notes
+
+Appendix D of the [paper](../paper/main.pdf) is a 25-page syllabus companion,
+with one unchanged slide thumbnail, a short title and two explanations per page:
+**Biomedical and imaging path** and **Computational path**. The
+[LaTeX source](../paper/appendix-slides.tex) is editable. The notes supply definitions,
+interpretation, exercises and links to the relevant notebooks; qualifications in
+the notes do not change the slides. Slide 24's supplied PNG is a static video
+placeholder, which its notes explicitly identify. The [thumbnail manifest](../paper/figures/talk/manifest.json)
+records the original filenames and checksums.
+
 ## Slides and supporting material
 
 | Slides | Subject | Resource and suggested use |

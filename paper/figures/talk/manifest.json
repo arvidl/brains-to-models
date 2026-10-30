@@ -1,0 +1,180 @@
+{
+  "description": "Unmodified supplied PNG exports of the 25-slide keynote; slide 24 is a static video placeholder.",
+  "slides": [
+    {
+      "slide": 1,
+      "source_filename": "From Brains to Models_01.png",
+      "file": "slide-01.png",
+      "bytes": 88075,
+      "sha256": "efa720e3637e96f0fe251e84ae98d2a42a084650ca811172a126c985f2f6faac"
+    },
+    {
+      "slide": 2,
+      "source_filename": "From Brains to Models_02.png",
+      "file": "slide-02.png",
+      "bytes": 16519,
+      "sha256": "c7884cd7269e5a6097ecb0760b17373182668f6c4a0402422878d71cf0687e9a"
+    },
+    {
+      "slide": 3,
+      "source_filename": "From Brains to Models_03.png",
+      "file": "slide-03.png",
+      "bytes": 548045,
+      "sha256": "5f5d155179f8089102b062bc8264c614d30bdf2a991af5256382aaf22efb88e3"
+    },
+    {
+      "slide": 4,
+      "source_filename": "From Brains to Models_04.png",
+      "file": "slide-04.png",
+      "bytes": 238500,
+      "sha256": "a172b863b1b11b171a77a268aef3efe676af25627602c5342cefe18a5352d6d0"
+    },
+    {
+      "slide": 5,
+      "source_filename": "From Brains to Models_05.png",
+      "file": "slide-05.png",
+      "bytes": 87177,
+      "sha256": "cd110fe62e74a33f9f39f3ed4fdd22754cdf076eecc0456cfb644f2ce3baea60"
+    },
+    {
+      "slide": 6,
+      "source_filename": "From Brains to Models_06.png",
+      "file": "slide-06.png",
+      "bytes": 147061,
+      "sha256": "bf904adb9e71d0c077f5665ccf357c905ee5d801ec73a4dfd1ac43cd85a3626d"
+    },
+    {
+      "slide": 7,
+      "source_filename": "From Brains to Models_07.png",
+      "file": "slide-07.png",
+      "bytes": 180750,
+      "sha256": "7287dcb307b3d57b1c7ae5cddb423cc132803781e0b99b1830f9c9eae26e05d0"
+    },
+    {
+      "slide": 8,
+      "source_filename": "From Brains to Models_08.png",
+      "file": "slide-08.png",
+      "bytes": 86158,
+      "sha256": "e3ce2ddc98ce34384209d29d5ee0f0126bc1772a72d13c0f3252879f634fd269"
+    },
+    {
+      "slide": 9,
+      "source_filename": "From Brains to Models_09.png",
+      "file": "slide-09.png",
+      "bytes": 168205,
+      "sha256": "1482770145bda1bb0244e3b7e51f540b82790756da7adfd4b8cb36850dffb33f"
+    },
+    {
+      "slide": 10,
+      "source_filename": "From Brains to Models_10.png",
+      "file": "slide-10.png",
+      "bytes": 264818,
+      "sha256": "18f3d7c98af01219e161a6b0a089bed309b7e59d498c89a9e057630b432d8de0"
+    },
+    {
+      "slide": 11,
+      "source_filename": "From Brains to Models_11.png",
+      "file": "slide-11.png",
+      "bytes": 159088,
+      "sha256": "d6fde703b439cf1baa0576d468aa32518d1fdcbe4e952c1944352c83b5957746"
+    },
+    {
+      "slide": 12,
+      "source_filename": "From Brains to Models_12.png",
+      "file": "slide-12.png",
+      "bytes": 261843,
+      "sha256": "00fe049fa91ea4d0b31ec5ba807c35a1f53e811a098f017d208c289620db5f59"
+    },
+    {
+      "slide": 13,
+      "source_filename": "From Brains to Models_13.png",
+      "file": "slide-13.png",
+      "bytes": 133868,
+      "sha256": "3da6ae1ac1f51a1166b8637fdd8a0d44dd94deedca4edf7a0d5150aa33a95756"
+    },
+    {
+      "slide": 14,
+      "source_filename": "From Brains to Models_14.png",
+      "file": "slide-14.png",
+      "bytes": 177951,
+      "sha256": "6dbf3d19b1981feab372122f76cca48909550c9ad4d0239f4f49b93a9a3332fe"
+    },
+    {
+      "slide": 15,
+      "source_filename": "From Brains to Models_15.png",
+      "file": "slide-15.png",
+      "bytes": 132935,
+      "sha256": "3b62f29c77e33f4cbaf43a97d5677e57c4d854d301c944b2deeaf100a54fc275"
+    },
+    {
+      "slide": 16,
+      "source_filename": "From Brains to Models_16.png",
+      "file": "slide-16.png",
+      "bytes": 230540,
+      "sha256": "686003cbda993fafc7a2a390604522a3d9030dcabdb69ea99151b1cd30aa81f9"
+    },
+    {
+      "slide": 17,
+      "source_filename": "From Brains to Models_17.png",
+      "file": "slide-17.png",
+      "bytes": 127341,
+      "sha256": "50d2a7f714183b5ee9ca260dea69921fc411649fa7e34a0dce9b9d1964eb56b5"
+    },
+    {
+      "slide": 18,
+      "source_filename": "From Brains to Models_18.png",
+      "file": "slide-18.png",
+      "bytes": 255701,
+      "sha256": "7b081129fe179f7da3f9c254800947ce7e00fa5c536d2ee4ddcbf32a724dd94d"
+    },
+    {
+      "slide": 19,
+      "source_filename": "From Brains to Models_19.png",
+      "file": "slide-19.png",
+      "bytes": 416889,
+      "sha256": "8277f1eea02f4959d51dafaa3e0733f847faa179acf41e2794f3befd78a4cc40"
+    },
+    {
+      "slide": 20,
+      "source_filename": "From Brains to Models_20.png",
+      "file": "slide-20.png",
+      "bytes": 284858,
+      "sha256": "423c8eaae084c4b71c1dfcfda603847c82951ed00838530066b13071191f8478"
+    },
+    {
+      "slide": 21,
+      "source_filename": "From Brains to Models_21.png",
+      "file": "slide-21.png",
+      "bytes": 284713,
+      "sha256": "64c113968c2cf85ad6e2aec8c8efabf2b2fadfcb503edff9faf0e740bc67febb"
+    },
+    {
+      "slide": 22,
+      "source_filename": "From Brains to Models_22.png",
+      "file": "slide-22.png",
+      "bytes": 88549,
+      "sha256": "d440c33c7ad32e8cfa67bd3ebe007d4765a9d234d37feb1fc11eacac299ee134"
+    },
+    {
+      "slide": 23,
+      "source_filename": "From Brains to Models_23.png",
+      "file": "slide-23.png",
+      "bytes": 49887,
+      "sha256": "03cbe21ddc0cec18811063ae9a9502e119280656c3d9826414f2a663297d390e"
+    },
+    {
+      "slide": 24,
+      "source_filename": "From Brains to Models_24.png",
+      "file": "slide-24.png",
+      "bytes": 12620,
+      "sha256": "b591d026c08df7ecbbc1993dfd98d5d6f9ffdb8afe50dc2dd3bda2ee985cef74"
+    },
+    {
+      "slide": 25,
+      "source_filename": "From Brains to Models_25.png",
+      "file": "slide-25.png",
+      "bytes": 1132792,
+      "sha256": "74e74ab0b57aaaf703ba30e5f37925a72d5bae3d0013e77524abbc676604e247"
+    }
+  ]
+}
