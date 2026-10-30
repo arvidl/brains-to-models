@@ -178,6 +178,16 @@
         "author_url": "https://www.molekyl.io",
         "video_url": "https://vimeo.com/1234541249",
         "source_text_url": "https://www.molekyl.io/p/m020-that-feeling"
+      },
+      "transcript": {
+        "file": "../../../talk/transcripts/slide-24-something-has-changed.txt",
+        "source_filename": "something-has-changed-molekyl-030.mp4",
+        "source_sha256": "3c21ff9320f90c7c8831edacbae97cc64332a076e8d28210499aca3cba923ee8",
+        "duration_seconds": 112.512,
+        "sha256": "0db48314f40be16da3aef08454bd29219df3ba5f3ac6faa7cc152f4ea8b4ecfc",
+        "language": "en",
+        "credit": "Words: Prof. Eirik S. Knudsen",
+        "method": "Local speech recognition; recognition errors checked against on-screen wording; punctuation and paragraph breaks edited."
       }
     },
     {

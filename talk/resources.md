@@ -16,8 +16,9 @@ interpretation, exercises and links to the relevant notebooks; qualifications in
 the notes do not change the presentation deck. Appendix slide 24 uses a supplied
 video-player image credited to **Prof. Eirik S. Knudsen**, linked to
 [Molekyl](https://www.molekyl.io) and the [film](https://vimeo.com/1234541249).
-Its notes include a summary and a link to the
-[published source words](https://www.molekyl.io/p/m020-that-feeling). The [thumbnail manifest](../paper/figures/talk/manifest.json)
+Its notes include the full spoken narration from the supplied video, with an
+[editable plain-text transcript](transcripts/slide-24-something-has-changed.txt).
+Punctuation and paragraphing are edited; the writer's credit is retained. The [thumbnail manifest](../paper/figures/talk/manifest.json)
 records the original filenames and checksums.
 
 ## Slides and supporting material

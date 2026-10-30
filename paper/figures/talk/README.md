@@ -14,6 +14,9 @@ with the user-supplied video-player image, reproduced unchanged. The paper adds
 [Vimeo link](https://vimeo.com/1234541249). The manifest records this replacement
 separately; `slide-24.png` preserves the original export.
 
-The notes contain a labelled summary with a link to the
-[published source words](https://www.molekyl.io/p/m020-that-feeling), rather than
-a soundtrack transcript.
+Appendix slide 24 includes the complete spoken narration, transcribed from the
+supplied MP4 and checked against its on-screen wording. A
+[plain-text copy](../../../talk/transcripts/slide-24-something-has-changed.txt)
+records the writer's credit and editorial convention. The manifest records the
+source video's checksum and duration and the transcript's checksum. The video
+itself remains available through the Vimeo link.

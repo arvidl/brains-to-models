@@ -38,6 +38,8 @@ followed by **Biomedical and imaging path** and **Computational path** explanati
 It serves as extended presenter notes and a syllabus route through the
 [presentation](talk/resources.md) and notebooks. Its [LaTeX source](paper/appendix-slides.tex)
 is editable separately from the main text.
+Slide 24 includes the full video narration, also available as a
+[plain-text transcript](talk/transcripts/slide-24-something-has-changed.txt).
 
 ## Run the notebooks
 
