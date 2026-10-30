@@ -63,12 +63,11 @@ In 14c, compare noise seeds, generating rates, early observation times, search r
 
 ## Colab verification
 
-**Last verified: 29 October 2026.** The twenty-one notebooks 00–14c completed their default execution paths on Google Colab hosted CPU runtimes using Python 3.13.18 and NumPy 2.1.3. These were hosted runs, in addition to the repository's local checks and Colab setup simulations.
+**Last verified: 30 October 2026.** All twenty-two notebooks completed their default execution paths on Google Colab hosted CPU runtimes using Python 3.13.18 and NumPy 2.1.3: 00–14c on 29 October and 15 on 30 October. These were hosted runs, in addition to the repository's local checks and Colab setup simulations.
 
 - **05b:** static figures, GIF/MP4 exports and widget startup passed without a manual runtime restart. Coordinate controls and contour clicks updated the trajectory and energy readout. Mouse dragging rotated the 3-D view; selecting another start preserved the rotated camera. Mouse interactions were tested in the full-screen output view described above.
 - **12:** recall, energy assertions, the cue-corruption sweep and results export passed, including the equal-energy stored and inverse patterns.
 - **14a–14c:** notebook titles, default runs and representative widget changes passed, including model reruns, cached display controls and parameter recovery with a withheld forecast. In 14b/14c, the bundled BrainWeb inputs loaded successfully; both NIfTI files matched their manifest checksums.
+- **15 (30 October):** fresh Run all completed all nine code cells, including the paper's expected counts and PPV values, limiting cases, decision-cost boundary, callback assertions and exercises. Browser interactions through the widget numeric readouts confirmed PPV updates, independent population and decision controls, undefined PPV and equal expected costs. Default controls were restored.
 
 Widget checks exercised representative control changes rather than every parameter combination. Notebook 13's default independent numerical checks passed; its optional audit of an external 3-D solver was not run.
-
-**Notebook 15:** local execution and a fresh Colab bootstrap simulation check the paper's PPV values, expected-count identities, limiting cases, decision-cost boundary and representative widget callbacks. This is not yet a hosted Colab/browser verification of notebook 15.
