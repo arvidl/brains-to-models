@@ -33,7 +33,7 @@ The [reader's guide](paper/main.pdf#page=2) offers two reading paths through a s
 Four paired perspective boxes connect these approaches in growth modelling, attention and image overlays, associative retrieval, and predictive value and decisions. Both paths retain the assumptions, takeaways and check questions. Readers can switch paths as their interests and preparation suggest.
 
 Appendix D is a [25-page slide companion](paper/main.pdf#page=35), with one page
-per slide. Each page starts with an unchanged thumbnail and a short title,
+per slide. Each page starts with a thumbnail and a short title,
 followed by **Biomedical and imaging path** and **Computational path** explanations.
 It serves as extended presenter notes and a syllabus route through the
 [presentation](talk/resources.md) and notebooks. Its [LaTeX source](paper/appendix-slides.tex)

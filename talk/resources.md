@@ -9,12 +9,15 @@ the companion source versions. The presentation can be downloaded from this publ
 ## Slide-by-slide teaching notes
 
 Appendix D of the [paper](../paper/main.pdf) is a 25-page syllabus companion,
-with one unchanged slide thumbnail, a short title and two explanations per page:
+with one thumbnail, a short title and two explanations per page:
 **Biomedical and imaging path** and **Computational path**. The
 [LaTeX source](../paper/appendix-slides.tex) is editable. The notes supply definitions,
 interpretation, exercises and links to the relevant notebooks; qualifications in
-the notes do not change the slides. Slide 24's supplied PNG is a static video
-placeholder, which its notes explicitly identify. The [thumbnail manifest](../paper/figures/talk/manifest.json)
+the notes do not change the presentation deck. Appendix slide 24 uses a supplied
+video-player image credited to **Prof. Eirik S. Knudsen**, linked to
+[Molekyl](https://www.molekyl.io) and the [film](https://vimeo.com/1234541249).
+Its notes include a summary and a link to the
+[published source words](https://www.molekyl.io/p/m020-that-feeling). The [thumbnail manifest](../paper/figures/talk/manifest.json)
 records the original filenames and checksums.
 
 ## Slides and supporting material

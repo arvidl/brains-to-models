@@ -1,5 +1,5 @@
 {
-  "description": "Unmodified supplied PNG exports of the 25-slide keynote; slide 24 is a static video placeholder.",
+  "description": "Unmodified source PNG exports of the 25-slide keynote, with a separately supplied replacement video-player image for appendix slide 24.",
   "slides": [
     {
       "slide": 1,
@@ -167,7 +167,18 @@
       "source_filename": "From Brains to Models_24.png",
       "file": "slide-24.png",
       "bytes": 12620,
-      "sha256": "b591d026c08df7ecbbc1993dfd98d5d6f9ffdb8afe50dc2dd3bda2ee985cef74"
+      "sha256": "b591d026c08df7ecbbc1993dfd98d5d6f9ffdb8afe50dc2dd3bda2ee985cef74",
+      "appendix_replacement": {
+        "file": "slide-24-video.png",
+        "source_filename": "codex-clipboard-7ab52a18-09ae-4bff-85fa-1d40211c1646.png",
+        "description": "User-supplied video-player image, reproduced unchanged; the paper supplies linked author attribution.",
+        "bytes": 10971,
+        "sha256": "3d9bdfb31c59012043d6c4cc58545c511638d410d18339fc514b8171c57e1309",
+        "credit": "Prof. Eirik S. Knudsen",
+        "author_url": "https://www.molekyl.io",
+        "video_url": "https://vimeo.com/1234541249",
+        "source_text_url": "https://www.molekyl.io/p/m020-that-feeling"
+      }
     },
     {
       "slide": 25,
