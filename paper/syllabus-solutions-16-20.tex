@@ -1,0 +1,292 @@
+\solutionslide{16}{Compartments, anatomy and measurement}
+\biomedicalanswer
+\task{Predict how a closed fluid barrier changes spread and explain how coarse sampling can change the pattern without changing growth rates.}
+\answerstep{1. State what ``closed'' means in this model.}
+The lesson assigns some fluid-labelled regions as barriers to cell transport. Under that assumption, cells cannot cross a closed interface, although proliferation can still increase their number on the occupied side. The population may spread along connected tissue routes around the barrier instead of taking the shortest straight path through it.
+
+If a barrier completely separates an unseeded component from every seeded component, and the model has no other cell source there, that unseeded component stays empty. A partial barrier can instead delay or redirect access. These are predictions about the declared transport geometry, not universal statements about all tumour--fluid interactions.
+\answerstep{2. Explain the effect of a coarse grid.}
+A thin fluid layer may disappear or become a connected tissue voxel when anatomy is resampled. The discretized model now contains a path that the finer representation blocked. Cells can enter the newly connected region and then proliferate there under the same assigned growth rates. The altered pattern therefore need not come from altered cell biology; it can come from altered connectivity.
+
+The reverse is also possible: coarse sampling can close a narrow tissue passage and impede spread. Grid spacing changes physical representation as well as the number of numerical unknowns.
+\answerstep{3. Choose observations that distinguish the effects.}
+Inspect the resampled tissue mask and the relevant physical slices, trace whether the pathway is open and compare simulations with matched initial fields and rates as closely as the grids permit. Report voxel dimensions and the barrier's physical thickness. If the goal is a pure solver-resolution test, use a geometry defined consistently across grids rather than silently changing the anatomical domain.
+
+BrainWeb supplies a normal anatomical phantom; density, seed and rates are assigned model quantities in this lesson. Its image background is not observed tumour progression \citep{lundervold2026glioma}.
+\answercheck{Explain the chain from anatomical sampling to connectivity, transport and local growth. A mass-conserving computation can still represent the wrong anatomical pathway.}
+
+\computationalanswer{16}
+\task{Prove that increasing a density cutoff cannot increase selected volume. Check the geometry and units of the density integral, threshold volume and cell count.}
+\answerstep{1. Recover the physical voxel volume.}
+An affine maps a homogeneous voxel coordinate to a physical coordinate:
+\[
+\begin{bmatrix}\mathbf x\\1\end{bmatrix}
+=A\begin{bmatrix}\mathbf i\\1\end{bmatrix}.
+\]
+The spatial block $A_{3\times3}$ maps index displacements to millimetres. Its determinant is signed volume scaling; taking its absolute value gives $v=|\det A_{3\times3}|$ in mm$^3$. Translation changes positions, not voxel volume. For spacings 2, 3 and 4~mm on orthogonal axes, $v=24$~mm$^3$; reversing an axis changes the determinant's sign but not this positive volume.
+\answerstep{2. Define the selected sets and prove inclusion.}
+Let $u_i=c_i/K$ be dimensionless density fraction and $S_\tau=\{i:u_i\geq\tau\}$. If $\tau_2\geq\tau_1$, every $i\in S_{\tau_2}$ satisfies $u_i\geq\tau_2\geq\tau_1$, hence $i\in S_{\tau_1}$. Therefore $S_{\tau_2}\subseteq S_{\tau_1}$ and
+\[
+V_{\tau_2}=\frac v{1000}|S_{\tau_2}|
+\leq\frac v{1000}|S_{\tau_1}|=V_{\tau_1}.
+\]
+Here $|S|$ counts elements; $v/1000>0$ converts each voxel's volume to mL. With unequal positive voxel volumes, the same argument uses sums over the nested sets. The proof requires a fixed field and geometry, not a rerun after changing model parameters.
+\answerstep{3. Compute three different summaries.}
+For four 4-mm isotropic voxels, $v=64$~mm$^3=0.064$~mL. Take $u=(0.10,0.25,0.60,1.00)$, whose sum is $1.95$. Then
+\[
+\begin{aligned}
+B&=0.064(1.95)=0.1248\ \mathrm{mL},\\
+V_{0.2}&=0.064(3)=0.192\ \mathrm{mL},\\
+V_{0.5}&=0.064(2)=0.128\ \mathrm{mL}.
+\end{aligned}
+\]
+The density integral $B$ weights each voxel by its fraction; the threshold volumes count every selected voxel fully. For constant $K$ in cells/mm$^3$, the cell count is
+\[
+N=Kv\sum_i u_i=K\,(124.8\ \mathrm{mm}^3).
+\]
+Its units are cells, not mL. Multiplying the displayed mL value $B$ by $K$ without the factor 1000 would give the wrong unit conversion.
+\answerstep{4. Interpret the invariant.}
+Changing only $\tau$ can change $V_\tau$ while leaving $B$ and $N$ unchanged. The notation $B$ here means a density integral; on slide 19 it means a local birth rate. \coursenotebook{14b_brainweb_growth.ipynb}{Notebook 14b} keeps geometry, assigned parameters and simulated fields distinct.
+\answerconnection{The biological answer explains how a barrier shapes a pattern. The calculations distinguish changes in that pattern from changes caused only by threshold or physical-volume accounting.}
+
+\solutionslide{17}{Population growth and a mechanistic hypothesis}
+\biomedicalanswer
+\task{Predict the outcomes of disabling movement and disabling proliferation in a closed domain. Identify an observation separating accumulation from redistribution.}
+\answerstep{1. Disable movement while keeping proliferation.}
+In a model without transport, cells cannot seed a previously empty location by moving into it. Where cells are initially present, their density can rise toward the local limiting scale. An initially sparse tail may become visible as its existing cells proliferate; that appearance is not proof that new cells migrated there. An exactly empty location remains empty in this deterministic model without another source.
+
+Thus the expected picture is local accumulation at occupied sites, with no transport across their boundaries. Whether a threshold contour expands depends partly on the initial field, including low-density tails.
+\answerstep{2. Disable proliferation while keeping movement.}
+With a closed, no-flux boundary, movement redistributes the existing population. High-density regions can become less dense while neighbouring regions gain cells. The total cell number remains constant, even though the apparent footprint can change. In disconnected compartments, each separately closed compartment retains its own total.
+
+A thresholded display can grow or shrink during redistribution, so visible area alone is not a count of newly created cells. With both movement and proliferation disabled, the field remains unchanged.
+\answerstep{3. Name a discriminating observation.}
+Within the simulation, compare the spatial density field with its full-domain integral. Rising density at one site alongside falling density elsewhere and a constant total supports redistribution. An increasing total requires a source such as proliferation under this model's assumptions. In biological work, independent information about division and movement would be needed to separate those mechanisms; MRI appearance alone is not a direct cell count.
+
+The go-or-grow hypothesis additionally distinguishes migratory and proliferative states \citep{hatzikirou2012}. Basic Fisher--KPP combines effective dispersal and logistic growth without an explicit switching variable.
+\answercheck{Use local observations and a total together. An enlarging coloured region does not by itself distinguish migration, proliferation or a display-threshold effect.}
+
+\computationalanswer{17}
+\task{Derive the no-flux total-cell balance, establish conservation without proliferation and verify the diffusion-free logistic solution.}
+\answerstep{1. Define the field and check units.}
+On fixed tissue domain $\Omega$, let $c(\mathbf x,t)$ and constant capacity $K>0$ be in cells/mm$^3$, with $\mathbf x$ in mm and $t$ in days. Diffusivity $D\geq0$ has units mm$^2$/day and rate $\rho\geq0$ has units day$^{-1}$. Fisher--KPP is
+\[
+\partial_t c=\nabla\!\cdot(D\nabla c)+\rho c(1-c/K).
+\]
+The gradient has units cells/mm$^4$. Flux $\mathbf j=-D\nabla c$ therefore has units cells/mm$^2$/day; its divergence, like each other term in the equation, has units cells/mm$^3$/day.
+\answerstep{2. Integrate and apply the boundary condition.}
+Define total $M(t)=\int_\Omega c\,dV$. For sufficiently regular fields on a fixed domain, differentiate under the integral and use the divergence theorem:
+\[
+\begin{aligned}
+\dot M
+&=\int_\Omega\nabla\!\cdot(D\nabla c)\,dV
++\int_\Omega\rho c(1-c/K)\,dV\\
+&=\int_{\partial\Omega}\mathbf n\cdot D\nabla c\,dS
++\int_\Omega\rho c(1-c/K)\,dV\\
+&=\int_\Omega\rho c(1-c/K)\,dV.
+\end{aligned}
+\]
+Here $\partial\Omega$ is the boundary, $\mathbf n$ its outward unit normal and $dS$ a surface element. No flux means $\mathbf n\cdot\mathbf j=0$, equivalently $\mathbf n\cdot D\nabla c=0$. The total $M$ has units cells and $\dot M$ cells/day. Setting $\rho=0$ gives $\dot M=0$, hence $M(t)=M(0)$.
+\answerstep{3. Verify the closed-compartment solution directly.}
+With $D=0$, each location obeys $dc/dt=\rho c(1-c/K)$. For initial value $c_0>0$, set $a=K/c_0-1$ and $q(t)=a e^{-\rho t}$. The proposed solution is $c(t)=K/(1+q(t))$. Since $q'=-\rho q$,
+\[
+c'(t)=\frac{K\rho q}{(1+q)^2},\qquad
+\rho c(1-c/K)=\rho\frac K{1+q}\frac q{1+q}
+=\frac{K\rho q}{(1+q)^2}.
+\]
+The differential equation is satisfied, and
+\[
+c(0)=\frac K{1+(K/c_0-1)}=c_0.
+\]
+For $0<c_0<K$ and $\rho>0$, the solution increases toward $K$; $c_0=K$ gives a constant. The separate initial condition $c_0=0$ has solution zero, although the displayed formula contains $K/c_0$ and cannot be evaluated there directly.
+\answerstep{4. Turn the results into verification checks.}
+\coursenotebook{13_verified_growth_model.ipynb}{Notebook 13} can compare a transport-only run with constant total and a reaction-only run with this exact solution. Check errors at matched times and units. A numerical method can have finite discretization error while still approximating the continuum equations; these checks test implementation, not physiological adequacy.
+\answerconnection{The qualitative predictions correspond to two separately testable mathematical limits: conserved redistribution and local logistic accumulation.}
+
+\solutionslide{18}{An interactive simulation is an experiment}
+\biomedicalanswer
+\task{Predict where oxygen becomes scarce, change uptake alone, interpret viable and necrotic patterns, and distinguish a new run from a new view.}
+\answerstep{1. State a spatial prediction and its assumptions.}
+In the lesson's coupled model, viable cells consume oxygen and accumulated material suppresses an assigned delivery factor. A plausible prediction is that scarcity will develop in regions of high burden with limited replenishment, often within the denser interior of a growing population. The location need not be the geometric centre: tissue connectivity, initial seed and the chosen parameters can alter the pattern.
+
+Mildly reduced oxygen can slow proliferation before the lower death threshold is reached. Greater scarcity can then transfer viable cells into the necrotic-material compartment. These are separate mechanisms, so a smaller viable population does not imply equally increased necrosis.
+\answerstep{2. Describe a controlled notebook comparison.}
+In \coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d}, start with the small CPU preset and record its seed, domain, grid, rates, capacity and time settings. Compare uptake zero with uptake four while keeping the remaining settings fixed. These are instructions for an experiment, not new measurements claimed by this document.
+
+Before running, predict the direction of change in oxygen, viable growth and necrotic accumulation. Afterward, inspect matched days and physical slices, and record full-domain trajectories as well as images. If oxygen never crosses the death threshold, reduced growth without much necrosis is compatible with the equations. An unexpected pattern is a reason to inspect assumptions and settings rather than reinterpret every dark region as dead tissue.
+\answerstep{3. Explain a display change.}
+After a run, move to another saved time or physical slice. This reveals another part of the computed trajectory; it does not change the parameters that generated it. Changing only a density display threshold changes what is visible, not the underlying full-volume cell count. The oxygen view uses the tissue mask rather than the tumour-density cutoff.
+\answercheck{Record whether each control changes the model, the saved time being inspected or the display. Their effects answer different questions even when the screen changes in each case.}
+
+\computationalanswer{18}
+\task{Define a matched difference in full-volume viable-cell counts for uptake zero and four. Explain its invariance to display threshold.}
+\answerstep{1. Separate the solution from its observation.}
+Let $\theta_\beta$ denote the parameter vector whose uptake component is $\beta$. The solution operator gives
+\[
+U_{\theta_\beta}(t)=S_{\theta_\beta}(t;U_0)
+=(c_\beta(\cdot,t),z_\beta(\cdot,t),o_\beta(\cdot,t)).
+\]
+The dot marks the full spatial argument. A displayed image is $I=H_{\tau,k,j}[U_{\theta_\beta}(t)]$, where $\tau$ is a cutoff, $k$ a slice and $j$ a selected field. The solution and the display operator are different mathematical objects.
+\answerstep{2. Define a total with units.}
+At one fixed physical time $t_*$ and on the same domain $\Omega$, define
+\[
+N_\beta(t_*)=\int_\Omega c_\beta(\mathbf x,t_*)\,dV,
+\qquad \Delta N(t_*)=N_0(t_*)-N_4(t_*).
+\]
+For viable densities in cells/mm$^3$, these quantities are in cells. On equal-volume voxels, $N_\beta\approx v\sum_{i\in\Omega}c_{\beta,i}$. If the stored array is instead fraction $u=c/K$, multiply by the relevant $K$ before integrating. A sum of $u$ alone is not a cell count.
+
+Positive $\Delta N$ means fewer viable cells in the uptake-four run at that day. It does not state that $\Delta N$ cells died, nor establish a pointwise ordering of every voxel. Its observed sign and size should be reported rather than inferred from a differently scaled picture.
+\answerstep{3. Prove the display invariance.}
+The expression for $N_\beta$ contains $c_\beta$, $\Omega$ and physical volume, but not $\tau$. Holding those objects fixed while replacing $H_\tau$ by $H_{\tau'}$ leaves $N_\beta$ and therefore $\Delta N$ unchanged. In contrast,
+\[
+V_{\tau,\beta}=\frac v{1000}\sum_i\mathbf1[c_{\beta,i}/K\geq\tau]
+\]
+does depend on the threshold. A total computed only from displayed voxels is this different, threshold-dependent measurement, not the full-domain count.
+\answerstep{4. Specify what must be matched.}
+Use the same initial viable and necrotic fields, tissue mask, spatial coordinates, $D$, $\rho$, $K$, other coupling settings, output days and declared solver settings. Match views independently when comparing images. Changing the grid also resamples anatomy and can change cell connectivity, so it is not by itself an isolated display or time-step intervention.
+\answerconnection{The biological route predicts a mechanism-dependent pattern. The formal route defines a measurement that can test that prediction while remaining independent of how the pattern is displayed.}
+
+\solutionslide{19}{From a biological diagram to coupled variables}
+\biomedicalanswer
+\task{Predict a viable rim and necrotic core, explain why missing viable cells need not equal necrosis, and distinguish both compartments from MRI signal.}
+\answerstep{1. Explain a possible rim--core pattern.}
+Where delivery can keep pace with consumption, viable cells can remain oxygenated and proliferate. In a region of high consumption and suppressed delivery, oxygen can fall far enough to slow births, and then below a lower threshold that activates death transfer. Under suitable settings this can leave a more viable outer region and accumulated necrotic material deeper within the population.
+
+This is a conditional explanation, not a universal geometry. The lesson does not explicitly model vessels, angiogenesis or every form of tissue injury represented in a biological diagram \citep{comba2021heterogeneity}. Its assigned oxygen and material fields should therefore be read as model compartments.
+\answerstep{2. Use a material-accounting example.}
+Imagine two closed model populations starting with 100 viable cell equivalents and no necrotic material. Over an interval, the reference produces 40 births. The coupled population produces 10 births, transfers 15 viable equivalents to necrotic material and clears 5 necrotic equivalents. At the end:
+\begin{itemize}
+\item Reference: 140 viable equivalents.
+\item Coupled: $100+10-15=95$ viable and $15-5=10$ necrotic equivalents.
+\end{itemize}
+The viable deficit is $140-95=45$, while remaining necrotic material is only 10. Thirty of the deficit are births that did not occur; fifteen reflect death transfer, five of which have already been cleared. These are invented accounting values, not notebook output.
+\answerstep{3. Keep imaging interpretation separate.}
+Viable density, necrotic material and oxygen are separate assigned fields. An MRI signal depends on acquisition and tissue properties; it is not one of these densities read out directly. A dark or coloured region in an overlay must be interpreted using its field label, units, threshold and legend. Calling it an MRI-measured necrotic volume would add an observation model that the lesson has not established.
+\answercheck{A useful explanation distinguishes reduced births, transfer and clearance. It avoids reading a deficit relative to another simulation as a one-for-one map of cell death.}
+
+\computationalanswer{19}
+\task{Derive the total viable-plus-necrotic balance and explain exactly how it constrains interpretation of the viable deficit.}
+\answerstep{1. State compartments, rates and boundary assumptions.}
+On fixed tissue domain $\Omega$, let $c,z$ be viable and necrotic densities in cell equivalents/mm$^3$. For relative oxygen $o$, define local birth and transfer rates
+\[
+B=\rho g(o)c[1-(c+z)/K]_+,\qquad T=\delta h(o)c.
+\]
+Here $K>0$ is the common density scale, $D$ is diffusivity in mm$^2$/day, and $\rho,\delta\geq0$ are proliferation and death-transfer rates in day$^{-1}$. The dimensionless modifiers are $g(o)=\min(1,o/\theta_p)$ and $h(o)=\max(1-o/\theta_d,0)$, with oxygen thresholds $0<\theta_d<\theta_p<1$.
+The positive part $[a]_+=\max(a,0)$ prevents negative births. Both $B$ and $T$ have units cell equivalents/mm$^3$/day. The governing density equations are
+\[
+\partial_tc=\nabla\!\cdot(D\nabla c)+B-T,\qquad
+\partial_tz=T-\lambda_z z.
+\]
+Assume constant clearance rate $\lambda_z\geq0$ in day$^{-1}$, no transport of $z$, no cell flux across the boundary and enough regularity for the integral operations below. The shipped presets use $\lambda_z=0$; examples with clearance require a positive rate.
+\answerstep{2. Add first, then integrate.}
+At each position, adding gives
+\[
+\partial_t(c+z)=\nabla\!\cdot(D\nabla c)+B-\lambda_z z.
+\]
+The term $-T+T$ cancels because transfer changes compartment, not the amount represented in their sum. With $M(t)=\int_\Omega(c+z)\,dV$, the divergence theorem and no-flux condition give
+\[
+\begin{aligned}
+\dot M
+&=\int_{\partial\Omega}\mathbf n\cdot D\nabla c\,dS
++\int_\Omega B\,dV-\lambda_z\int_\Omega z\,dV\\
+&=\int_\Omega B\,dV-\lambda_z\int_\Omega z\,dV.
+\end{aligned}
+\]
+Each side has units cell equivalents/day. Births add material and clearance removes it. Transfer can affect later births through changed state, but it is not a direct loss term from $M$.
+\answerstep{3. Distinguish a stock from accumulated transfer.}
+Write $C=\int_\Omega c\,dV$, $Z=\int_\Omega z\,dV$, $\mathcal B=\int_\Omega B\,dV$ and $\mathcal T=\int_\Omega T\,dV$. Then
+\[
+\dot C=\mathcal B-\mathcal T,\qquad
+\dot Z=\mathcal T-\lambda_z Z.
+\]
+For $Z(0)=0$, integrating the second equation gives
+\[
+Z(t)=\int_0^t e^{-\lambda_z(t-s)}\mathcal T(s)\,ds.
+\]
+The exponential discounts material cleared since time $s$. With $\lambda_z=0$, $Z(t)$ equals cumulative transfer under this zero-initial-necrosis assumption. With clearance it is generally smaller.
+\answercontinued{19}
+\answerstep{4. Relate the reference deficit to its components.}
+For a matched no-death reference $C_r$ with the same initial viable total, $\dot C_r=\mathcal B_r$. Subtract and integrate:
+\[
+C_r(t)-C(t)
+=\int_0^t(\mathcal B_r-\mathcal B)\,ds
++Z(t)+\int_0^t\lambda_z Z(s)\,ds.
+\]
+The deficit combines a difference in cumulative births, remaining necrotic material and cleared material. The birth difference can reflect oxygen effects and the changed density-dependent crowding. No pointwise death map follows from a single viable-difference image. If initial totals differ or material crosses the boundary, additional terms are required.
+
+\answerstep{5. Check a simple transfer-only limit.}
+For a closed uniform compartment, disable births and clearance and stipulate a constant effective transfer rate $q=0.2$ day$^{-1}$. The isolated transfer equations have solutions
+\[
+C(t)=100e^{-qt},\qquad Z(t)=100(1-e^{-qt})
+\]
+for initial totals $C(0)=100$, $Z(0)=0$ cell equivalents. Differentiation gives $\dot C=-qC$ and $\dot Z=qC$, while adding the solutions gives $M(t)=100$ at every time. At day 5, about 36.8 equivalents remain viable and 63.2 are necrotic, with no loss of total material. This tests the transfer subproblem at a fixed effective rate; it is not an asserted solution of the whole dynamically coupled oxygen system.
+
+\coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d} supplies the coupled solver. For a numerical audit, compare the declared discrete accounting and fluxes; a finite-step splitting method need not satisfy an instantaneous continuum identity to machine precision at every substep.
+\answerconnection{The rim--core story is a mechanistic hypothesis. The balance specifies which changes could produce a viable deficit and prevents a biologically misleading one-compartment interpretation.}
+
+\solutionslide{20}{Compare states with matched displays}
+\biomedicalanswer
+\task{Predict the zero-uptake pattern, use trajectories to assess it, and explain why a difference image alone cannot identify a death rate.}
+\answerstep{1. Predict the model's limiting behaviour.}
+When oxygen uptake is disabled in this normalized model, positive delivery with no-flux oxygen boundaries supports oxygen at its assigned normal baseline throughout active tissue. With the usual zero initial necrotic field and thresholds below baseline, oxygen does not activate death transfer. Proliferation retains its full oxygen modifier and viable growth should match the otherwise identical Fisher--KPP reference.
+
+The prediction belongs to this mathematical closure. It does not say that suppressing consumption in real tissue would eliminate every cause of cell death. Nor is a reduction in the model's delivery factor alone equivalent to oxygen depletion when its consumption term is zero.
+\answerstep{2. Describe the check with trajectories.}
+In \coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d}, rerun the declared uptake-zero comparison and inspect minimum active-tissue oxygen, total viable cells and accumulated necrotic material over saved days. Expect baseline oxygen, zero necrotic accumulation from zero initial necrosis and matched viable trajectories within the declared numerical accuracy. Compare equal physical locations and fixed display limits as well as full-domain totals. Differences outside active tissue should not be confused with tissue oxygen.
+
+If the expectation fails, inspect initial necrosis, thresholds, boundary conditions, other parameters and numerical settings before assigning a biological explanation. These instructions define a check rather than report a new run.
+\answerstep{3. Explain why a death rate is not identified.}
+A smaller viable field can result from slower proliferation, altered transport, death or combinations of these. Remaining necrotic material additionally depends on clearance and previous history. One difference image records a state comparison, not the separate rates that generated it. Trajectories and independent information about the compartments can constrain those rates, but even many observations may leave parameter trade-offs.
+\answercheck{The answer should specify initial necrosis, what ``normal oxygen'' means in the lesson and which trajectories test the limit. It should not infer a unique death rate from reduced viable intensity or visible extent.}
+
+\computationalanswer{20}
+\task{Explain the assumptions under which zero uptake recovers Fisher--KPP, derive the oxygen result and distinguish the continuum proof from a numerical check.}
+\answerstep{1. Substitute zero uptake in the oxygen balance.}
+The quasi-steady equation is
+\[
+0=\ell_o^2\Delta o+p(1-o)-\beta(c/K)o,\qquad
+p=[1+\alpha(c+z)/K]^{-1}.
+\]
+Here $\ell_o$ is a length, $o,p,\alpha,\beta$ are dimensionless and $\Delta$ is the spatial Laplacian. Set $\beta=0$ and $w=o-1$. Since the Laplacian of a constant is zero, the equation becomes
+\[
+0=\ell_o^2\Delta w-pw.
+\]
+At a fixed tumour state, $p$ is a prescribed positive spatial function provided the burden and nonnegative suppression parameter are finite and $K>0$.
+\answerstep{2. Multiply, integrate and remove the boundary term.}
+For constant $\ell_o>0$, multiply by $w$ and integrate:
+\[
+0=\ell_o^2\int_\Omega w\Delta w\,dV-\int_\Omega pw^2\,dV.
+\]
+Integration by parts states
+\[
+\int_\Omega w\Delta w\,dV
+=\int_{\partial\Omega}w\,\partial_{\mathbf n}w\,dS
+-\int_\Omega|\nabla w|^2\,dV.
+\]
+No flux for oxygen gives $\partial_{\mathbf n}w=0$, so
+\[
+0=-\ell_o^2\int_\Omega|\nabla w|^2\,dV-\int_\Omega pw^2\,dV.
+\]
+The two integrands are nonnegative before their minus signs. A sum of their negatives can be zero only if the integrals vanish. Since $p>0$, the second forces $w=0$ almost everywhere; for regular solutions, $o=1$ throughout tissue. Disconnected tissue components obey the same conclusion under the same positive-delivery assumption.
+\answerstep{3. Remove death and recover the logistic term.}
+With $0<\theta_d<\theta_p<1$,
+\[
+g(1)=\min(1,1/\theta_p)=1,\qquad
+h(1)=\max(1-1/\theta_d,0)=0.
+\]
+Therefore $T=0$. If $z_0=0$, then $\partial_tz=-\lambda_z z$ gives $z=0$ for all times. The viable equation reduces to
+\[
+\partial_tc=\nabla\!\cdot(D\nabla c)+\rho c[1-c/K]_+.
+\]
+For constant $K>0$, nonnegative $D,\rho$, initial $0\leq c_0\leq K$ and compatible no-flux boundaries, zero and $K$ are lower and upper bounds under the usual comparison assumptions. Hence $0\leq c\leq K$ and the positive-part clipping changes nothing: this is Fisher--KPP.
+\answercontinued{20}
+\answerstep{4. Explain why the assumptions matter.}
+Positive delivery selects the baseline solution; if delivery and uptake both vanish on an isolated component, the no-flux oxygen equation need not select that particular constant. Zero initial necrosis removes the residual crowding contribution; otherwise existing $z$ may still suppress births while clearing. Constant $K$ supports the stated simple upper bound; spatially varying capacity needs a separate argument. The $\ell_o>0$ proof is sufficient, not necessary: if $\ell_o=0$ and $p>0$, the algebraic equation $p(1-o)=0$ also gives $o=1$.
+\answerstep{5. Define the numerical comparison.}
+Match initial fields, domain, $D$, $\rho$, $K$, grid, saved times and declared solver accuracy. On active voxels, useful dimensionless errors are
+\[
+e_o=\max_i|o_i-1|,\quad e_z=\max_i|z_i|/K,\quad
+e_c=\max_i|c_{\beta=0,i}-c_{r,i}|/K.
+\]
+Evaluate over the compared times as well as locations. Finite tolerances and discretization must be distinguished from the exact continuum identity. The analytical limit provides an independent target; an overlay alone is not that check.
+\answerconnection{The biological prediction becomes a conditional mathematical result. Agreement tests a specified implementation limit; it does not establish that the oxygen closure is physiologically complete.}

@@ -1,0 +1,243 @@
+\solutionslide{21}{Agents produce different kinds of evidence}
+\biomedicalanswer
+\task{Follow a source claim to an agent's proposed experiment, identify a contradictory observation and explain what failure would mean biologically.}
+\answerstep{1. Preserve the distinction between source and proposal.}
+Start with the syllabus's discussion of go-or-grow: a hypothesis distinguishing migratory and proliferative states \citep{hatzikirou2012}. An agent might propose a more specific question: ``Under the chosen oxygen conditions, do viable cells change their movement and division behaviour?'' This is a proposed operationalization for a teaching example, not a claim that the cited study performed the experiment described below.
+
+Trace what the source actually supports, what the agent infers and which additional assumption turns that inference into a testable proposal. The agent's well-written plan is a research artefact, not a new biological observation.
+\answerstep{2. Specify observations that address the mechanism.}
+A possible laboratory study would compare declared oxygen conditions while following cells over time, recording movement, divisions and survival separately. Track which cells remain observable. If cells disappear because they die or leave the field of view, treating disappearance as increased movement would confuse mechanisms. Conditions, biological preparation, exposure history and analysis rules need to be defined before results are inspected.
+
+Separate biological replicates from repeated analysis of the same recording. A rerun of tracking software can test analysis sensitivity; it does not create another preparation.
+\answerstep{3. State what could contradict the proposal.}
+If the specified viable population shows no predicted movement change under a comparison capable of detecting the proposed effect, that result challenges this specific prediction in that setting. If the apparent effect instead accompanies substantial death or tracking failure, it challenges the agent's interpretation of movement. Appropriate controls and measurement precision are needed to distinguish absence of evidence from an informative negative result.
+
+Failure would not refute every oxygen-related mechanism or every form of go-or-grow. It would narrow the proposed relationship, motivating changes to the hypothesis, model or experiment. The progression from extraction to hypotheses and empirical knowledge requires new evidence, as emphasized by the agent framework in the syllabus \citep{primeview2026}.
+\answercheck{A strong answer gives a falsifiable prediction, measures competing mechanisms and states exactly which claim a failed test would weaken.}
+
+\computationalanswer{21}
+\task{Enumerate the four score pairs, calculate selection bias and define an independent evaluation. Explain why reruns are not new biological samples.}
+\answerstep{1. Enumerate the sample space.}
+Let $Z_1,Z_2$ be independent scores taking $-1$ and $+1$ with equal probability. Each has expectation zero. Independence makes the four pairs equally probable:
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$Z_1$ & $Z_2$ & Selected maximum\\\midrule
+$-1$&$-1$&$-1$\\
+$-1$&$+1$&$+1$\\
+$+1$&$-1$&$+1$\\
+$+1$&$+1$&$+1$\\\bottomrule
+\end{tabular}
+\end{center}
+Therefore $P(\max=-1)=1/4$, $P(\max=+1)=3/4$, and
+\[
+\mathbb E[\max(Z_1,Z_2)]=(-1)\tfrac14+(+1)\tfrac34=\tfrac12.
+\]
+Neither candidate has improved; selecting by the observed noisy score changes the expected reported result.
+\answerstep{2. Generalize to see the role of search.}
+For $N$ independent scores with the same distribution, the maximum is negative only if all $N$ are negative, an event of probability $2^{-N}$. Thus
+\[
+\mathbb E[\max_{1\leq i\leq N}Z_i]
+=-2^{-N}+(1-2^{-N})=1-2^{1-N}.
+\]
+For $N=1$ the expression is zero; for $N=2$ it is $1/2$; as search expands it approaches one. This is an exact result for the toy noise model, not a universal formula for an agent's performance.
+\answerstep{3. Evaluate without reusing the selection noise.}
+Let the chosen candidate index be $J$, determined using the first scores. Give each candidate an independent new evaluation score $W_i$, with mean zero and independent of all selection scores. Then
+\[
+\mathbb E[W_J]=\sum_j P(J=j)\mathbb E[W_j\mid J=j]
+=\sum_jP(J=j)\,0=0.
+\]
+The new evaluation removes the particular noise advantage used for selection under these assumptions. In a real study, reserve evaluation cases, biological samples or outcomes unavailable during candidate development. Merely hiding filenames while reusing the same underlying patient information does not ensure independence.
+\answerstep{4. Record the procedure being reproduced.}
+An agent trace should include sources, prompts or actions, tool results, candidate-selection rule and stopping criterion. Independent runs on the same dataset can assess variation of that procedure. They cannot change how many independent biological units were observed. A repeated computational analysis and a new biological replication occupy different levels of evidence.
+\answerconnection{The biomedical route identifies a test that can contradict the claim. The formal route explains why selecting a convincing run cannot replace that independent test.}
+
+\solutionslide{22}{Place assistance inside the research design}
+\biomedicalanswer
+\task{Propose a measurement that helps distinguish dispersal from proliferation, and explain why a progression forecast is not a treatment-effect estimate.}
+\answerstep{1. Explain the ambiguity in serial appearance.}
+A visible region can enlarge because cells move into neighbouring tissue, because local cell numbers increase, or because a thresholded measurement changes. A similar boundary speed may be compatible with different combinations of movement and proliferation. A close fit to a few earlier images therefore need not identify the individual rates.
+
+This ambiguity is especially important when the scan is only indirectly related to cell density. More precise measurement of the same ambiguous boundary may improve reproducibility without completely resolving the biological question.
+\answerstep{2. Add information with a different mechanistic connection.}
+One possible additional observation is an independently defined tissue measurement of the fraction of cells undergoing division, sampled and interpreted for the question of interest. It may constrain proliferation while spatial observations constrain spread. Another experimental possibility is direct cell tracking over time, with divisions recorded separately. Either requires an explicit account of how the measurement relates to the model's population-level rate.
+
+For imaging, compare spatial density-related profiles or changes at several locations and times rather than only a single volume. Such observations could help distinguish a broader low-density front from local accumulation, but the signal-to-cell relation must be established. A proliferation-associated marker is not automatically the model parameter itself.
+\answerstep{3. Separate forecasting from intervention.}
+A forecast asks what a later observation is likely to be under the setting represented in the data. A treatment effect asks how outcomes would differ under alternative interventions. Comparing a forecast with what happened supplies only the observed trajectory, not the unobserved trajectory for that same person under another treatment. A causal design or additional justified assumptions are required for the latter question.
+\answercheck{The additional measurement should constrain a different aspect of the mechanism, and its observation model should be stated. Good prediction under observed care does not by itself answer which treatment would change that outcome.}
+
+\computationalanswer{22}
+\task{Compare persistence and fitted-model residuals at day 90. Explain why a precise grid minimum may leave parameters difficult to distinguish.}
+\answerstep{1. Define the forward and observation maps.}
+Let $\theta=(s,\rho)$, where $s$ is a dimensionless multiplier of tissue diffusivity and $\rho$ is a rate in day$^{-1}$. The simulated density fraction is $u_\theta=c_\theta/K$. Operator $H$ averages each retained $2\times2\times2$ block:
+\[
+[Hu]_i=\frac18\sum_{r\in\text{block }i}u_r.
+\]
+For observation time $t_j$, $y_{j,i}$ is the generated noisy fraction in retained block $i$. Fit days 20, 40 and 60 by minimizing mean squared residual
+\[
+J(\theta)=\frac1{N_{\rm obs}}\sum_{j,i}
+\bigl([Hu_\theta(t_j)]_i-y_{j,i}\bigr)^2
+\]
+over the declared grid $\Theta_{\rm grid}$. The denominator counts included time--block pairs, not only unique spatial blocks. Day 90 must remain unavailable to the fitting and selection rule.
+\answerstep{2. Compare the held-out errors using the same observations.}
+For day-90 block $i$, define
+\[
+r_i^{\rm pers}=y_{60,i}-y_{90,i},\qquad
+r_i^{\rm model}=[Hu_{\hat\theta}(90)]_i-y_{90,i}.
+\]
+Persistence uses the saved noisy day-60 observation, not an inaccessible clean state. Both methods are scored on the same day-90 blocks. For example, if $y_{60}=0.20$, $y_{90}=0.30$ and model prediction is $0.28$, the residuals are $-0.10$ and $-0.02$, with squared errors $0.0100$ and $0.0004$. This single-block illustration does not determine a whole-volume ranking.
+
+Across $n$ retained day-90 blocks, $\mathrm{RMSE}=\sqrt{n^{-1}\sum_i r_i^2}$ is in density-fraction units. Lower is better under this criterion.
+\answerstep{3. Read the saved reference result at its proper scope.}
+The course's \href{https://github.com/arvidl/brains-to-models/blob/main/paper/figures/growth_extension_values.json}{saved generated-data reference} records generating and recovered parameters $s=1.0$ and $\rho=0.04$ day$^{-1}$. Its day-90 RMSE against noisy observations is approximately $0.004651$ for the model and $0.062877$ for persistence. These are saved results, not a fresh run reported here. The separately stored clean-field RMSE measures a different comparison and should not be substituted for the noisy-observation score.
+\answerstep{4. Explain the identifiability limitation.}
+A grid search returns the smallest evaluated objective, possibly a unique pair, even if neighbouring parameter pairs produce nearly the same early observations. A flat valley of $J$ means small objective differences can select quite different parameters as noise or model assumptions change. Grid spacing can make the reported pair look more exact than the evidence warrants.
+
+In \coursenotebook{14c_growth_parameter_recovery.ipynb}{Notebook 14c}, the generating pair is included in the search, seed and tissue ratio are known, and generation and fitting share the spatial model. Successful recovery tests this controlled problem. It is neither a patient parameter estimate nor an uncertainty interval. Independent observation types, additional times and sensitivity analysis can help assess which parameter differences are actually distinguishable.
+\answerconnection{The biomedical route proposes information that constrains different mechanisms. The objective and held-out comparison make explicit which aspects of recovery and forecasting the current experiment tests.}
+
+\solutionslide{23}{A creative workflow and its provenance}
+\biomedicalanswer
+\task{Explain oxygen-limited growth in ordinary language and as a visual sequence. Identify a misleading omission and ask a viewer what they understood.}
+\answerstep{1. Give a plain-language account.}
+``Growing cells use oxygen supplied by their surroundings. If supply does not keep pace, cells may multiply more slowly. Under sufficiently poor conditions in this model, some viable cells become necrotic material. That material can remain for a time and later be cleared. The pattern depends on the supply, consumption and movement assumptions.''
+
+This description distinguishes slower multiplication from death and accumulation from clearance. It does not require equations, and it avoids claiming that every part of a tumour follows the same sequence.
+\answerstep{2. Translate the account into a sequence.}
+Use matched panels at a few saved days. First show viable density and an oxygen legend. Next show oxygen falling where burden is high, while explaining that some cells remain viable but proliferate more slowly. Then show necrotic material appearing only where the model's death condition is met. Finally show how viable, necrotic and total material can have different trajectories as clearance acts.
+
+Keep the same physical slices, times, field labels and colour limits across comparisons. A changing slice or colour scale should be announced, because either can create an apparent biological change.
+\answerstep{3. Identify an omission and test understanding.}
+If the sequence jumps from ``less oxygen'' directly to ``all missing viable cells are dead'', it omits reduced proliferation. If necrotic material disappears without explaining clearance, viewers may infer recovery of viable cells. If the model field is drawn over MRI without labelling its origin, viewers may mistake simulation for measured tumour biology.
+
+Ask a viewer: ``Can the viable population be smaller without an equal amount of dead material? What caused the change shown here?'' Their explanation reveals whether the visual story retained the intended distinctions. Emotional impact is another outcome to assess separately. The creative workflow discussed in the syllabus combines human and generated contributions \citep{knudsen2026changed}; its persuasiveness does not replace these comprehension checks.
+\answercheck{A strong visual explanation preserves the distinctions among fields and processes, not merely an attractive sequence of colours.}
+
+\computationalanswer{23}
+\task{Formulate and test a colour-consistency invariant on saved frames. Distinguish reproducible rendering from replaying an external generation service.}
+\answerstep{1. Define a fixed data-to-colour map.}
+Let scalar physical value $u$ have declared display limits $l<h$. Normalize and clip by
+\[
+\eta(u)=\min\!\left(1,\max\!\left(0,\frac{u-l}{h-l}\right)\right),
+\qquad \mathrm{colour}(u)=C(\eta(u)),
+\]
+where $C:[0,1]\to[0,1]^3$ is a fixed red--green--blue map. Clipping defines how values outside the range are handled. The invariant is: the same physical value in any compared frame receives the same mapped RGB triple when $l,h,C$ are unchanged.
+\answerstep{2. Verify why frame-specific scaling breaks it.}
+For value $u=0.5$, frame limits $[0,1]$ give normalized value $0.5$, while limits $[0,0.5]$ give one. A nonconstant colour map can assign different colours to those two normalized values even though the physical value is unchanged. If $h=l$, the normalization is undefined; a constant-frame convention must be declared instead of dividing by zero.
+\answerstep{3. Test two saved frames.}
+Record the scalar limits, units, colour map and clipping rule. Select equal-valued probes in both frames, or pass a shared set of known probe values through the saved rendering procedure. Confirm identical mapped triples within the numerical or image-encoding tolerance. Also check a few known unequal values so that an accidentally constant map does not pass as useful scientific rendering.
+
+The invariant concerns the data-to-colour map. A final screen pixel blended with a different background or opacity can look different despite the same mapped RGB value. Match or separately account for those settings, slice coordinates and masks. Equal array indices alone do not establish equal physical locations across different geometries.
+\answerstep{4. Preserve the stages of the pipeline.}
+Write animation $a=R(d,\phi)$ for saved data $d$ and rendering settings/assets $\phi$. Preserve source arrays, physical geometry, software and asset versions, parameters, transformations and revision decisions. This permits a declared rendering to be reproduced or compared even if a previous external music or image generator no longer returns exactly the same result.
+
+Re-rendering saved assets and regenerating those assets are different procedures. External generation can depend on model version, service state and hidden settings; a seed alone may not specify all of them. Preserve the accepted source assets as part of the scientific communication record.
+\answerconnection{The biological story states what the colours are meant to explain. The rendering invariant tests whether the displayed comparison preserves that meaning across frames.}
+
+\solutionslide{24}{A human response to AI change}
+\biomedicalanswer
+\task{Describe an activity to delegate and one where participation has meaning. Name an observation that could change the view.}
+\answerstep{1. Make the choice specific to a purpose.}
+A defensible sample choice is to delegate an initial formatting task: organizing already verified measurements and dates into a draft table. Its output is inspectable against sources. Retain personal participation in discussing an uncertain finding with someone whose concerns, priorities and understanding need to be heard. That interaction involves listening and adapting the explanation, rather than simply delivering fluent text.
+
+This is a sample value judgment, not a rule that every person must make the same division. The film discussed in the syllabus expresses human ambivalence about AI-assisted change \citep{knudsen2026changed}. Enthusiasm, fear and perceived efficiency can coexist without determining which workflow serves a particular person.
+\answerstep{2. Explain the trade-off concretely.}
+Delegating formatting could free attention, or it could create checking work if the draft mismatches dates. Participating in a conversation may matter because a recipient needs room to ask what uncertainty means for them. A professional's excitement about a faster tool does not automatically answer that need. The relevant comparison includes the accepted output and the experience of people involved.
+\answerstep{3. State observations that could revise the choice.}
+If the delegated table repeatedly introduces consequential errors or takes longer to verify than to prepare directly, revise the delegation. If a particular communication aid improves the recipient's demonstrated understanding and gives them more opportunity to ask questions, incorporate it while reassessing the role of personal participation. Conversely, if recipients prefer and understand another arrangement, that evidence should challenge the original assumption about what helps them.
+
+Measure work time, error correction, comprehension and reported experience separately. A strong emotional response to the film or tool can be meaningful without demonstrating factual learning.
+\answercheck{The answer should state whose purpose is served, what is being delegated and a concrete observation that could change the choice. Personal meaning and measurable task performance are related questions, not interchangeable outcomes.}
+
+\computationalanswer{24}
+\task{Define comprehension and emotional-response scores for assigned film and transcript groups. Compare them separately and interpret the total-time example.}
+\answerstep{1. Define two non-interchangeable outcomes.}
+Let $C_i$ count correct answers to five fixed comprehension questions for participant $i$, so $C_i\in\{0,1,\ldots,5\}$. Define each correct answer before observing group responses, including the key uncertainty distinctions. Let $E_i\in\{0,1,\ldots,10\}$ be a declared self-report of emotional arousal from ``none'' to ``very strong''. This measures response intensity, not whether the feeling is pleasant, and does not directly measure knowledge.
+
+Keep film and transcript factual content comparable for the declared question. If sound and imagery are part of the intervention, the comparison estimates their combined presentation effect rather than identifying one component automatically.
+\answerstep{2. Calculate separate group contrasts.}
+For an invented example with four participants per group, suppose
+\[
+\begin{array}{c|cc}
+& C & E\\\hline
+\text{Film}&(3,4,2,3)&(8,7,9,8)\\
+\text{Transcript}&(4,3,3,2)&(3,4,2,3)
+\end{array}
+\]
+The mean comprehension scores are both $3$, whereas mean arousal is $8$ for film and $3$ for transcript. Thus
+\[
+\widehat\Delta_C=3-3=0,\qquad
+\widehat\Delta_E=8-3=5.
+\]
+The outcomes even have different scales. The emotional contrast cannot be read as a five-point comprehension improvement. The small invented sample also supplies no claim of statistical precision or population equivalence of comprehension.
+\answerstep{3. Explain the design and inference.}
+Random assignment, a consistent intervention, comparable assessment timing and an appropriate analysis support a group contrast. Prior knowledge, missing responses and scoring should be handled explicitly. Blind comprehension scoring where possible; use new questions or another suitable design to avoid learning from repeated testing. A difference in $E$ alone provides no logical implication about $C$; both must be measured.
+\answerstep{4. Calculate the complete workflow time.}
+For generation, review and revision times in minutes, $T=T_g+T_r+T_v$. The syllabus's invented comparison is
+\[
+T_{\rm initial}=5+1+1=7,\qquad
+T_{\rm assisted}=1+5+3=9.
+\]
+Generation is four minutes faster, but total time is two minutes greater, about $28.6\%$ of the original total. This calculation assumes non-overlapping, comparably defined tasks and the same acceptance standard. Distinguish person-work time from machine waiting and elapsed time; overlapping activities cannot simply be added to obtain elapsed time.
+\answerconnection{Human purposes identify which effects matter. Separate outcome and time definitions make it possible to assess those effects without substituting excitement or first-draft speed for understanding and accepted work.}
+
+\solutionslide{25}{Synthesis and a next experiment}
+\biomedicalanswer
+\task{Explain a positive result without beginning with a formula. Use a teach-back question and name an observation that could change the interpretation.}
+\answerstep{1. Count people in the stipulated population.}
+Imagine 10,000 people, of whom 100 have the condition and 9,900 do not. The test finds 90 of the 100 affected people. It also produces positive results in 990 of the unaffected people. Altogether 1,080 people test positive, and 90 of them have the condition.
+
+One possible explanation is: ``In this example, about one person in twelve with a positive result has the condition. The positive result deserves interpretation, but it does not by itself confirm the condition. The condition is uncommon in this population, so positive results from the much larger unaffected group make up most of the positives.''
+
+These are expected counts based on hypothetical prevalence and test characteristics, not the measured outcome of screening a real group. They describe a specified population; an individual's full information may support another probability.
+\answerstep{2. Check understanding in ordinary language.}
+Ask: ``Of the people who tested positive in this example, are most affected or unaffected? Why?'' A useful answer recognizes that most positives come from the large unaffected group, while also recognizing that some positives are true. ``The test is 90\% sensitive, so a positive means a 90\% chance of disease'' reverses the question being asked.
+
+Another misunderstanding is ``a positive is usually false, so it can always be ignored''. The next action also depends on consequences, further evidence and the context in which testing was used.
+\answerstep{3. Name information that changes the account.}
+A different condition frequency in the tested population changes the composition of positive results. Different test performance or additional well-characterized evidence can also change interpretation. Explain what is measured and how it relates to the first result; a second test should not be assumed independent merely because it has another name.
+\answercheck{Preserve the denominator: the question concerns people with positive results. The explanation should keep uncertainty and action separate while identifying what new observation would matter.}
+
+\computationalanswer{25}
+\task{Derive PPV and the cost-based action boundary. Distinguish prevalence, sensitivity and the event probability used for a decision.}
+\answerstep{1. Construct the complete expected-count table.}
+Let $D$ denote disease and $+$ a positive test. With $\pi=P(D)=0.01$ and $\mathrm{Se}=P(+\mid D)=0.9$, $\mathrm{Sp}=P(-\mid\neg D)=0.9$, the expected counts are
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+& Disease & No disease & Total\\\midrule
+Positive & 90 & 990 & 1,080\\
+Negative & 10 & 8,910 & 8,920\\\midrule
+Total & 100 & 9,900 & 10,000\\\bottomrule
+\end{tabular}
+\end{center}
+Checking row and column totals catches many denominator errors.
+\answerstep{2. Derive rather than memorize the fraction.}
+Conditional probability gives $P(D\mid+)=P(D\cap+)/P(+)$. The joint true-positive probability is
+\[
+P(D\cap+)=P(+\mid D)P(D)=\mathrm{Se}\,\pi.
+\]
+Disease and no disease partition the population, so total positive probability is
+\[
+P(+)=\mathrm{Se}\,\pi+(1-\mathrm{Sp})(1-\pi).
+\]
+Combining these expressions yields
+\[
+\mathrm{PPV}=\frac{\mathrm{Se}\,\pi}
+{\mathrm{Se}\,\pi+(1-\mathrm{Sp})(1-\pi)}
+=\frac{0.009}{0.009+0.099}=\frac1{12}\approx0.0833.
+\]
+Sensitivity conditions on disease; PPV conditions on a positive result. They have different denominators and need not be equal. At prevalence $0.10$ with the same test characteristics, PPV becomes $0.09/(0.09+0.09)=0.5$.
+\answercontinued{25}
+\answerstep{3. Derive the decision boundary independently.}
+For event probability $p$ given available decision evidence, stipulate false-positive cost 1, false-negative cost 4 and zero loss for correct actions. The two expected losses are $1-p$ and $4p$, so
+\[
+1-p<4p\quad\Longleftrightarrow\quad p>0.2.
+\]
+At equality, both actions cost $0.8$ in expectation. If a positive test is the only new evidence in the stipulated population and no other information is used, set $p=\mathrm{PPV}=1/12$. Acting then costs $11/12$ and waiting $4/12=1/3$ in this toy loss model. The preferred toy action follows from the supplied consequences, not from PPV alone. Other costs or actions change the decision problem.
+\answerstep{4. Check definitions at the boundaries.}
+Prevalence $\pi$ is the population probability before conditioning on this test. Decision probability $p$ uses the available evidence; equating it with PPV requires the declared conditioning information. If $P(+)=0$, PPV is undefined because the conditioning event cannot occur. That differs from PPV zero with a positive denominator, where positives occur but none are true positives in the model.
+
+\coursenotebook{15_ppv_and_decisions.ipynb}{Notebook 15} permits separate exploration of counts, conditional probabilities and stipulated decision costs. Changing population size rescales expected counts while leaving PPV fixed when prevalence and test characteristics stay fixed.
+\answerconnection{Population counts communicate what a positive result means. Conditional probabilities establish the denominator, and a separate loss model makes the action assumptions explicit.}

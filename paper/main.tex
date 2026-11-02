@@ -1,43 +1,12 @@
 % !TEX TS-program = pdflatex
 % !BIB program = bibtex
 \documentclass[11pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern,microtype}
-\usepackage[margin=25mm]{geometry}
-\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,longtable}
-\usepackage[round,authoryear]{natbib}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{tcolorbox}
-\tcbuselibrary{breakable}
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
-\usepackage{caption,placeins,fancyhdr}
-\usepackage[colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
-\urlstyle{same}
-\setlength{\emergencystretch}{3em}
-\setlength{\parskip}{5pt}
-\setlength{\parindent}{0pt}
-\renewcommand{\arraystretch}{1.22}
-\captionsetup{font=small,labelfont=bf}
-\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small From Brains to Models}\fancyhead[R]{\small Educational perspective}\fancyfoot[C]{\thepage}
-\setlength{\headheight}{14pt}
-\newcommand{\learningcheck}[2]{%
-  \par\smallskip\noindent\begin{minipage}{\linewidth}
-  \textbf{Takeaway.} #1\par\smallskip
-  \textbf{Check your understanding.} #2\end{minipage}\par\smallskip}
-\newcommand{\coursenotebook}[2]{\href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/#1}{#2}}
-\newtcolorbox{perspectives}[1]{%
-  breakable,title={Two perspectives: #1},
-  colback=blue!2,colframe=MidnightBlue!45,
-  colbacktitle=blue!6,coltitle=MidnightBlue,
-  fonttitle=\small\bfseries,fontupper=\small,
-  boxrule=0.4pt,arc=1mm,
-  left=2.5mm,right=2.5mm,top=1.5mm,bottom=1.5mm,
-  before skip=8pt,after skip=8pt}
+\input{preamble}
+\fancyhead[R]{\small Educational perspective}
+\hypersetup{pdftitle={From Brains to Models: What AI Reveals About Being Human},pdfauthor={Arvid Lundervold}}
 \title{\textbf{From Brains to Models:\\What AI Reveals About Being Human}\\[5mm]\large Representation, understanding, and responsibility in medical AI}
-\author{Arvid Lundervold\\\normalsize Department of Biomedicine, University of Bergen\\\normalsize Mohn Medical Imaging and Visualization Centre}
-\date{\small Companion to the Joint PRESIMAL $\times$ NORA HS keynote\\5 November 2026, Sola Strand Hotel, Stavanger}
+\author{\courseauthor}
+\date{\coursedate}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -46,8 +15,9 @@ Artificial intelligence (AI) in medical imaging is both an engineering instrumen
 \textbf{Keywords:} medical imaging; representation learning; cognitive neuroscience; clinical AI; consciousness; human oversight; AI education.
 
 \clearpage
+\begingroup\small
 \section*{Reader's guide}
-\textbf{Audience and starting knowledge.} For MSc and PhD students in biomedicine, imaging and computational science. You need percentages, graphs and the idea of a model fitted to data. Terms and notation are explained within the examples. Basic vectors and matrices help with the attention appendix; the core route assumes no differential equations or consciousness theory.
+\textbf{Audience and starting knowledge.} For MSc and PhD students in biomedicine, imaging and computational science. You need percentages, graphs and the idea of a model fitted to data. Terms and notation are explained within the examples. Basic vectors and matrices help with the attention appendix; the biomedical route assumes no differential equations or consciousness theory.
 
 \textbf{Learning outcomes.} After working through the core examples, you should be able to:
 \begin{enumerate}
@@ -59,18 +29,20 @@ Artificial intelligence (AI) in medical imaging is both an engineering instrumen
 \end{enumerate}
 
 \textbf{Two reading paths through a shared core.}
-In Sections~\ref{sec:why}--\ref{sec:decisions}, follow the question, verbal example, figures and takeaway; then read the report exercise and synthesis (Sections~\ref{sec:report}--\ref{sec:conclusion}). Both paths retain the assumptions, interpretations and check questions. The perspective boxes offer different starting points within selected technical examples. Choose either path and switch when the other helps; discipline does not determine mathematical preparation or clinical knowledge.
-Start with \coursenotebook{00_intro_timeline.ipynb}{Notebook 00} for Marr's levels of explanation and \coursenotebook{09_segmentation_reflection.ipynb}{Notebook 09} for a controlled imaging example.
+The \emph{Biomedical and imaging path} starts with a phenomenon: what is observed, which biological processes could explain it, and what it means for a person. Its exercises ask for an intuitive prediction or explanation in ordinary language. The \emph{Computational path} starts with objects and assumptions: variables, domains, units, equations, objectives and update rules. Its exercises ask for a derivation, calculation, dimensional check, invariant or counterexample. The boxes develop these complementary forms of reasoning before a short \emph{shared interpretation} connects their results. Either path can be read first; discipline does not determine mathematical preparation or clinical knowledge.
+
+Both paths use the same core evidence, figures and limitations. Start with \coursenotebook{00_intro_timeline.ipynb}{Notebook 00} for Marr's levels and \coursenotebook{09_segmentation_reflection.ipynb}{Notebook 09} for imaging. In each notebook, setup and numerical code are shared: run code cells in order whichever explanation you read first. The route guide identifies useful sections, followed by paired exercises and a shared interpretation.
 \begin{itemize}
-\item \emph{Biomedical and imaging path:} use the MRI vignette (Section~\ref{sec:clinical}) to anchor each model claim. In growth modelling, distinguish the simulated density, the displayed boundary and an imaging observation (Section~\ref{sec:growth}). In the vocabulary examples, identify the measured operation before making a brain comparison (Section~\ref{sec:vocabulary}). Use the expected counts to explain a positive result before considering an action (Section~\ref{sec:decisions}). The biomedical and imaging paragraphs in the boxes guide these comparisons.
-\item \emph{Computational path:} after each verbal example, trace the variables, update rule and test. Follow the growth equation and numerical checks (Section~\ref{sec:growth}; Notebooks 13 and 14a--14c), then the attention and Hopfield derivations (Appendices~\ref{app:attention} and~\ref{app:hopfield}; Notebooks 08, 10 and 12). Derive predictive value and the action threshold from counts and expected costs (Section~\ref{sec:decisions}; Notebook 15). The computational paragraphs guide these calculations; return to the shared interpretation to identify what the computed quantity measures.
+\item \emph{Biomedical and imaging route:} anchor the comparisons in the MRI vignette (Section~\ref{sec:clinical}). Explain population growth, oxygen supply and consumption before reading equations (Section~\ref{sec:growth}). Distinguish anatomy, simulated state and imaging appearance. Use population counts to explain a positive result (Section~\ref{sec:decisions}), then practise preserving meaning in the report exercise (Section~\ref{sec:report}).
+\item \emph{Computational route:} derive the population balance and the coupled model's Fisher--KPP limit (Section~\ref{sec:coupled}; Notebooks 13 and 14a--14d). Use the representation and shortcut counterexamples to delimit claims. Follow the attention and Hopfield derivations (Appendices~\ref{app:attention} and~\ref{app:hopfield}; Notebooks 08, 10 and 12), then derive predictive value and the action boundary (Section~\ref{sec:decisions}; Notebook 15).
 \end{itemize}
 
-\textbf{Slide-by-slide syllabus route.} Appendix~\ref{app:slides} follows all 25 slides, one page per slide, with a thumbnail and a separate explanation for each reading path. Use it as extended presenter notes: read your path, make a prediction or answer the suggested question, and compare with the other path. The notes distinguish the slide's illustration from measured results and point to runnable examples.
+\textbf{Slide-by-slide syllabus route.} The separate \coursesyllabus{Slide-by-slide syllabus companion} follows all 25 slides, one page per slide, with a thumbnail and both reading paths. Use it beside the presentation for predictions, exercises and notebook links; the \coursesolutions{tentative solutions} develop worked answers for both paths. Slides 18--20 guide the transition from Fisher--KPP to the coupled tumour--oxygen--necrosis lesson in \coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d}. This paper develops the thematic argument and retains its technical appendices.
 
 \textbf{Optional extension for either path.} Reasoning/functional MRI studies, embodiment and consciousness (Sections~\ref{sec:research}--\ref{sec:consciousness}), and clinical 4E examples (Appendix~\ref{app:4e}), extend the same question: what observation would distinguish two explanations?
 
 \textbf{Related resources:} \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{Notebook guide and Colab links} $\cdot$ \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{Presentation guide}. Each notebook runs independently. Predict, run, then explain the result.
+\endgroup
 \clearpage
 
 \section{Why this comparison belongs in a clinical AI school}\label{sec:why}
@@ -81,6 +53,14 @@ This sequence makes medical imaging a productive \emph{meeting place for technic
 This educational perspective connects brain--model comparisons with foundational computational work, medical AI evaluation and consciousness research. It is a narrative synthesis rather than a systematic review. The examples distinguish published measurements, assumptions chosen for a model, and philosophical proposals; the synthetic calculations make those distinctions testable.
 
 Deep learning enters multiple stages of magnetic resonance imaging (MRI), an imaging method using magnetic fields and radiofrequency signals to form tissue-dependent contrasts \citep{lundervold2019}. Earlier expert systems made decision rules explicit; learned systems encode regularities in parameters fitted to data. This change alters the methods of development and inspection while preserving questions about evaluation, intended use, and responsibility.
+
+\begin{perspectives}{measurement, prediction and action}
+\textbf{Biomedical and imaging path.} What does the output mean for the person being examined? An image records signals shaped by tissue and acquisition. A model turns some of those patterns into a proposed finding; a clinician connects it to history and possible action. \emph{Exercise:} describe one way an unchanged lesion could produce a changed image appearance.
+
+\textbf{Computational path.} Distinguish latent biological state $s$, observation $x=H(s)+\epsilon$, prediction $\hat y=f_\theta(x)$ and action $a=\pi(\hat y,h)$, where $h$ is available history. \emph{Exercise:} construct $s_1\neq s_2$ with $H(s_1)=H(s_2)$ and show why a deterministic $f_\theta$ cannot distinguish them from $x$ alone.
+
+\textbf{Shared interpretation.} The clinical example supplies a meaningful source of ambiguity; the construction establishes a limitation of the stipulated observation map.
+\end{perspectives}
 
 \learningcheck{An image, a model output and a clinical decision answer different questions.}{A segmentation becomes more accurate: which further observation would support a claim that it improves care?}
 
@@ -108,6 +88,14 @@ Context & Training population, workflow, incentives, and intended use. & Experie
 \end{table}
 
 The framework also prevents a common rhetorical shortcut: counting parameters and neurons as though they were interchangeable units of intelligence. A parameter is a quantity in an engineered computation; a biological neuron is a dynamic cell within a complex physiological system. Morphological comparisons such as those reviewed by \citet{defelipe2011} establish biological richness, not a conversion factor between brains and models. Similarly, the GPT-4 technical report does not disclose the model size, detailed architecture, hardware, or training compute \citep{openai2023}. Comparisons should use disclosed or measured quantities with clearly defined system boundaries.
+
+\begin{perspectives}{purpose and representation}
+\textbf{Biomedical and imaging path.} Why measure a lesion? Location, shape and change can matter differently for diagnosis and follow-up. A reproducible summary need not preserve every clinically relevant relationship. \emph{Exercise:} explain why two lesions with the same volume could have different consequences because of their anatomical locations.
+
+\textbf{Computational path.} For binary mask $m$ and voxel volumes $v_i$ in mm$^3$, define $V(m)=\sum_i v_i m_i$. This maps many masks to one scalar. \emph{Exercise:} construct $m\neq\tilde m$ with $V(m)=V(\tilde m)$, then distinguish computing a mask, computing its volume and implementing either algorithm.
+
+\textbf{Shared interpretation.} Clinical purpose determines which distinctions need preserving; a scalar summary alone cannot recover spatial information discarded by its definition.
+\end{perspectives}
 
 \learningcheck{Marr's questions distinguish a purpose, a procedure and a physical realization while keeping their relationships visible.}{If a clinician and a network produce the same mask, what would you still need to learn about the algorithms producing it?}
 
@@ -153,6 +141,18 @@ This example makes the distinction between representation and interpretation tan
 
 Figures~\ref{fig:glioma-source-A3} and~\ref{fig:glioma-source-6} reproduce source Figure A3 and Figure 6, respectively. The original legends retain source numbering; [60] denotes \citet{suter2022}. Detailed descriptions are added here.
 
+A useful exercise (a thought experiment) is to ask three people to state the output they need. The imaging scientist might require a reproducible boundary estimate. The clinician might require evidence that a change alters management. The patient might require an explanation of what remains uncertain and what happens next. These are compatible purposes, but they demand different evaluation targets. Confusing them makes technical improvements look more clinically complete than they are.
+
+\begin{perspectives}{interpreting a measured change}
+\textbf{Biomedical and imaging path.} Could an apparent increase reflect progression, acquisition differences or an annotation choice? Compare anatomy and imaging conditions before explaining a volume change biologically. \emph{Exercise:} explain a plausible non-progression account of the 10-to-12~mL change and identify an observation that would challenge it.
+
+\textbf{Computational path.} With masks $m,\tilde m$ on a matched grid, $|V(m)-V(\tilde m)|\leq\sum_i v_i|m_i-\tilde m_i|$. The right side is disagreement volume. \emph{Exercise:} derive the bound from the triangle inequality, check units and construct equal-volume masks with nonzero disagreement. The bound does not estimate biological change.
+
+\textbf{Shared interpretation.} Anatomical review suggests explanations; dimensional accounting distinguishes a changed summary from an established change in disease.
+\end{perspectives}
+
+\learningcheck{A measured volume change needs separate evidence about measurement reliability, biological interpretation and consequences for a decision.}{A volume increases from 10 to 12~mL: what would you need to determine whether the change reflects progression?}
+
 \clearpage
 \begin{figure}[!ht]
 \centering
@@ -184,10 +184,6 @@ Figures~\ref{fig:glioma-source-A3} and~\ref{fig:glioma-source-6} reproduce sourc
 \clearpage
 
 
-A useful exercise (a thought experiment) is to ask three people to state the output they need. The imaging scientist might require a reproducible boundary estimate. The clinician might require evidence that a change alters management. The patient might require an explanation of what remains uncertain and what happens next. These are compatible purposes, but they demand different evaluation targets. Confusing them makes technical improvements look more clinically complete than they are.
-
-\learningcheck{A measured volume change needs separate evidence about measurement reliability, biological interpretation and consequences for a decision.}{A volume increases from 10 to 12~mL: what would you need to determine whether the change reflects progression?}
-
 \section{AI-assisted model development and numerical verification}\label{sec:growth}
 Marr's questions help organize an AI-assisted simulation. The \emph{task} is to investigate how cell spread and proliferation change a density field. The \emph{representation} is density over space and time; the algorithm approximates the field's evolution. The \emph{implementation} chooses a spatial grid, time steps, boundary treatment and numerical precision. Checking an implementation is distinct from testing whether the represented biology is adequate.
 
@@ -206,10 +202,12 @@ Read the equation as \emph{change in density = redistribution through space + lo
 \end{itemize}
 The no-flux boundary specifies a closed transport domain; growth inside it can still change the total cell number. The migration/proliferation dichotomy known as \emph{go-or-grow} is a separate mechanistic hypothesis \citep{hatzikirou2012}; the displayed equation has no explicit switching between migratory and proliferative cell states.
 
-\begin{perspectives}{growth modelling}
-\textbf{Biomedical and imaging perspective.} Read $c$ as an assigned cell density and ask how a measurement would relate to it. In the threshold example below, first change only the display threshold at a fixed time, then change a growth parameter while keeping the threshold fixed. Which change alters the simulated state, and which changes only its displayed extent?
+\begin{perspectives}{population growth and its observation}
+\textbf{Biomedical and imaging path.} What changes when cells divide or disperse? Births increase a population; movement redistributes it. A thresholded outline can expand because density crosses a display criterion, even without the outline being a measured biological boundary. \emph{Exercise:} predict what remains constant when proliferation is disabled in a closed domain.
 
-\textbf{Computational perspective.} Separate the evolution equation from the rule that converts its field into observations. Use Notebook 13 to check growth, transport and boundaries independently; use 14a--14c to investigate thresholding, anatomy and fitting. Track which assumptions are shared by the observation generator and fitted model before interpreting a withheld forecast.
+\textbf{Computational path.} For $M=\int_\Omega c\,dV$, no-flux boundaries imply $\dot M=\int_\Omega\rho c(1-c/K)\,dV$. Every term has units cells/day. A separate operator $H_\tau(c)=\mathbf1[c/K\geq\tau]$ defines a displayed region. \emph{Exercise:} derive the balance by the divergence theorem and prove threshold volume cannot increase as $\tau$ rises at a fixed state.
+
+\textbf{Shared interpretation.} Population accounting tests the evolution; threshold monotonicity tests its reading. Neither alone establishes a relationship to measured MRI contrast.
 \end{perspectives}
 
 \subsection{Check the implementation using simpler cases}
@@ -221,7 +219,34 @@ At $t=0$ the denominator is $K/c_0$, giving $c(0)=c_0$; for $\rho>0$, the soluti
 
 Next set $\rho=0$ and retain zero boundary flux. Transport should redistribute cells while conserving their total number. A second check is needed for their location: periodic wraparound can conserve the total while moving cells across the wrong boundary. Reducing grid spacing and time steps tests how discretization error changes with resolution. \coursenotebook{13_verified_growth_model.ipynb}{Notebook 13} implements a small independent one-dimensional reference, plus a uniform-compartment coupled limit. An optional check exercises the pinned three-dimensional implementation on synthetic arrays without reading anatomy or patient data.
 
-The separate BrainWeb demonstration adds an illustrative coupling of viable cells, oxygen and necrotic material, and compares it with a matched Fisher--KPP reference. Its reduced closure (the chosen relationships connecting the variables) and parameters are hypotheses for exploration. Removing oxygen uptake should recover the specified baseline; this checks consistency of the coupled equations. Testing physiological adequacy additionally requires independent oxygen and cell-density measurements, parameter estimation and withheld outcomes. The following exercises examine the simpler Fisher--KPP model on anatomy and with generated observations; they do not reproduce the full coupled implementation. The slide-to-resource guide records the external implementations and their versions.
+\subsection{Couple viable tumour, oxygen and necrotic material}\label{sec:coupled}
+\coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d} supplies the slides' coupled BrainWeb demonstration, with the pinned solver, normal anatomy and histological guide \citep{comba2021heterogeneity}. Begin with the biological distinction: oxygen delivery and consumption jointly affect availability. Lower availability can suppress proliferation before it causes death. Viable tumour, necrotic material and imaging appearance therefore require separate interpretations. The illustration includes vascular and cellular processes that this model does not resolve.
+
+Define viable density $c(\mathbf x,t)$ and immobile necrotic density $z(\mathbf x,t)$ in tumour-cell equivalents/mm$^3$ on tissue domain $\Omega$. Relative oxygen $o(\mathbf x,t)$ is dimensionless with normal baseline one; it is not blood oxygen saturation. With $[a]_+=\max(a,0)$, the equations are
+\begin{align}
+\partial_t c&=\nabla\!\cdot(D\nabla c)+B-T, &
+\partial_t z&=T-\lambda_z z,\\
+B&=\rho g(o)c[1-(c+z)/K]_+, & T&=\delta h(o)c,\\
+0&=\ell_o^2\Delta o+p(1-o)-\beta(c/K)o, &
+p&=[1+\alpha(c+z)/K]^{-1},\\
+g(o)&=\min(1,o/\theta_p), &h(o)&=[1-o/\theta_d]_+.
+\end{align}
+Here $0<\theta_d<\theta_p<1$. Rates $\rho,\delta,\lambda_z$ have units day$^{-1}$, $D$ has units mm$^2$/day, $\ell_o$ has units mm, and $\alpha,\beta,p,g,h$ are dimensionless. Carrying capacity $K$ has the same units as $c,z$. There is no flux of viable cells or oxygen through the domain boundary. Necrotic material occupies capacity; the perfusion factor $p$ decreases with accumulated material. The shipped coupled presets use $\lambda_z=0$; clearance requires explicitly choosing a positive rate. These are illustrative assumptions, not measured vascular physiology. Oxygen is solved quasi-steadily rather than evolved with its own time derivative.
+
+The computational route can derive a useful accounting identity. Add the two evolution equations and integrate over the no-flux domain:
+\begin{equation}\label{eq:material-balance}
+M(t)=\int_\Omega(c+z)\,dV,\qquad
+\dot M=\int_\Omega B\,dV-\lambda_z\int_\Omega z\,dV.
+\end{equation}
+Viable-to-necrotic transfer cancels exactly. The balance has units cell equivalents/day. \emph{Biomedical exercise:} predict how reduced delivery could alter a viable rim and necrotic core. \emph{Computational exercise:} derive Equation~\ref{eq:material-balance} and identify the extra term if the viable-cell boundary were open. \emph{Shared interpretation:} a viable deficit relative to the reference includes reduced births as well as death; it cannot be assigned entirely to necrosis. Clearance further separates accumulated necrotic material from cumulative deaths.
+
+The Fisher--KPP limit needs explicit assumptions. For zero uptake $\beta=0$, positive perfusion $p$ and no-flux boundaries, multiply the oxygen equation for $w=o-1$ by $w$ and integrate. For $\ell_o>0$,
+\[
+0=-\ell_o^2\int_\Omega|\nabla w|^2\,dV-\int_\Omega p w^2\,dV,
+\]
+so $o=1$. Thus $g=1$ and $h=0$. With $z(\mathbf x,0)=0$, no necrotic material is produced. For constant $K$, nonnegative transport and $0\leq c(\mathbf x,0)\leq K$, the Fisher--KPP invariant range makes $[1-c/K]_+=1-c/K$. The equations then recover the reference on the same domain with the same seed, $D$, $\rho$ and $K$. Initial densities above $K$ would invalidate this argument because the coupled birth term is clipped. Finite-grid agreement also depends on the discretization and solver tolerances; the notebook checks it numerically.
+
+Setup and display choices are shared by both paths. The default 4-mm, 90-day CPU run supports exploration; a separate 2-mm, 90-day preset records the coupled slide settings. Shared time and physical slices compare viable tumour, oxygen, necrosis and the reference. The more demanding 1-mm Fisher--KPP preset was not included in the latest verification. The \coursesyllabus{syllabus companion}, slides 18--20, supplies guided interventions. Numerical checks establish implementation consistency; physiological adequacy additionally needs independent oxygen and density measurements, parameter estimation and withheld biological outcomes. The following 14a--14c exercises use a smaller independent solver for density, anatomy and generated-data inference; 14d supplies the full pinned coupled implementation.
 
 \subsection{Separate a density field from a displayed boundary}
 \input{figures/growth_extension_numbers}
@@ -291,6 +316,14 @@ An illustrative experiment makes the optimization argument tangible. Train the s
 
 In the MRI vignette, compare lesion masks on paired images with identical anatomy but a specified synthetic intensity transformation, and then validate on an independent acquisition setting. Report lesion-wise failures and boundary changes as well as average overlap. Separately remove a required sequence and record whether a system designed to abstain does so. Preserved average performance, preserved lesion information, and appropriate abstention are three distinct outcomes. Synthetic transformations help isolate a question, but do not reproduce every consequence of a scanner change.
 
+\begin{perspectives}{available information and used information}
+\textbf{Biomedical and imaging path.} Does recognition survive a changed acquisition? A lesion feature may remain visible while a classifier follows a correlated site cue. \emph{Exercise:} explain what a successful lesion decoder and a changed original prediction would mean after a marker-only intervention.
+
+\textbf{Computational path.} Let representation $h=(\ell,b)$ contain lesion feature $\ell$ and marker $b$. A probe $q(h)=\ell$ decodes the lesion perfectly, while head $g(h)=b$ ignores it. \emph{Exercise:} calculate both outputs before and after $b\mapsto1-b$ with $\ell$ fixed. This is a counterexample to inferring use from decodability.
+
+\textbf{Shared interpretation.} The clinical route identifies the relevant feature; the counterexample separates availability to a readout from dependence of the original output.
+\end{perspectives}
+
 \learningcheck{Information decodable from a representation is available to the chosen readout; an intervention tests whether a particular output uses it.}{A lesion label is decodable from an embedding: what intervention would test whether the original classifier depends on lesion information?}
 
 \subsection{Attention: a weighting operation and a family of human capacities}
@@ -309,9 +342,11 @@ For a specific controlled example, put a bright site marker outside the anatomy 
 Appendix~\ref{app:maps} and \texttt{code/src/brainsmodels/attention\_maps.py} make these distinctions executable. A small, explicitly specified self-attention sublayer and scalar readout produce an attention matrix, a signed input gradient, and a patch-occlusion map for the same synthetic input (\coursenotebook{08_attention_maps.ipynb}{notebook 08}; the two-key calculation is in \coursenotebook{10_two_key_attention.ipynb}{notebook 10}). The example also changes a marker while holding the central pattern fixed and randomizes parameters. It is a transparent computational exercise, not a trained clinical Transformer or a reproduction of a saliency validation study.
 
 \begin{perspectives}{attention and image overlays}
-\textbf{Biomedical and imaging perspective.} Before interpreting an overlay, identify what its colours encode and which output is being examined. In the synthetic marker experiment, compare the score before and after the marker changes while the central pattern stays fixed. Anatomical plausibility and dependence of a prediction on a feature are separate questions.
+\textbf{Biomedical and imaging path.} Why might a plausible overlay accompany a wrong prediction? Colour can draw a reader to an anatomical region without establishing which feature controlled the score. \emph{Exercise:} explain how changing a border marker while preserving lesion pixels could distinguish two accounts of the prediction.
 
-\textbf{Computational perspective.} Work through Appendix~\ref{app:attention} with Notebook 10: keep query and keys fixed, then change the second value from 10 to $-10$. Explain why the weights stay fixed while the output changes. In Notebook 08, compare a local derivative with a finite replacement, keeping the output target and replacement baseline explicit.
+\textbf{Computational path.} For two scalar values, $f=a_1v_1+a_2v_2$, $a_i\geq0$ and $a_1+a_2=1$. At fixed weights, $\partial f/\partial v_i=a_i$, whereas a finite replacement changes $f$ by $a_i(v_i'-v_i)$. \emph{Exercise:} hold $a$ fixed and construct opposite-signed score changes. Appendices and Notebooks 08/10 extend the calculation.
+
+\textbf{Shared interpretation.} An overlay can motivate a clinical hypothesis. The precise operation and intervention determine which dependence has actually been established.
 \end{perspectives}
 
 \learningcheck{Attention weights, gradients and finite replacements describe different operations and must be interpreted with their output and scale.}{If attention weights stay fixed while the values change, must the final weighted output stay fixed?}
@@ -355,9 +390,11 @@ Can this tell us how the brain might work? It demonstrates the sufficiency of on
 Stronger tests would compare neural population trajectories and behavioural errors across cue quality, competing memories, and interventions, against alternative models such as feed-forward classification. The classical network assumes symmetric weights, binary states, and asynchronous updates, whereas biological circuits have richer dynamics and plasticity. Its energy is a mathematical function, not a measurement of metabolic expenditure. Thus the model can reveal a candidate computational principle and its failure modes while leaving its biological realization open.
 
 \begin{perspectives}{associative retrieval}
-\textbf{Biomedical and imaging perspective.} Compare the corrupted cue, final pattern and energy trace in Notebook 12. Ask separately whether the system settles and whether it retrieves the intended pattern. Then identify the behavioural and neural observations that would be needed to investigate pattern completion in a biological system.
+\textbf{Biomedical and imaging path.} How can a partial cue evoke a familiar but wrong recollection? Pattern completion offers an intuitive account of both successful recall and confident error. \emph{Exercise:} describe what reduced-cue behaviour and a neural intervention would need to show to support a biological completion mechanism.
 
-\textbf{Computational perspective.} Follow one asynchronous update in Appendix~\ref{app:hopfield}, checking where symmetry and the zero diagonal enter the energy argument. Next start at the sign-reversed target: it is stable and has the same energy as the target in this construction. Report retrieval accuracy alongside energy; a decreasing energy trace alone does not select the intended memory.
+\textbf{Computational path.} For symmetric zero-diagonal $W$ and binary $s$, $E=-s^\top Ws/2$. An asynchronous update of unit $i$ gives $\Delta E=-(s_i'-s_i)\sum_jW_{ij}s_j\leq0$ under the sign rule. \emph{Exercise:} derive this expression, then show $E(-s)=E(s)$. In Notebook 12 both target and inverse can be stable.
+
+\textbf{Shared interpretation.} Settling is a dynamical result; recalling the intended pattern is a separate result. Energy decrease alone cannot select the intended biological meaning.
 \end{perspectives}
 
 \begin{figure}[htbp]\centering
@@ -395,6 +432,14 @@ Suppose a binary label $Y$ is balanced (half the cases have each label) and a si
 \end{figure}
 
 The broader shortcut-learning problem is documented across deep learning \citep{geirhos2020}. In chest radiography, cross-hospital evaluation has exposed variable generalization and hospital-associated signals \citep{zech2018}. These findings motivate tests tailored to the proposed shortcut. Keeping each patient entirely within one data partition helps prevent leakage (evaluation information entering development). Site-aware and temporal evaluation test transfer across institutions and time; inspecting acquisition cues tests a proposed source of dependence. A random split alone may leave important correlations untouched. \coursenotebook{11_shortcut_dependence.ipynb}{Notebook 11} reconstructs the three analytic accuracy comparisons.
+
+\begin{perspectives}{a changing acquisition cue}
+\textbf{Biomedical and imaging path.} Could a model follow hospital identity rather than disease? Referral and acquisition practices can correlate with a finding during development and change later. \emph{Exercise:} explain how a marker-dependent system could reverse its apparent diagnostic performance while the lesion information stays unchanged.
+
+\textbf{Computational path.} Let $Y,M\in\{0,1\}$ denote target and marker. For the fixed rule $\hat Y=M$, accuracy is exactly $P(M=Y)=a$. \emph{Exercise:} derive error $1-a$ and the 95\%, 50\%, 5\% accuracy sequence for $a=0.95,0.5,0.05$. Explain why $a=0.5$ alone does not prove independence without additional marginal constraints.
+
+\textbf{Shared interpretation.} The clinical explanation identifies a plausible shift; the analytic rule in Notebook 11 isolates its effect without attributing it to a trained biological feature extractor.
+\end{perspectives}
 
 \learningcheck{A useful comparison changes a suspected cause while controlling alternatives; average accuracy alone leaves many mechanisms compatible with the result.}{The site rule falls from 95\% to 5\% accuracy: which stipulated change produces the reversal?}
 
@@ -443,9 +488,11 @@ For an arithmetic example, if a missed condition costs four units and an unneces
 \coursenotebook{15_ppv_and_decisions.ipynb}{Notebook 15} reproduces the counts and cost comparisons, with separate controls for population rates, decision probability and costs.
 
 \begin{perspectives}{predictive value and decisions}
-\textbf{Biomedical and imaging perspective.} Use the 10,000-person table to explain why only 90 of 1,080 positive results are true positives in this example. Identify the population to which those counts refer. Before proposing an action, ask which consequences and patient preferences the simplified cost model leaves out.
+\textbf{Biomedical and imaging path.} Why are most positive results false positives in the example? Of 10,000 people, only 100 have the condition. Even a modest false-positive fraction among the other 9,900 produces 990 positives, compared with 90 true positives. \emph{Exercise:} explain this balance without a formula, then identify consequences absent from the simplified action example.
 
-\textbf{Computational perspective.} Reconstruct the expected counts and cancel the population size to obtain PPV. Keep population prevalence $\pi$ distinct from the decision probability $p$. Derive the action threshold by comparing the two expected costs, then ask whether the probabilities are calibrated in the population where the rule will be used.
+\textbf{Computational path.} Cancel population size from the expected counts to obtain $\mathrm{PPV}=s\pi/[s\pi+(1-q)(1-\pi)]$, where $s$ is sensitivity and $q$ specificity. For decision risk $p$, compare $(1-p)C_{FP}$ and $pC_{FN}$. \emph{Exercise:} derive $p>C_{FP}/(C_{FP}+C_{FN})$ and state why $\pi$ and $p$ are different probabilities.
+
+\textbf{Shared interpretation.} Counts convey population meaning; conditional probabilities and explicit losses establish the calculation. Choosing acceptable consequences requires justified clinical values.
 \end{perspectives}
 
 \subsection{Evaluate the system people actually use}
@@ -508,6 +555,14 @@ The preprint by \citet{suvakovic2026} reports that apparently strong candidate-r
 
 These studies suggest a concrete connection to monitoring LLM inference. A probe can reveal that information is available in a hidden state, just as a decoder can recover information from fMRI; demonstrating that the system \emph{uses} that information requires further evidence. In an accessible model, activation replacement, ablation, or a controlled input change can test whether the candidate representation contributes to an output. In a person, experimentally varied stimuli, behavioural measurements, and appropriately justified neural interventions answer related but non-identical questions. A readable reasoning trace, an activation-based interpretation, and an fMRI reconstruction should therefore be evaluated against a specified target, such as detecting an error or distinguishing two hypotheses, rather than treated as interchangeable windows into thought. Understanding advances when the proposed account predicts what will change under a new test.
 
+\begin{perspectives}{neural measurement and decoding}
+\textbf{Biomedical and imaging path.} What does a measured brain signal contribute? Functional MRI is an indirect measurement related to neural activity, and a decoded sentence is an interpreted output. \emph{Exercise:} explain why a plausible candidate ranked without informative brain input would not establish recovery of a person's intended wording.
+
+\textbf{Computational path.} Separate encoding $\hat r=Wx$ from decoding $\hat y=g(r)$, with stimulus features $x$ and measured responses $r$. A zero-input control compares loss $L(g(r),y)$ with $L(g(0),y)$ on the same items. \emph{Exercise:} construct a decoder that ignores $r$ and prove the losses are identical; state which contribution that comparison fails to establish.
+
+\textbf{Shared interpretation.} Biological interpretation identifies the measurement being used; matched controls isolate the incremental contribution of that input to the defined output.
+\end{perspectives}
+
 \learningcheck{Decoding information and demonstrating its contribution to an output require different tests.}{If candidate-ranking performance is unchanged after fMRI inputs are zeroed, what contribution of the brain signal has that evaluation established?}
 
 \section{Embodiment and viability: a hypothesis with limits}\label{sec:embodiment}
@@ -522,6 +577,14 @@ The proposal should not be inflated into the claim that all behavior is governed
 The artificial side needs equal care. A base language model's next-token training objective is not a complete description of every deployed AI system. Post-training, multimodal input, retrieval, external tools, memory, and robotic interaction alter the system being evaluated. Some artificial systems act through bodies and feedback loops. Being embodied in an engineering sense does not itself settle whether a system has biological needs or experience. Conversely, the absence of biological metabolism is not a proof that experience is impossible.
 
 A more precise comparison therefore names the systems: for example, an adult human regulating bodily state and a specified language-model application with fixed weights, a given context window, and defined tools. It asks which feedback signals are available, what changes through learning, how goals are represented, and what counts as failure. These questions can be investigated without first settling a universal boundary between humans and machines.
+
+\begin{perspectives}{active exploration}
+\textbf{Biomedical and imaging path.} How can action change perception? A reader scrolls through slices, adjusts windows and selects a closer view. The next observation depends partly on the reader's action. \emph{Exercise:} explain how active exploration could help localize a structure and distinguish that benefit from simply receiving better images.
+
+\textbf{Computational path.} Write $s_{t+1}=F(s_t,a_t)$, $o_t=H(s_t)$ and $a_t=\pi(o_{\leq t})$. Under a fixed replay $o_{1:T}$, actions no longer alter later observations. \emph{Exercise:} specify a paired active/replay design and state which variables must be matched to separate feedback from image content. An identical trace does not itself identify an identical policy.
+
+\textbf{Shared interpretation.} The clinical account proposes a role for exploration; the closed-loop specification defines the intervention needed to test it.
+\end{perspectives}
 
 \learningcheck{Body, environment and feedback can change the appropriate unit of analysis; a proposed role should be tied to an observable comparison.}{How would you distinguish an effect of active image exploration from an effect of seeing different images?}
 
@@ -540,6 +603,14 @@ Two positions deserve a fair hearing. A functionalist approach holds that releva
 
 There is also an ethical distinction between determining a machine's possible moral status and determining its effect on people. A nonconscious system could profoundly alter a patient's care, expectations, or opportunities. Clinical responsibility therefore cannot wait for agreement about machine experience. People and institutions remain the parties who select, deploy, oversee, and respond to the consequences of clinical systems.
 
+\begin{perspectives}{access, report and experience}
+\textbf{Biomedical and imaging path.} What is the difference between information being available for report and a person's experience? Biological studies connect reports, behaviour and physiology under stated conditions. A fluent report alone does not resolve the relationship. \emph{Exercise:} describe an observation concerning access and a further question about experience that it leaves open.
+
+\textbf{Computational path.} Let $R$ be observed reports and $C$ a proposed latent experiential state. Distinct hypotheses $(C_1,H_1)$ and $(C_2,H_2)$ can be observationally equivalent if $H_1(C_1)=H_2(C_2)=R$. \emph{Exercise:} construct such a pair and state an additional measurement or assumption needed to distinguish it. This demonstrates non-identifiability of that observation model, not a verdict on consciousness.
+
+\textbf{Shared interpretation.} The biological distinction identifies the explanatory target; the formal example shows why an inference requires more than a matching report.
+\end{perspectives}
+
 \learningcheck{Experience, access, report and proposed mechanisms are different explanatory targets.}{A model accurately reports information from an earlier input: which observation concerns access, and what additional argument would be needed to infer experience?}
 
 \section{A report exercise that bridges into RadKom}\label{sec:report}
@@ -550,6 +621,14 @@ A reasonable answer is: \emph{``The scan shows a change whose cause is not yet c
 A technically fluent model may make the passage shorter and warmer while changing its meaning. An expert may preserve meaning while using language that is hard to understand. These are separate dimensions and should be evaluated separately. In Marr's terms, preserving clinically relevant meaning is the task, the wording and transformation procedure are the representation and algorithm, and the particular model/application supplies the implementation. Record the input, exact model or system version, prompt, output, and human revisions. Reviewers assess contradiction, unsupported additions, omissions, uncertainty, and readability. Patient or public involvement should shape what counts as understandable communication in the intended setting.
 
 This example also connects to a linguistic debate. Bender and Koller distinguish linguistic form from meaning and caution against unexamined claims of understanding \citep{bender2020}. Their argument concerns the relationship between a learning setup and a stronger semantic claim; it should not be turned into a blanket empirical verdict on all multimodal or interactive AI. For this exercise, the operational question is more tractable: did the transformation preserve the source's clinically relevant propositions and their uncertainty?
+
+\begin{perspectives}{meaning preserved in plain language}
+\textbf{Biomedical and imaging path.} Does a clearer report preserve the finding? Laterality, negation, comparison time and uncertainty can each change clinical meaning. \emph{Exercise:} explain to a patient why ``may mean growth'' and ``means growth'' convey different conclusions, then rewrite the source without removing its uncertainty.
+
+\textbf{Computational path.} Let $P_{src}$ and $P_{out}$ be sets of clinically normalized meaning units, including polarity, anatomy and uncertainty. Unsupported additions are $P_{out}\setminus P_{src}$; omissions are $P_{src}\setminus P_{out}$. \emph{Exercise:} encode the two growth statements as different units and compute the differences. Exact preservation requires both differences empty under the declared normalization.
+
+\textbf{Shared interpretation.} Clinical reading determines which propositions matter; explicit units make a fidelity comparison precise without assuming that lexical overlap measures meaning.
+\end{perspectives}
 
 \learningcheck{Plain language should preserve the source propositions and their uncertainty while making them easier to understand.}{Does replacing ``may mean the tumour has grown'' with ``the tumour has grown'' preserve the source meaning?}
 
@@ -564,6 +643,14 @@ The accompanying code uses small deterministic examples that run on an ordinary 
 
 A useful collaboration between the two school communities would pair a computational claim with a conceptual audit. One participant states the target, data, and test. Another asks what the target leaves out, whose purposes it serves, and which stronger interpretations might be mistakenly inferred. Both then revise the experiment. This is not an opposition between engineering and ethics; the questions jointly determine whether the technical result is relevant to the proposed use.
 
+\begin{perspectives}{assistance and retained judgment}
+\textbf{Biomedical and imaging path.} What remains after assistance is removed? A learner can finish a task quickly while practising less interpretation. \emph{Exercise:} predict how routinely accepting an overlay could affect later unaided boundary judgments and propose a biological explanation the learner must give before viewing it.
+
+\textbf{Computational path.} Define separate assisted score $S_a$ and later unaided score $S_l$. Between-group contrasts $\Delta_a$ and $\Delta_l$ need not share a sign. \emph{Exercise:} construct scores with $\Delta_a>0$ and $\Delta_l<0$, then specify a sampling and assessment design that estimates each contrast without reusing the assisted answers as the later test.
+
+\textbf{Shared interpretation.} The teaching purpose identifies retained capability as an outcome; separate variables prevent immediate success from replacing that outcome.
+\end{perspectives}
+
 \learningcheck{An informative exercise reports both a result and an attempt to challenge its interpretation.}{Choose one notebook result: which alternative explanation would your next controlled test address?}
 
 \section{Conclusion}\label{sec:conclusion}
@@ -574,18 +661,11 @@ The most useful conclusion for clinical integration is therefore a disciplined a
 \learningcheck{Specify the computation, test competing explanations, and connect the result to the purposes of the people using it.}{For a model claim you encounter next, what single observation would make you revise your interpretation?}
 
 \section*{Reproducibility and provenance}
-The training examples and simulated tumour states are generated for teaching; the glioma and fMRI studies are empirical research identified separately. Reproduced figures contain published LUMIERE case information; no patient imaging volumes or additional patient records are distributed here. The normal BrainWeb T1 phantom and tissue labels used in Notebooks 14b/14c are bundled with the code, with source attribution and checksums. The \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{presentation guide} maps topics to local notebooks and versioned external implementations. The \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{notebook guide} supplies learning goals, setup instructions and Colab links. AI assistance was used in preparing text and code; scientific interpretation and responsibility rest with the named author. Source, dependencies and reproduction commands are recorded in \url{https://github.com/arvidl/brains-to-models}. A short \href{https://github.com/arvidl/brains-to-models/blob/main/paper/background/README.md}{repository note} documents the preserved background manuscript.
+The training examples and simulated tumour states are generated for teaching; the glioma and fMRI studies are empirical research identified separately. Reproduced figures contain published LUMIERE case information; no patient imaging volumes or additional patient records are distributed here. The normal BrainWeb T1 phantom and tissue labels used in Notebooks 14b--14d are bundled with the code, with source attribution and checksums. Notebook 14d also includes the pinned slide solver with its licence and provenance; its histological illustration retains its published attribution. The separate \coursesyllabus{syllabus companion} supplies the slide-by-slide teaching route. The \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{presentation guide} maps topics to local notebooks and versioned external implementations. The \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{notebook guide} supplies learning goals, setup instructions and Colab links. AI assistance was used in preparing text and code; scientific interpretation and responsibility rest with the named author. Source, dependencies and reproduction commands are recorded in \url{https://github.com/arvidl/brains-to-models}. A short \href{https://github.com/arvidl/brains-to-models/blob/main/paper/background/README.md}{repository note} documents the preserved background manuscript.
 
 \FloatBarrier
 \input{appendices}
-\input{appendix-slides}
 \FloatBarrier
 \clearpage
-\begingroup
-\small
-\setlength{\bibsep}{3pt}
-\interlinepenalty=10000
-\bibliographystyle{plainnat}
-\bibliography{references}
-\endgroup
+\input{bibliography}
 \end{document}

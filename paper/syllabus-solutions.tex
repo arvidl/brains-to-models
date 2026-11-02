@@ -1,0 +1,59 @@
+% !TEX TS-program = pdflatex
+% !BIB program = bibtex
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+\newcommand{\currentsolutionheading}{Tentative syllabus solutions}
+\fancyhead[R]{\small\currentsolutionheading}
+\hypersetup{pdftitle={Tentative solutions to the syllabus exercises},pdfauthor={Arvid Lundervold}}
+\title{\textbf{Tentative solutions to the\\syllabus exercises}\\[5mm]\large From Brains to Models: What AI Reveals About Being Human}
+\author{\courseauthor}
+\date{\coursedate}
+\newcounter{solutionslide}
+\newcommand{\solutionslide}[2]{%
+  \clearpage\refstepcounter{solutionslide}
+  \gdef\currentsolutionheading{Slide #1: Tentative solutions}
+  \section*{Slide #1. #2}\label{solution-#1}
+  \addcontentsline{toc}{section}{Slide #1. #2}}
+\newcommand{\biomedicalanswer}{\pdfbookmark[1]{Biomedical and imaging path}{answer-bio-\arabic{solutionslide}}\subsection*{Biomedical and imaging path}}
+\newcommand{\computationalanswer}[1]{\clearpage\pdfbookmark[1]{Computational path}{answer-comp-#1}\subsection*{Slide #1: Computational path}}
+\newcommand{\answercontinued}[1]{\clearpage\subsection*{Slide #1: Computational path (continued)}}
+\newcommand{\answerstep}[1]{\par\medskip\textbf{#1}\par\nobreak}
+\newcommand{\answerconnection}[1]{\par\medskip\textbf{Connecting the paths.} #1\par}
+\newcommand{\answercheck}[1]{\par\medskip\textbf{Check your reasoning.} #1\par}
+\newtcolorbox{exercisefocus}{colback=blue!2,colframe=MidnightBlue!35,boxrule=.4pt,arc=1mm,left=2.5mm,right=2.5mm,top=1.5mm,bottom=1.5mm,fontupper=\small,before skip=7pt,after skip=9pt,breakable}
+\newcommand{\task}[1]{\begin{exercisefocus}\textbf{Exercise in focus.} #1\end{exercisefocus}}
+\begin{document}
+\maketitle
+\section*{How to use these tentative solutions}
+This separate companion develops answers to the exercises for all 25 slides in the \coursesyllabus{slide-by-slide syllabus}. Attempt a question first, then compare the reasoning, assumptions and conclusion. Slide numbers and titles match the syllabus; each slide's biomedical answer and computational answer begin on separate pages. Longer derivations continue as needed.
+
+\textbf{Two ways of reasoning.} The \emph{Biomedical and imaging path} starts with a phenomenon, explains it in ordinary biological or clinical language, considers alternatives and proposes an informative observation. Open questions admit several defensible answers; the examples here show what makes one answer persuasive. The \emph{Computational path} specifies mathematical objects and units, works through a calculation or proof and interprets precisely what follows. Its conclusions are conditional on its assumptions. A brief connection brings the two results together.
+
+\textbf{What ``tentative'' means.} These are worked teaching answers for discussion and revision, rather than a unique marking key. Algebraic results can be checked exactly; a proposed clinical interpretation or study design needs further evidence. Patient situations and numerical examples are hypothetical unless explicitly identified as saved course results. Suggested notebook experiments describe what to run and record; this document does not present them as newly executed experiments.
+
+\textbf{Read symbols locally.} Each computational answer reintroduces its essential notation. A symbol can change meaning between examples: $D$ may be a dataset, diffusivity or disease event, and $p$ may be an event probability or a perfusion factor. The syllabus's glossary, before its references, supplies abbreviations, biological concepts and mathematical notation for both paths. The \coursepaper{perspective paper} provides the broader discussion and technical appendices; notebook links lead to the executable examples.
+
+\clearpage
+\begingroup\small
+\makeatletter\let\l@section\l@subsection\makeatother
+\tableofcontents\endgroup
+\input{syllabus-solutions-01-05}
+\input{syllabus-solutions-06-10}
+\input{syllabus-solutions-11-15}
+\input{syllabus-solutions-16-20}
+\input{syllabus-solutions-21-25}
+\clearpage
+\gdef\currentsolutionheading{Sources and follow-up}
+\section*{Sources and reproducible follow-up}
+\addcontentsline{toc}{section}{Sources and reproducible follow-up}
+The exercise wording and notation follow the separate syllabus. References below support the concepts discussed here; invented examples are not estimates from those publications. The three documents share formatting and one bibliography database.
+
+For notebook exploration, record the notebook and source revision, parameter values, seed, grid, time settings and the quantity measured. Keep a verbal prediction separate from the observed result. Compare the result with the mathematical check and then explain which biological question remains open. Saved reference values cited for slide 22 come from \href{https://github.com/arvidl/brains-to-models/blob/main/paper/figures/growth_extension_values.json}{the course's generated-data results file}; they are not patient measurements or a new execution reported here.
+
+\textbf{Reviewing an answer.} A biomedical answer should connect a mechanism or anatomical relationship to an observable consequence, consider a plausible alternative and name evidence that distinguishes them. A computational answer should define its quantities, justify each operation, check units or a limiting case and state the assumptions required by its conclusion. Agreement between the paths is strongest when both refer to the same observable quantity.
+
+\clearpage\phantomsection
+\gdef\currentsolutionheading{References}
+\addcontentsline{toc}{section}{References}
+\input{bibliography}
+\end{document}

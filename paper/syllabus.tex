@@ -1,0 +1,32 @@
+% !TEX TS-program = pdflatex
+% !BIB program = bibtex
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+\fancyhead[R]{\small Slide-by-slide syllabus}
+\hypersetup{pdftitle={From Brains to Models: Slide-by-slide syllabus companion},pdfauthor={Arvid Lundervold}}
+\title{\textbf{From Brains to Models:\\What AI Reveals About Being Human}\\[5mm]\large Slide-by-slide syllabus companion}
+\author{\courseauthor}
+\date{\coursedate}
+\begin{document}
+\maketitle
+\section*{How to use this companion}
+This teaching guide follows the keynote's 25 slides, one page per slide, with a thumbnail, two reading paths, predictions and exercises. Use it beside the presentation or when revisiting a notebook. The separate \coursepaper{perspective paper} develops the thematic argument and retains the technical appendices; the \coursesolutions{tentative solutions} work through every slide's exercises for both paths. Each document can be read independently; follow their links when a derivation or a broader discussion helps.
+
+\textbf{Choose a starting path.} The \emph{Biomedical and imaging path} asks what phenomenon needs explaining. It develops biological mechanisms, anatomical relationships, clinical observations and intuitive predictions. Its exercise asks for an observable consequence explained in ordinary language. The \emph{Computational path} asks which objects, assumptions and operations define the problem. It develops variables, domains, units, equations and update rules; its exercise asks for a derivation, calculation, dimensional check, invariant or counterexample. A short \emph{shared interpretation} connects the two results. Choose either first; neither is a prerequisite for the other. The intended audience is MSc and PhD students in biomedicine, imaging and computational science.
+
+\textbf{Predict, run, explain.} State a prediction before opening a notebook. Setup and numerical code are shared: run code cells in order whichever explanation you read first. Change one assumption at a time, compare matched conditions, then explain what the result establishes and what remains untested. Slides 18--20 use \coursenotebook{14d_coupled_tumour_growth.ipynb}{Notebook 14d} for the transition from anatomical growth to the coupled tumour--oxygen--necrosis model. Its small CPU preset supports exploration; the higher-resolution slide presets are separate choices.
+
+\textbf{Resources and evidence.} The \href{https://github.com/arvidl/brains-to-models/blob/main/talk/resources.md}{presentation guide} maps slides to sources and runnable examples; the \href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/README.md}{notebook guide} supplies setup instructions, Colab links and verification scope. Abbreviations, concepts and symbols for both paths are collected in the \hyperref[sec:syllabus-glossary]{glossary} before the references. Thumbnails follow the presentation; slide 24 uses the credited replacement video-player image and retains the full narration. Model outputs, published observations and interpretive claims are identified separately throughout.
+
+\clearpage
+\begingroup
+\small
+\tableofcontents
+\endgroup
+\input{syllabus-slides}
+\input{syllabus-glossary}
+\clearpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\input{bibliography}
+\end{document}

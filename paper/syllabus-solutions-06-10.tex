@@ -1,0 +1,224 @@
+\solutionslide{06}{Embodiment, judgment and collaboration}
+\biomedicalanswer
+\task{Explain how fatigue could change a choice while the image stays identical. Name a bodily observation and an alternative explanation.}
+\answerstep{1. Describe a plausible change in the person.}
+The same scan can be encountered by a person in different bodily states. A fatigued reader might find sustained search more demanding, seek an additional opinion or stop examining an ambiguous boundary sooner. Another reader might compensate by becoming more cautious. Fatigue need not have one universal behavioural direction. The point is that unchanged external pixels do not imply an unchanged perceptual and decision situation.
+
+Interoception concerns signals about internal bodily condition; homeostatic regulation concerns maintaining physiological variables within viable ranges. These concepts motivate questions about how bodily needs influence cognition \citep{seth2013,sethbayne2022}. They do not make every performance change evidence about consciousness.
+\answerstep{2. Propose observations that can separate explanations.}
+Record sleep history and a declared fatigue rating alongside the task. A bodily measure related to arousal might provide an additional observation, but no single measure should be treated as a complete definition of fatigue. Record the choice, search duration, confidence and relevant accuracy outcome separately.
+
+An alternative explanation is that the second encounter occurs under a different workload, incentive or instruction. Familiarity with the case can also change the answer. A within-person comparison should therefore consider order, prior exposure and matched task conditions; simply showing the same image twice does not isolate a bodily cause.
+\answerstep{3. State the interpretation at the right level.}
+If measured fatigue and choices change together, that is an association to explain. A controlled comparison can strengthen a specific causal claim, but the result remains about the measured state and behaviour. It does not establish that a software controller has bodily experience, nor that the reader's complete internal state has been measured.
+\answercheck{A good answer names an observable bodily correlate, a specific choice and a credible competing explanation. It distinguishes a hypothesis about bodily influence from a claim to have measured subjective experience.}
+
+\computationalanswer{06}
+\task{Establish invariance for an unlimited controller, then show why bounded actions can fail when disturbances are larger.}
+\answerstep{1. Define the state, action and disturbance.}
+The scalar model is $s_{t+1}=s_t+a_t+w_t$. All quantities here are dimensionless. The viable set is $\mathcal V=[-1,1]$. Full observation means the controller knows $s_t$ before choosing $a_t$. Invariance requires the next state to remain in $\mathcal V$ for every allowed current state and disturbance under the declared policy.
+\answerstep{2. Prove the unlimited-action result.}
+Use policy $a_t=-s_t$. Substitution gives
+\[
+s_{t+1}=s_t-s_t+w_t=w_t.
+\]
+For every $|w_t|\leq0.2$, it follows that $|s_{t+1}|\leq0.2\leq1$. Starting from any $s_0\in\mathcal V$, apply this argument at each step: the next state is in $\mathcal V$, so the same guarantee applies again. This is an induction over updates.
+
+The proof depends on exact observation, the stated transition equation, timely control and permission to choose $-s_t$. It does not cover an unmodelled delay or action constraint.
+\answerstep{3. Construct a failure that no allowed action repairs.}
+Now impose $|a_t|\leq0.5$ and allow $|w_t|\leq0.6$. Choose the allowed boundary state $s_t=1$ and disturbance $w_t=0.6$. The most negative allowed action is $-0.5$. Consequently, for every admissible action,
+\[
+s_{t+1}=1+a_t+0.6\geq1-0.5+0.6=1.1>1.
+\]
+The next state must leave $\mathcal V$. This is stronger than showing that one poorly chosen action fails: even the best allowed correction is insufficient for this state--disturbance pair. At the negative boundary, $s_t=-1,w_t=-0.6$ gives the symmetric failure.
+\answerstep{4. Read the quantifiers and their meaning.}
+A robust invariance claim has the structure ``for every allowed state, the policy succeeds for every allowed disturbance.'' One permitted pair that defeats all permitted actions is enough to refute that claim. The successful unlimited controller and failed bounded controller have different assumptions, so their conclusions are compatible.
+
+This calculation establishes a functional property of a specified control loop. Relating such a loop to biological regulation is a further modelling question; attributing experience requires another argument. Appendix C of the \coursepaper{paper} develops that distinction.
+\answerconnection{Bodily regulation motivates the viable range. The proof clarifies which sensing, action and disturbance assumptions actually guarantee staying within it.}
+
+\solutionslide{07}{What a Turing-like test measures}
+\biomedicalanswer
+\task{Explain how a scan explanation could sound human while omitting important uncertainty. Propose an observation of comprehension rather than resemblance.}
+\answerstep{1. Construct the communication problem.}
+Suppose the source finding is an abnormal region whose cause remains uncertain. A polished explanation says, ``The scan shows the cause of your symptoms, and the next step is clear.'' Its familiar phrasing and confident narrative may sound like a human conversation. However, it omits the source's uncertainty and introduces a connection to symptoms that the imaging observation alone has not established.
+
+The resemblance judgment asks who appears to have produced the answer. The comprehension question asks what the recipient understands about the finding. A response can succeed on the first and fail on the second. The syllabus's Turing-like comparison concerns a specified judgment task, not a complete assessment of clinical communication \citep{zhang2026turing}.
+\answerstep{2. Define a comprehension observation.}
+Ask the recipient: ``What has this scan shown, and what remains uncertain?'' A meaningful answer might distinguish a visible abnormality from its possible causes and recognize that other information is needed. An answer such as ``The scan has proved the cause'' would reveal the particular misunderstanding in this hypothetical example.
+
+Use a predeclared scoring guide based on the source finding. Assess the recipient's own explanation, rather than asking only whether the wording was reassuring or sounded professional. Confidence in an answer and comprehension of its uncertainty are different outcomes.
+\answerstep{3. Design a fair comparison.}
+Compare explanations for matched source findings, keep essential clinical content explicit and have assessors score comprehension without knowing which system produced the wording. Include recipients with relevant language and health-literacy backgrounds. Record resemblance, comprehension and preference separately so that one outcome cannot silently substitute for another.
+\answercheck{An answer should identify the omitted uncertainty, the mistaken belief it could produce and an observable response that would reveal that belief. Human-like style alone supplies none of those measurements.}
+
+\computationalanswer{07}
+\task{Derive the variance of an average of independent Bernoulli judgments and of duplicated copies of one judgment. Identify the independent sampling units.}
+\answerstep{1. Derive the variance of one correctness indicator.}
+Let $Z\in\{0,1\}$ indicate a correct judgment, with $P(Z=1)=a$. Then $Z^2=Z$, so
+\[
+\mathbb E Z=a,\qquad
+\operatorname{Var}(Z)=\mathbb E Z^2-(\mathbb E Z)^2=a-a^2=a(1-a).
+\]
+Here $a$ is an accuracy probability and is unrelated to an action symbol on other slides.
+\answerstep{2. Average independent judgments.}
+For $N>0$ independent, identically distributed indicators $Z_1,\ldots,Z_N$, define $\hat a=N^{-1}\sum_k Z_k$. The general variance identity is
+\[
+\operatorname{Var}(\hat a)=\frac1{N^2}
+\left(\sum_k\operatorname{Var}(Z_k)+2\sum_{k<l}\operatorname{Cov}(Z_k,Z_l)\right).
+\]
+Independence sets the covariances to zero. The $N$ equal variance terms then give $\operatorname{Var}(\hat a)=a(1-a)/N$. Its square root is the standard error, the spread of the estimated accuracy over repeated samples under these assumptions.
+\answerstep{3. Replace independent observations by copies.}
+If every row is the same random variable $Z$, then
+\[
+\hat a=\frac1N\underbrace{(Z+\cdots+Z)}_{N\text{ copies}}=Z,
+\qquad \operatorname{Var}(\hat a)=a(1-a).
+\]
+Equivalently, each covariance equals $\operatorname{Var}(Z)$, leaving $N^2$ equal contributions before division by $N^2$. No new information was created by duplicating rows.
+
+For the illustrative value $a=0.6$, one judgment has variance $0.24$ and standard deviation about $0.490$. One hundred independent judgments have mean variance $0.0024$ and SE about $0.049$. One hundred copies of one judgment retain variance $0.24$.
+\answerstep{4. Map the mathematics to a proposed study.}
+Judgments may share a judge, source item or generated response. Those shared components can induce dependence without making every judgment an exact copy. Identify the sampled judges and items, which responses were reused, and whether conclusions concern these items, new items, these judges or a wider population. Analysis may need to represent both judge and item clustering. The raw number of rows alone does not justify the independent-Bernoulli formula.
+\answerconnection{A human resemblance judgment is meaningful only in its task and population. The covariance calculation explains why repeated judgments also need a clear sampling structure.}
+
+\solutionslide{08}{Read results in their time and protocol}
+\biomedicalanswer
+\task{Describe a presentation change that could alter a patient's impression without improving clinical content, and identify an observation that would detect it.}
+\answerstep{1. Hold the informational content fixed.}
+Consider two versions of the same explanation: identical statements about the finding, alternatives and uncertainty, presented either as plain text or as an attractive narrated display. A confident voice, familiar layout or animation could change perceived authority, warmth or reassurance without adding a clinical fact. The direction and size of this effect are empirical questions, not assumed results.
+
+A different example is replacing cautious visual emphasis with a vivid highlighted contour while keeping the words unchanged. The appearance may imply a more definite boundary than the accompanying explanation supports.
+\answerstep{2. Measure impression and understanding separately.}
+Ask recipients to rate perceived confidence or trust, and separately ask them to explain what is known and uncertain. Check factual content against the source using a fixed rubric. A changed impression alongside unchanged factual content and comprehension would support the proposed distinction. Improved comprehension would be a separate possible benefit to measure, rather than assume.
+
+If the same participant sees both versions, order and memory may affect the result. Separate assigned groups or a counterbalanced design can help address that issue, depending on the question and population.
+\answerstep{3. Preserve the historical comparison.}
+A result obtained for one model version, interface and set of instructions belongs to that encounter. A later model with tools, a different prompt or another display is a changed procedure. Report those changes before interpreting differences. The source study discussed in the syllabus should therefore be read with its model versions and comparison protocol in view \citep{zhang2026turing}.
+\answercheck{The answer should identify which presentation feature changed, demonstrate that the clinical propositions stayed fixed and use different observations for impression and comprehension. A preference rating alone cannot establish improved clinical content.}
+
+\computationalanswer{08}
+\task{Separate item variability from generation variability, explain protocol confounding and construct a scoring change that reverses a model ranking.}
+\answerstep{1. Index the two sources of variability.}
+Let $S_{jk}$ be the score on item $j$ in repeated generation $k$. A useful decomposition is $S_{jk}=\mu_j+\epsilon_{jk}$, where $\mu_j$ is that item's expected score and the residual has conditional mean zero. The law of total variance gives
+\[
+\operatorname{Var}(S)=\operatorname{Var}(\mathbb E[S\mid j])+
+\mathbb E[\operatorname{Var}(S\mid j)].
+\]
+The first term concerns differences between items; the second concerns repeated responses within an item. Many generations of one easy item do not measure variation across a population of difficult and easy items.
+\answerstep{2. Explain why changing two factors obscures the contrast.}
+A score is $S(m,p,D)$ for model $m$, protocol $p$ and item set $D$. With fixed $D$,
+\[
+\begin{aligned}
+S(m_2,p_2,D)-S(m_1,p_1,D)
+={}&[S(m_2,p_2,D)-S(m_2,p_1,D)]\\
+&+[S(m_2,p_1,D)-S(m_1,p_1,D)].
+\end{aligned}
+\]
+The observed difference combines a protocol contrast and a version contrast. Measuring just the endpoints does not supply both terms. A matched version comparison uses the same protocol and items, or a design that separately estimates the factors.
+\answerstep{3. Reverse a ranking without changing any answer.}
+Suppose fixed answers have fact and clarity scores as follows:
+\[
+\begin{array}{c|cc}
+&\text{Fact score}&\text{Clarity score}\\\hline
+A&0.9&0.4\\B&0.7&0.9
+\end{array}
+\]
+Define a combined score $S_w=wF+(1-w)C$, where $0\leq w\leq1$ is the weight on facts. At $w=0.8$, $S_A=0.80$ and $S_B=0.74$. At $w=0.2$, $S_A=0.50$ and $S_B=0.86$. The ranking reverses solely because the evaluation objective changes.
+\answerstep{4. Interpret an uncertainty summary.}
+For independent matched item differences $d_j$, estimate the mean difference by $\bar d$ and its SE by $s_d/\sqrt n$. For invented differences $(1,-1,2,0)$, $\bar d=0.5$, $s_d^2=5/3$ and SE $\sqrt{5/3}/2\approx0.645$. These are score units, not probabilities. Repeated generations or related items require an analysis consistent with their dependence.
+\answerconnection{A presentation may change an encounter without improving its content. Indexing the model, protocol, items and score prevents that change from being mislabelled as a single model effect.}
+
+\solutionslide{09}{Turn a model suggestion into a study}
+\biomedicalanswer
+\task{Draft a comprehension question about an uncertain scan finding. Describe a consequential misunderstanding and a population in which to check the wording.}
+\answerstep{1. Ask what the explanation is meant to communicate.}
+Suppose an explanation states that the scan contains an abnormality but its cause cannot be established from this image alone. A comprehension question could be: ``What does the scan tell us, and what does it leave unresolved?'' An adequate answer identifies the visible finding and distinguishes it from a confirmed cause. The question should be anchored to the actual explanation and source finding.
+
+A consequential misunderstanding would be: ``The image proves that the abnormality is cancer,'' when the source has not established that diagnosis. Another would be: ``An uncertain cause means there is definitely no problem.'' Both replace uncertainty with unwarranted certainty in opposite directions.
+\answerstep{2. Build a usable scoring guide.}
+Specify in advance whether an answer must identify the finding, retain uncertainty and avoid a false diagnostic inference. Allow equivalent ordinary-language descriptions. Avoid giving credit simply for repeating a technical word. Ask a follow-up such as ``What makes you say that?'' to distinguish understanding from a guessed response.
+
+Use independent assessors with examples of acceptable and unacceptable answers. If the research question concerns communication, score recipients' understanding as well as the factual accuracy of the text they received.
+\answerstep{3. Check the question in the intended population.}
+Test the wording with people resembling the intended recipients, including relevant language backgrounds, levels of health literacy and prior experience of imaging. Cognitive interviews can reveal whether words such as ``finding'' or ``uncertain'' mean what the researchers intend. Anxiety and prior knowledge may affect interpretation and should be considered in recruitment and measurement.
+\answercheck{A useful study question specifies the misunderstanding it is designed to detect. Satisfaction, trust and factual comprehension can all matter, but they require distinct observations rather than one interchangeable score.}
+
+\computationalanswer{09}
+\task{Specify a causal outcome, construct an aggregate reversal across two strata and distinguish randomized participants from repeated question responses.}
+\answerstep{1. Define the estimand before the data.}
+Let $Y_i(1)$ be participant $i$'s comprehension score under an AI-assisted explanation and $Y_i(0)$ the score under the comparison. For example, define the score as the proportion of five predeclared questions answered correctly, ranging from zero to one. The target average effect is
+\[
+\Delta=\mathbb E[Y_i(1)-Y_i(0)].
+\]
+Only the assigned condition's outcome is observed for a participant. Random assignment supports estimating the average contrast under a well-defined intervention, no interference and the design's sampling and follow-up assumptions. It does not reveal the two potential outcomes for one person.
+\answerstep{2. Construct the reversal explicitly.}
+The following invented table records success on a single comprehension criterion. It illustrates the arithmetic of unequal group composition, not an estimated effect of AI:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Stratum & Group A & Group B\\\midrule
+Novice & $60/100=60\%$ & $5/10=50\%$\\
+Experienced & $9/10=90\%$ & $80/100=80\%$\\\bottomrule
+\end{tabular}
+\end{center}
+Within each stratum A has the higher success rate. Aggregating gives
+\[
+P_A=\frac{60+9}{110}\approx0.627,\qquad
+P_B=\frac{5+80}{110}\approx0.773.
+\]
+B now appears better because it contains many more experienced readers. The aggregate difference mixes within-stratum performance with composition.
+\answerstep{3. Compare the same target mixture.}
+If the target population is half novice and half experienced, standardizing both groups to those weights gives
+\[
+P_A^*=0.5(0.6)+0.5(0.9)=0.75,\qquad
+P_B^*=0.5(0.5)+0.5(0.8)=0.65.
+\]
+This does not itself make observational rates causal. It shows why the population and weighting rule must be declared. Randomization balances composition in expectation, not necessarily exactly in a realized sample; stratification can address an important known factor by design.
+\answerstep{4. Identify the analysis unit.}
+If participants are assigned and each answers five questions, five responses are repeated measurements within one participant. Define a participant score or use an analysis accounting for this clustering. Counting five answers as five independently randomized people misstates the design. Freeze scoring and handling of missing answers before examining group results.
+\answerconnection{The biomedical route defines a misunderstanding worth measuring. The formal route ensures that the measured comparison addresses the intended people and intervention rather than a difference in group composition.}
+
+\solutionslide{10}{From patient data to a useful decision}
+\biomedicalanswer
+\task{Trace one input from acquisition to prediction to action, and explain how the care process could produce apparent accuracy.}
+\answerstep{1. Trace an input and its availability.}
+Imagine a research model predicting a later disease-change outcome from an MRI available at a specified decision date. The image is acquired, reconstructed, checked for quality, aligned or otherwise processed, and converted into input features. The model produces a forecast. A separate clinical process interprets that forecast with symptoms, previous findings, uncertainty and the burdens of possible actions.
+
+The acquisition date is not always the availability date of every derived input. A report, annotation or later corrected record may become available only after the intended prediction time. A fair prospective task uses information actually available then.
+\answerstep{2. Identify a care-process shortcut.}
+Suppose more concerning cases are sent for an additional acquisition or an urgent review. A model might learn the associated protocol label or recording pattern. That feature could predict the outcome in the original service while partly reflecting clinicians' prior concerns and organizational decisions. If referral or recording practice changes, the association may weaken.
+
+An even clearer failure is including a later note describing the outcome being predicted. The apparent forecast can then partly reconstruct a known result. High retrospective accuracy does not repair the time-order error.
+\answerstep{3. Connect the forecast to a meaningful decision.}
+Ask what an additional assessment would achieve, what burdens it entails and how errors would matter. A probability estimate does not choose those consequences. Evaluate the proposed use at the actual point in the workflow and compare it with the current procedure, including its existing clinical judgment.
+\answercheck{A satisfactory trace identifies the physical measurement, processing, availability time, prediction target and decision. It gives a concrete route by which organizational information could substitute for the intended disease feature.}
+
+\computationalanswer{10}
+\task{Derive the action boundary for false-positive cost 1 and false-negative cost 4, and explain why a future note changes a prediction problem.}
+\answerstep{1. Define the information set and probability.}
+At time $t$, let $x_{\leq t}$ contain only available information. For future binary outcome $Y_{t+h}$ with horizon $h>0$, write
+\[
+p=P_\theta(Y_{t+h}=1\mid x_{\leq t}).
+\]
+The parameter $\theta$ indexes the fitted model. Interpreting its output as this probability requires evaluation in the relevant setting; algebra alone does not establish calibration.
+\answerstep{2. Write the full loss table.}
+For actions ``act'' and ``wait'', stipulate loss zero for the two correct decisions, $C_{FP}=1$ for acting without the event and $C_{FN}=4$ for waiting despite it. Expected losses are
+\[
+L_{\rm act}=P(Y=0\mid x)C_{FP}=(1-p),\qquad
+L_{\rm wait}=P(Y=1\mid x)C_{FN}=4p.
+\]
+Both quantities use the same stipulated cost units.
+\answerstep{3. Rearrange the comparison one step at a time.}
+Acting has strictly lower expected loss when
+\[
+1-p<4p\quad\Longleftrightarrow\quad1<5p
+\quad\Longleftrightarrow\quad p>\tfrac15=0.2.
+\]
+At $p=0.2$, both expected losses equal $0.8$. At $p=0.1$, acting costs $0.9$ in expectation and waiting $0.4$; at $p=0.3$, the values are $0.7$ and $1.2$. These substitutions check both sides of the boundary.
+
+For arbitrary positive costs, the same rearrangement gives $p>C_{FP}/(C_{FP}+C_{FN})$. Scaling both costs by the same positive constant leaves this threshold unchanged. Nonzero correct-decision costs or additional actions require a revised comparison.
+\answerstep{4. Explain information leakage.}
+If a future note $N_{t+h}$ is included, the evaluated quantity is closer to $P(Y_{t+h}=1\mid x_{\leq t},N_{t+h})$. This is a different conditional distribution using information unavailable at the declared decision time. Renaming that input as an earlier feature does not make the prospective task valid.
+
+\coursenotebook{15_ppv_and_decisions.ipynb}{Notebook 15} separates an event probability, a test-score classification threshold and a consequence-based action boundary. A forecast under observed care also does not by itself identify what would happen under a different treatment.
+\answerconnection{Clinical reasoning supplies the relevant information date and consequences. The inequality makes the decision implied by those assumptions explicit and checkable.}

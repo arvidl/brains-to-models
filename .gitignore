@@ -11,7 +11,7 @@ __pycache__/
 .ruff_cache/
 .DS_Store
 
-# LaTeX intermediates; paper/main.pdf and scientific figure PDFs are retained.
+# LaTeX intermediates; course document PDFs and scientific figure PDFs are retained.
 paper/*.aux
 paper/*.bbl
 paper/*.bcf

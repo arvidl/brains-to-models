@@ -1,8 +1,8 @@
 # Notebook guide
 
-These twenty-three independent notebooks accompany *From Brains to Models* for MSc and PhD students in biomedicine, imaging and computational science. Each includes an **Open in Colab** badge, learning goals, setup instructions and two reading paths explaining the concepts and notation used in its calculations. Read the explanations beside the calculations, predict a result before changing a parameter, and use the interpretation questions to design a further test.
+These twenty-three independent notebooks accompany *From Brains to Models* for MSc and PhD students in biomedicine, imaging and computational science. Each includes an **Open in Colab** badge, learning goals, setup instructions and two reading paths developing biological intuition and mathematical reasoning, with paired exercises and a shared interpretation. Read the explanations beside the calculations, predict a result before changing a parameter, and use the interpretation questions to design a further test.
 
-**Related resources:** [Paper](../../paper/main.pdf) · [Presentation guide](../../talk/resources.md)
+**Related resources:** [Paper](../../paper/main.pdf) · [Syllabus](../../paper/syllabus.pdf) · [Presentation guide](../../talk/resources.md)
 
 ## Choose a notebook
 
@@ -46,7 +46,9 @@ For local use, follow the [environment instructions](../../README.md#run-the-not
 
 ## Using the notebooks for teaching
 
-Read the biomedical/imaging explanation for the observable contrast and its interpretation. Use the computational path for the variables, objective and update rule. The paths describe the same calculation. Neither needs to be completed before the other.
+The **Biomedical and imaging path** begins with a phenomenon and develops biological mechanisms, anatomical relationships, clinical observations and intuitive predictions. Its exercise asks you to explain or predict an observable consequence in ordinary language. The **Computational path** begins with objects and assumptions, then specifies variables, domains, units, equations, objectives and update rules. Its exercise asks you to derive, calculate, check dimensions, establish an invariant or construct a counterexample. Each notebook ends these paired exercises with a short **Shared interpretation** connecting their results.
+
+Choose either explanation first; neither is a prerequisite for the other. Each opening route guide points to relevant sections. Setup, numerical code, figures and limitations are shared, so run the code cells in order whichever route you read. The paths support different forms of reasoning about the same experiment; they are not separate execution sequences.
 
 For notebook 09's interpretation exercise, run cells individually and pause before displaying an overlay. Notebook 05b has static figures and a GIF as well as its interactive panel; browser widget support affects interaction, not the underlying descent calculation. Notebook 13's independent references run by default; its optional audit of a pinned external 3-D solver is a separate, explicitly reported step.
 
@@ -65,6 +67,21 @@ Use **13 → 14a → 14b → 14d** to follow the biology/model hierarchy, or con
 Run the interactive cell in 14a–14c to create the widgets. Model and algorithm changes take effect when you press the run button. In 14a/14b, day, threshold and image-view controls read the last computed run immediately. A pending-change message prevents a previous result from being mistaken for a new simulation. Invalid time steps are rejected explicitly.
 
 In 14c, compare noise seeds, generating rates, early observation times, search resolution and fitting steps. Day 90 is always withheld. The static examples above the controls remain the reproducible paper reference; widgets do not overwrite them. GitHub shows those saved figures, while interactivity requires a running kernel.
+
+## Paper and slide-by-slide syllabus
+
+The [perspective paper](../../paper/main.pdf) develops the thematic argument and
+technical derivations. The separate [syllabus companion](../../paper/syllabus.pdf)
+follows all 25 slides with both reading paths, predictions and exercises. It explains
+mathematical symbols and operations beside the equations and includes a glossary
+of abbreviations, concepts and notation for both paths before the references. Its
+slides 18–20 guide notebook 14d's anatomical presets, coupled variables, matched
+views and limiting-case checks.
+
+The separate [tentative syllabus solutions](../../paper/syllabus-solutions.pdf)
+work through both paths for every slide, including the mathematical derivations
+and biological interpretations. They identify suggested notebook experiments
+and distinguish them from saved reference results.
 
 ## Colab verification
 

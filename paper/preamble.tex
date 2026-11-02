@@ -1,0 +1,42 @@
+% Shared packages, typography and course navigation.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,longtable}
+\usepackage[round,authoryear]{natbib}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{caption,placeins,fancyhdr}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\urlstyle{same}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.22}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small From Brains to Models}\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\newcommand{\learningcheck}[2]{%
+  \par\smallskip\noindent\begin{minipage}{\linewidth}
+  \textbf{Takeaway.} #1\par\smallskip
+  \textbf{Check your understanding.} #2\end{minipage}\par\smallskip}
+\newcommand{\coursenotebook}[2]{\href{https://github.com/arvidl/brains-to-models/blob/main/code/notebooks/#1}{#2}}
+\newtcolorbox{perspectives}[1]{%
+  title={Two reading paths: #1},
+  colback=blue!2,colframe=MidnightBlue!45,
+  colbacktitle=blue!6,coltitle=MidnightBlue,
+  fonttitle=\small\bfseries,fontupper=\small,
+  boxrule=0.4pt,arc=1mm,
+  left=2.5mm,right=2.5mm,top=1.5mm,bottom=1.5mm,
+  before skip=8pt,after skip=8pt}
+
+% Stable links between independently compiled course documents.
+\newcommand{\coursepaper}[1]{\href{https://github.com/arvidl/brains-to-models/blob/main/paper/main.pdf}{#1}}
+\newcommand{\coursesyllabus}[1]{\href{https://github.com/arvidl/brains-to-models/blob/main/paper/syllabus.pdf}{#1}}
+\newcommand{\coursesolutions}[1]{\href{https://github.com/arvidl/brains-to-models/blob/main/paper/syllabus-solutions.pdf}{#1}}
+\newcommand{\courseauthor}{Arvid Lundervold\\\normalsize Department of Biomedicine, University of Bergen\\\normalsize Mohn Medical Imaging and Visualization Centre}
+\newcommand{\coursedate}{\small Companion to the Joint PRESIMAL $\times$ NORA HS keynote\\5 November 2026, Sola Strand Hotel, Stavanger}

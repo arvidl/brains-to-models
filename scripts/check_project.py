@@ -20,7 +20,9 @@ def publication_files():
             ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
             cwd=ROOT,
         ).decode().split("\0")
-        return [ROOT / name for name in set(names) if name]
+        # The index also lists files removed or renamed in an uncommitted edit.
+        return [ROOT / name for name in set(names)
+                if name and (ROOT / name).is_file()]
     # Also support source archives, which have no Git metadata.
     ignored = {".venv", ".build", "__pycache__", ".ipynb_checkpoints", ".mplconfig"}
     return [p for p in ROOT.rglob("*") if p.is_file()
@@ -40,6 +42,36 @@ def check_local_links(path, text):
             continue
         linked = path.parent / unquote(parsed.path)
         assert linked.exists(), f"{path.relative_to(ROOT)}: missing link {target}"
+
+
+def check_course_companions():
+    """Keep all slide exercises and their two worked paths aligned."""
+    paper = ROOT / "paper"
+    syllabus = (paper / "syllabus-slides.tex").read_text()
+    solutions = "\n".join(p.read_text() for p in sorted(paper.glob("syllabus-solutions-*.tex")))
+    syllabus_slides = re.findall(r"\\begin\{slidenotes\}\{(\d+)\}\{([^\n]+?)\}\{", syllabus)
+    solution_slides = re.findall(r"\\solutionslide\{(\d+)\}\{([^\n]+?)\}", solutions)
+    assert [int(n) for n, _ in syllabus_slides] == list(range(1, 26)), "Syllabus slide coverage"
+    assert solution_slides == syllabus_slides, "Syllabus/solutions slide numbers or titles differ"
+    blocks = re.split(r"(?=\\solutionslide\{\d+\})", solutions)[1:]
+    for (number, _), block in zip(solution_slides, blocks):
+        assert block.count("\\biomedicalanswer") == 1, f"Slide {number}: biomedical answer"
+        assert block.count(f"\\computationalanswer{{{number}}}") == 1, f"Slide {number}: computational answer"
+        assert block.count("\\task{") == 2, f"Slide {number}: paired exercise prompts"
+        assert block.count("\\answercheck{") == 1, f"Slide {number}: reasoning check"
+        assert block.count("\\answerconnection{") == 1, f"Slide {number}: shared interpretation"
+    for number in (18, 19, 20):
+        syllabus_block = re.search(rf"\\begin\{{slidenotes\}}\{{{number}\}}.*?\\end\{{slidenotes\}}",
+                                   syllabus, re.S).group()
+        solution_block = blocks[number - 1]
+        for block in (syllabus_block, solution_block):
+            assert "14d_coupled_tumour_growth.ipynb" in block, f"Slide {number}: missing 14d link"
+    # Resolve stable links shared by the independently compiled PDFs locally too.
+    preamble = (paper / "preamble.tex").read_text()
+    for target in re.findall(r"\\href\{https://github.com/arvidl/brains-to-models/blob/main/([^}]+)\}", preamble):
+        if "#1" in target:  # Concrete notebook macro arguments are checked below.
+            continue
+        assert (ROOT / target).is_file(), f"Missing course-document target: {target}"
 
 
 def main():
@@ -63,6 +95,7 @@ def main():
         if path.suffix == ".py":
             ast.parse(path.read_text(), filename=str(rel))
 
+    check_course_companions()
     manuscript = "\n".join(p.read_text() for p in (ROOT / "paper").glob("*.tex"))
     bib = (ROOT / "paper/references.bib").read_text()
     keys = re.findall(r"@\w+\{([^,]+),", bib)
@@ -205,7 +238,8 @@ def main():
     assert resources["deck"]["slide_count"] == 25
     assert re.fullmatch(r"[0-9a-f]{64}", resources["deck"]["sha256"])
 
-    print(f"PASS: publication contents; {len(keys)} bibliography entries; paper figures; "
+    print(f"PASS: publication contents; 25 syllabus slides and 50 solution paths; "
+          f"{len(keys)} bibliography entries; paper figures; "
           f"local links; {len(notebooks)} notebooks with course navigation; "
           f"numerical references; Python syntax; "
           f"final PPTX checksum, size, package and {deck['slide_count']} slides.")

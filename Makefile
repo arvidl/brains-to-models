@@ -4,7 +4,7 @@ export MPLBACKEND := Agg
 export PYTHONHASHSEED := 7
 export MPLCONFIGDIR := $(CURDIR)/.build/matplotlib
 
-.PHONY: figures growth-figures paper all clean-paper check check-segmentation check-examples check-growth check-growth-brainweb check-growth-widgets check-growth-coupled check-notebooks
+.PHONY: figures growth-figures paper syllabus solutions documents all clean-paper check check-segmentation check-examples check-growth check-growth-brainweb check-growth-widgets check-growth-coupled check-notebooks
 
 figures:
 	mkdir -p paper/figures
@@ -32,9 +32,17 @@ growth-figures:
 paper:
 	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
+syllabus:
+	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error syllabus.tex
+
+solutions:
+	cd paper && latexmk -pdf -interaction=nonstopmode -halt-on-error syllabus-solutions.tex
+
+documents: paper syllabus solutions
+
 # Keep the stages ordered even when make is invoked with -j.
 all: figures
-	$(MAKE) paper
+	$(MAKE) documents
 	$(MAKE) check
 
 check:
@@ -70,4 +78,4 @@ check-notebooks:
 	$(PYTHON) scripts/check_notebooks.py
 
 clean-paper:
-	cd paper && latexmk -c
+	cd paper && latexmk -c main.tex syllabus.tex syllabus-solutions.tex

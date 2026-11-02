@@ -1,0 +1,234 @@
+\solutionslide{01}{From brains to models}
+\biomedicalanswer
+\task{Choose a lesion-follow-up task. Explain what the contour means, what might mislead it and what a patient would need from its use.}
+\answerstep{1. Give the contour a specific meaning.}
+Consider following a region of abnormal signal on successive brain MRI examinations. A contour marks the region included by an annotation policy on those images. For example, a policy may include a specified FLAIR abnormality. It does not automatically mark every tumour cell, identify a disease mechanism or establish that the person needs a particular treatment. The biological meaning depends on which image contrast was outlined and on the clinical context.
+
+A useful ordinary-language explanation is: ``This outline helps us compare the visible region across scans. It is a measurement of an image appearance. We still need to interpret what a change means in your situation.'' That explanation separates a reproducible measurement from a diagnosis or decision.
+\answerstep{2. Explain a plausible misleading agreement.}
+A model and a radiologist might draw similar contours on a familiar scan, while the model relies heavily on brightness. A change in acquisition, tissue fluid or the boundary convention could then alter the outline without a corresponding change in viable tumour. Conversely, two methods might agree because both use the same imperfect reference policy. Agreement is useful evidence about the specified output, but does not identify the reasoning that produced it.
+\answerstep{3. State what would make the output useful.}
+The patient would need the measurement related to symptoms, prior scans, uncertainty and the purpose of follow-up. The team should ask whether the apparent change exceeds plausible measurement variation and whether using it improves a meaningful part of care. Reproducibility, interpretation and benefit are separate questions.
+\answercheck{A satisfactory answer names the outlined contrast and purpose, offers an alternative explanation for a changed contour and identifies what additional information would matter. ``The model agrees with an expert, therefore it understands the disease'' skips those steps.}
+
+\computationalanswer{01}
+\task{Construct two real-valued functions agreeing on $D=\{0,1\}$ but differing at $x=2$. Explain what the additional test establishes.}
+\answerstep{1. Define the functions and evaluate them.}
+Let the input and output sets both be $\mathbb R$, the real numbers. Choose
+\[
+f(x)=0,\qquad g(x)=x(x-1).
+\]
+These are functions defined for every real input, not just for the two observed cases. Direct substitution gives
+\[
+\begin{array}{c|ccc}
+x&0&1&2\\\hline
+f(x)&0&0&0\\
+g(x)&0&0&2
+\end{array}
+\]
+Thus the agreement fraction on $D$ is
+\[
+A_D(f,g)=\tfrac12\bigl(\mathbf1[0=0]+\mathbf1[0=0]\bigr)=1.
+\]
+The indicator $\mathbf1[Q]$ equals one when statement $Q$ is true. Perfect agreement on the finite set does not imply the universal statement $f(x)=g(x)$ for every real $x$.
+\answerstep{2. Add one observation and state its consequence.}
+If the newly observed target at $x=2$ is zero, $g$ is inconsistent with the three exact observations and $f$ remains consistent. This rejects this particular $g$ as an exact predictor of all three cases. It does not prove that $f$ is the unique possible rule. For any nonzero constant $a$,
+\[
+h_a(x)=a\,x(x-1)(x-2)
+\]
+also returns zero at all three tested points but differs elsewhere. The factors make the construction easy to read: each factor forces a zero at one observed input.
+\answerstep{3. Generalize and interpret.}
+For any finite collection of distinct inputs $x_1,\ldots,x_n$, the function
+\[
+g_a(x)=f(x)+a\prod_{i=1}^n(x-x_i)
+\]
+agrees with $f$ on those inputs. The product vanishes whenever $x=x_i$. Without further restrictions on the admissible function family, finite observations leave behaviour elsewhere undetermined.
+
+Even identifying a complete input--output function would not uniquely identify an implementation: a formula, a table on a restricted domain and different algorithms can produce the same answers. Mechanism claims therefore require observations of internal structure, dynamics or responses to interventions in addition to output agreement. \coursenotebook{00_intro_timeline.ipynb}{Notebook 00} introduces this separation through Marr's levels \citep{marr2010}.
+\answerconnection{The biomedical answer specifies why a contour matters. The counterexample establishes exactly why matching contours on tested cases leaves both untested behaviour and internal mechanisms open.}
+
+\solutionslide{02}{A learning programme}
+\biomedicalanswer
+\task{Make a verbal prediction before a notebook run, explain a possible surprise and name an observation that could resolve it.}
+\answerstep{1. Choose a prediction that can be checked.}
+For \coursenotebook{15_ppv_and_decisions.ipynb}{Notebook 15}, a learner might predict: ``If a test detects nine out of ten affected people and correctly clears nine out of ten unaffected people, most positive results will indicate disease.'' This is a plausible starting intuition, not the correct conclusion for every population.
+
+Before running anything, specify the missing context: suppose only one in a hundred people has the condition. A prediction about positive results cannot be assessed without this population information. Write the prediction down so it is not retrospectively changed to match the output.
+\answerstep{2. Explain the surprise using people rather than formulas.}
+In the syllabus's hypothetical population of 10,000, 100 people have disease and 9,900 do not. Expect 90 true positives among the first group and 990 false positives among the second. The large unaffected group supplies many more positive results, despite its lower chance of testing positive. Consequently, only about eight of every hundred positive results correspond to disease in this example.
+
+The surprise is explained by the relative sizes of the two groups. It does not require the test to change between them. These are expected counts from stipulated inputs; a real sample will fluctuate.
+\answerstep{3. Name the observation needed outside the notebook.}
+To investigate whether the explanation applies to a proposed setting, estimate condition frequency in the relevant population and compare test results with an appropriate independent reference for condition status. Record who was included and how the reference was obtained. A conveniently selected group may not represent people who would actually be screened.
+\answercheck{Running the notebook checks what the stipulated inputs imply. It cannot by itself establish those inputs for a clinical population. A useful explanation names which assumption caused the surprise and which observation could challenge that assumption.}
+
+\computationalanswer{02}
+\task{Give two populations compatible with the same finite training sample but yielding different risks for a fixed predictor. Explain the limit of sample-loss minimization.}
+\answerstep{1. Specify the predictor, targets and loss.}
+Let $\mathcal X=\{a,b\}$ and $\mathcal Y=\{0,1\}$. Suppose the true target is zero at either input. Fix a predictor with $f(a)=0$ and $f(b)=1$. Use zero--one loss,
+\[
+L(\hat y,y)=\mathbf1[\hat y\ne y].
+\]
+This loss is dimensionless. The predictor makes no error at $a$ and an error at $b$.
+\answerstep{2. Define two possible joint distributions.}
+Under $P_1$, let $P_1(a,0)=0.9$ and $P_1(b,0)=0.1$. Under $P_2$, reverse these probabilities. All other input--target pairs have probability zero. The expected, or population, risks are
+\[
+\begin{aligned}
+R_{P_1}(f)&=0.9\times0+0.1\times1=0.1,\\
+R_{P_2}(f)&=0.1\times0+0.9\times1=0.9.
+\end{aligned}
+\]
+The two populations therefore give very different error probabilities to the same function. The changed object is $P$, not $f$ or $L$.
+\answerstep{3. Check compatibility with an observed sample.}
+Consider $n>0$ independent training observations, all equal to $(a,0)$. This sample has probability $0.9^n$ under $P_1$ and $0.1^n$ under $P_2$. Both are positive, so the same observed finite sample is possible under either population. The sample is more likely under one population; the exercise does not require equal likelihood.
+
+For that sample,
+\[
+\widehat R_n(f)=\frac1n\sum_{i=1}^n L(f(a),0)=0.
+\]
+Zero is the smallest possible sample loss, so $f$ is a sample minimizer if included in the candidate family. Its population risk nevertheless depends on the unobserved mixture of $a$ and $b$.
+\answerstep{4. Interpret the distinction.}
+Sample minimization establishes an optimization property on observed cases. Generalization requires assumptions connecting the sample and target population, together with appropriate evaluation. A demonstration shows that a computation is possible; verification checks its implementation against the specified mathematics; validation asks whether the model is adequate against independent observations for a stated use. The three claims have different evidence requirements.
+\answerconnection{Population counts make the prevalence effect intuitive. The construction formalizes why an observed training average cannot determine every relevant population average.}
+
+\solutionslide{03}{Biological brains across scales}
+\biomedicalanswer
+\task{Describe a visible contrast, propose a cellular explanation and an alternative, and identify an additional measurement that distinguishes them.}
+\answerstep{1. Keep description separate from explanation.}
+A defensible visual description is that the drawings show different arrangements of cell bodies and branching processes, while the photographs show larger-scale differences in brain form. Some illustrated regions appear more densely filled with processes than others. These statements concern what is visible. They do not establish which brain is more intelligent or how much tissue a drawing represents. Scale, section orientation and preparation matter.
+\answerstep{2. Offer two explanations for one contrast.}
+One possible explanation for a denser-looking microscopic panel is a difference in the number or branching pattern of labelled cells. An alternative is a difference in section thickness, staining, sampling location or the direction in which processes cross the section. The same apparent density can arise through either biological organization or how it was measured.
+
+An analogous imaging example is that one MRI appearance can be compatible with several microscopic states. The signal aggregates contributions within a voxel; it does not count a named cell population directly. Calling the appearance a measurement of ``more cells'' already adds a hypothesis.
+\answerstep{3. Choose a discriminating observation.}
+To compare microscopic branching, use matched tissue preparation, calibrated spatial scales and a defined sampling scheme. Three-dimensional reconstructions or an independent cell-counting measurement could help distinguish increased branching from more labelled cells. The additional observation should address the competing explanation, rather than repeat the same ambiguous image.
+
+For an imaging hypothesis, specify how the proposed additional tissue or imaging measurement relates to the hidden state. More observations help only if they contain information not already lost by the first measurement.
+\answercheck{A strong answer states what the image supports before naming a mechanism. It treats scale bars and measurement preparation as part of the evidence and explains why the proposed second measurement would distinguish the alternatives.}
+
+\computationalanswer{03}
+\task{Recover a two-component state from its sum and an added first-component measurement. Identify architecture, encoding and update-rule differences in Notebook 03.}
+\answerstep{1. Show why the first observation is insufficient.}
+Let $s=(s_1,s_2)^\top$ be a column vector of two state components. The noiseless scalar observation is
+\[
+x=Hs,\qquad H=\begin{bmatrix}1&1\end{bmatrix}.
+\]
+For example, $s=(1,2)^\top$ and $s=(2,1)^\top$ both give $x=3$. The vector $v=(1,-1)^\top$ satisfies $Hv=0$, so adding any multiple of $v$ to a state preserves its measured sum. This invisible direction is the null space of the observation map.
+\answerstep{2. Add a genuinely independent observation.}
+Measure $r=s_1$ in addition to $x=s_1+s_2$. The combined system is
+\[
+\begin{bmatrix}x\\r\end{bmatrix}
+=\underbrace{\begin{bmatrix}1&1\\1&0\end{bmatrix}}_{\widetilde H}
+\begin{bmatrix}s_1\\s_2\end{bmatrix}.
+\]
+The determinant of $\widetilde H$ is $-1$, which is nonzero; the two rows supply independent linear constraints. Recovery is particularly transparent without matrix inversion:
+\[
+s_1=r,\qquad s_2=x-r.
+\]
+Thus $x=3,r=1$ recover $(1,2)$, whereas $x=3,r=2$ recover $(2,1)$. Measuring the sum again would not remove the ambiguity.
+\answerstep{3. State the assumptions behind recovery.}
+Exact recovery here assumes the stated measurement maps, the same underlying state for both measurements and no measurement error. With errors $\epsilon_x,\epsilon_r$, the reconstructed components become $s_1+\epsilon_r$ and $s_2+\epsilon_x-\epsilon_r$. Uniqueness of the noiseless solution therefore does not imply zero uncertainty in practice. Units must also agree before the subtraction is meaningful.
+\answerstep{4. Identify the notebook's distinct design choices.}
+\coursenotebook{03_bio_vs_artificial.ipynb}{Notebook 03} compares a spiking perceptron with a multilayer perceptron on shared constructed tasks. Architecture differs: a shallow spiking decision system versus a network with a hidden layer. Encoding differs: Poisson input spikes versus numerical input features. Learning differs: a local update using pre-synaptic activity and an output error versus error propagation through the hidden layer by gradient-based training.
+
+These changes occur together. An accuracy difference cannot isolate the effect of locality, spiking or depth. A more discriminating comparison holds architecture and encoding fixed while changing the update rule, or explicitly studies their interactions.
+\answerconnection{The biological answer asks which observation would separate mechanisms. The linear example explains what ``separate'' requires: a second measurement must constrain a direction invisible to the first.}
+
+\solutionslide{04}{Architectures encode choices}
+\biomedicalanswer
+\task{Explain how a model can perform well on large lesions but miss small ones, and identify an observation hidden by an average score.}
+\answerstep{1. Explain a plausible size-dependent failure.}
+A large lesion occupies many image elements and often remains visible after spatial downsampling. A small lesion may occupy only a few elements, share a voxel with surrounding tissue or disappear from a coarser internal representation. A boundary error of a few voxels can also represent a large fraction of a small lesion. These are plausible mechanisms to investigate, rather than a diagnosis of every segmentation architecture.
+
+The task matters: outlining an already identified large region differs from detecting every small separate focus. A system may succeed at the former while failing at the latter. U-Net and attention-based architectures organize information differently, but their names do not establish detection performance \citep{ronneberger2015,vaswani2017}.
+\answerstep{2. Construct an average that hides the problem.}
+Imagine two reference lesions: one contains 1,000 voxels and the other 10. Suppose the model outlines the large lesion perfectly and misses the small lesion completely. The pooled Dice overlap is $2,000/2,010\approx0.995$. Yet it detected only one of the two lesions. If Dice were averaged separately over these two lesions, the result would instead be $(1+0)/2=0.5$ under this simple matching convention.
+
+All these numbers describe the same invented masks. They differ because they weight the errors differently.
+\answerstep{3. Name the missing observation.}
+Report lesion detection by size and location, the number of missed separate foci, and the clinical relevance of those omissions under the intended task. Inspect individual cases as well as pooled overlap. A high average contour score can conceal an entirely absent lesion that matters more than a small boundary discrepancy on a large one.
+\answercheck{Explain how image scale and the averaging rule contribute separately. ``The average is high'' does not answer whether the clinically important small lesions were found.}
+
+\computationalanswer{04}
+\task{Check attention-array dimensions. Keep attention weights $A$ fixed, replace values $V$ by $2V$, and calculate the resulting output.}
+\answerstep{1. Check that the products are defined.}
+For $n$ tokens, let $Q,K\in\mathbb R^{n\times d_k}$ and $V\in\mathbb R^{n\times d_v}$. The transpose $K^\top$ has $d_k$ rows and $n$ columns, so
+\[
+QK^\top\in\mathbb R^{n\times n},\quad
+A=\operatorname{softmax}(QK^\top/\sqrt{d_k})\in\mathbb R^{n\times n},\quad
+Z=AV\in\mathbb R^{n\times d_v}.
+\]
+For scaled score $s_{ij}$, row-wise softmax defines
+\[
+A_{ij}=\frac{e^{s_{ij}}}{\sum_{r=1}^n e^{s_{ir}}}.
+\]
+Every term is positive and summing over column $j$ returns one. Row $i$ supplies weights for combining the value vectors; it is not itself that combined vector.
+\answerstep{2. Work through a two-token example.}
+Choose $n=2$, $d_v=1$ and
+\[
+A=\begin{bmatrix}3/4&1/4\\1/2&1/2\end{bmatrix},\qquad
+V=\begin{bmatrix}1\\3\end{bmatrix}.
+\]
+Then
+\[
+Z=AV=\begin{bmatrix}(3/4)1+(1/4)3\\(1/2)1+(1/2)3\end{bmatrix}
+=\begin{bmatrix}1.5\\2\end{bmatrix}.
+\]
+Changing the values to $2V=(2,6)^\top$ gives
+\[
+Z'=A(2V)=2(AV)=\begin{bmatrix}3\\4\end{bmatrix}.
+\]
+The equality follows from linearity of matrix multiplication when $A$ is fixed. Exactly the same attention weights can therefore produce different outputs.
+\answerstep{3. Interpret the scope of this result.}
+The result concerns one attention operation, not every component of a Transformer. Doubling the original input can change $Q,K$ and hence $A$; projections, biases and normalization can also change the full model's response. Holding $A$ fixed is an explicit experimental condition.
+
+In \coursenotebook{01_tiny_transformer.ipynb}{Notebook 01}, trace score formation, normalization and value aggregation separately. In \coursenotebook{09_segmentation_reflection.ipynb}{09}, distinguish the output scores from the binary mask formed by a threshold. Neither an attractive attention map nor a score bounded by zero and one alone establishes a clinical explanation or calibrated probability.
+\answerconnection{The biomedical failure concerns whether relevant spatial information reaches the output. The calculation identifies what an attention map can and cannot specify without the associated representations.}
+
+\solutionslide{05}{Four questions about intelligence}
+\biomedicalanswer
+\task{Place four questions about one diagnostic decision in the human/rational and thought/action grid. Explain the evidence each question requires.}
+\answerstep{1. Keep one decision fixed across the grid.}
+Consider an uncertain image finding and the question of whether to request further assessment. The same setting supports four different investigations:
+\begin{itemize}
+\item \textbf{Thinking humanly:} Does the system use a process resembling how a clinician reasons? Relevant evidence could include the sequence of information sought, responses to conflicting findings and error patterns. A fluent explanation alone does not reveal the actual process.
+\item \textbf{Acting humanly:} Does its recommendation resemble those made by clinicians under the same information? Compare recommendations on matched cases. Agreement can reproduce shared habits or errors.
+\item \textbf{Thinking rationally:} Does the conclusion follow from the stated premises and rules? Check logical validity and then separately ask whether the clinical premises are justified.
+\item \textbf{Acting rationally:} Does the selected action do best under declared probabilities and consequences? Specify which outcomes matter, to whom, and how uncertainty and burden are represented.
+\end{itemize}
+\answerstep{2. Show why one success can accompany another failure.}
+A model could reproduce a clinician's usual recommendation while relying on an irrelevant image marker. It would agree behaviourally without establishing a similar reasoning mechanism. Alternatively, an impeccably valid argument starting from ``every enhancing region is viable tumour'' could be unhelpful because the premise is too strong. Agreement and formal validity do not repair an unsupported clinical assumption.
+
+A recommendation preferred under one person's priorities may also change when the burdens or consequences are valued differently. A formal action criterion makes those supplied values visible; it does not settle them on the patient's behalf.
+\answercheck{The four questions should concern the same task but require different evidence. Treating a human-like explanation as simultaneous proof of mechanism, truth and usefulness collapses the grid.}
+
+\computationalanswer{05}
+\task{Construct two policies ranked differently by agreement with a human and by expected utility. Supply the probabilities, utilities and calculations.}
+\answerstep{1. Define a deliberately simple decision problem.}
+Let outcome $Y\in\{0,1\}$ denote absence or presence of an event. Given the available evidence $x$, stipulate $P(Y=1\mid x)=0.1$. The two actions are $a_{\rm act}$ and $a_{\rm wait}$. Define utility as negative loss:
+\[
+\begin{array}{c|cc}
+U(a,y)&y=0&y=1\\\hline
+a_{\rm act}&-1&0\\
+a_{\rm wait}&0&-4
+\end{array}
+\]
+The numbers are invented, expressed in a common utility scale. Correct actions cost zero, acting unnecessarily costs one and failing to act when the event occurs costs four.
+\answerstep{2. Compute expected utilities.}
+Expected utility weights each possible consequence by its conditional probability:
+\[
+\begin{aligned}
+\mathbb E[U(a_{\rm act},Y)\mid x]&=0.9(-1)+0.1(0)=-0.9,\\
+\mathbb E[U(a_{\rm wait},Y)\mid x]&=0.9(0)+0.1(-4)=-0.4.
+\end{aligned}
+\]
+Because $-0.4>-0.9$, waiting maximizes expected utility under these stipulated inputs.
+\answerstep{3. Define agreement and obtain the reversed ranking.}
+Suppose the reference human chooses $a_{\rm act}$ on every case in a set of cases with these same probabilities and costs. Policy $\pi_1$ always acts; policy $\pi_2$ always waits. Their agreement fractions with this reference are
+\[
+A(\pi_1)=1,\qquad A(\pi_2)=0.
+\]
+Agreement ranks $\pi_1$ above $\pi_2$, while expected utility ranks $\pi_2$ above $\pi_1$. This counterexample disproves the general implication ``greater human agreement means greater expected utility.'' It does not estimate how often clinicians make either choice.
+\answerstep{4. Interpret the formal criteria.}
+If the event probability were instead 0.3 with the same costs, acting would have utility $-0.7$ and waiting $-1.2$; the preferred action would reverse. Utility conclusions depend on the supplied probability and value model. Likewise, $\Gamma\vdash\phi$ means derivability of conclusion $\phi$ from premises $\Gamma$, not empirical truth of $\Gamma$. \coursenotebook{04b_four_views_of_AI.ipynb}{Notebook 04b} separates these targets.
+\answerconnection{Clinical purposes determine which success question matters. The counterexample demonstrates mathematically why success under one criterion cannot substitute for the others.}

@@ -1,5 +1,12 @@
 # Notebook exercises
 
+The separate [Tentative solutions to the syllabus exercises](../../paper/syllabus-solutions.pdf)
+develops the Biomedical and imaging path and Computational path for all 25
+presentation slides, with worked reasoning, definitions, derivations and checks.
+Its [LaTeX source](../../paper/syllabus-solutions.tex) builds with `make solutions`
+from the repository root. These slide exercises are distinct from the notebook
+solution scripts described below.
+
 Each of notebooks 01–07 (including lettered companions) ends with three
 exercises. Solutions live here so they can be `%load`-ed from a clone:
 

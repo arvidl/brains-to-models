@@ -7,7 +7,8 @@ SHA-256 hashes. Their order matches the
 Embedded source credits are retained. The images include third-party material;
 the repository's code licence does not override the rights of its original creators.
 
-The paper's [slide companion](../../appendix-slides.tex) supplies two reading paths.
+The separate [syllabus companion](../../syllabus.pdf) supplies two reading paths;
+its [slide-note source](../../syllabus-slides.tex) uses these thumbnails.
 For appendix slide 24, `slide-24-video.png` replaces the original crossed-out panel
 with the user-supplied video-player image, reproduced unchanged. The paper adds
 **Prof. Eirik S. Knudsen**, [Molekyl](https://www.molekyl.io), and a clickable

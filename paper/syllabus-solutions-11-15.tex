@@ -1,0 +1,222 @@
+\solutionslide{11}{Keep the task fixed across Marr's levels}
+\biomedicalanswer
+\task{Explain why identical contours do not establish identical recognition, and what history-taking adds to the task.}
+\answerstep{1. Separate the output from the process.}
+Suppose a clinician and a model return the same outline. That is evidence about the contour on this case. It does not determine how either system selected the boundary. A model could exploit a reliable texture cue; the clinician could combine several contrasts, anatomical relationships and prior knowledge. The contour alone does not let us reconstruct either process.
+
+Marr's levels ask about the purpose of a computation, the representations and procedures that carry it out, and its physical realization \citep{marr2010}. These are complementary questions about a fixed task. They should not be replaced by comparisons between different tasks simply because both involve images.
+\answerstep{2. Explain what history changes.}
+For lesion follow-up, history may identify why the scan was obtained, which symptoms matter, whether a relevant intervention occurred and how an earlier finding was interpreted. This context can change which comparison is clinically meaningful and how a boundary change is understood. It need not change the pixels of the current scan.
+
+For example, the purpose may be documenting reproducible visible extent, rather than identifying every infiltrating cell. The clinician's context helps interpret whether that summary addresses the person's problem. An identical contour does not establish that the model incorporated that context.
+\answerstep{3. Suggest evidence about recognition.}
+Compare responses when image contrast, anatomical context or a suspected shortcut changes while the task stays fixed. For the clinician, ask which additional information is sought; for the model, test whether the relevant change alters the prediction. A spoken account is one observation and should be considered alongside behaviour, rather than treated as a complete readout of mechanism.
+\answercheck{A sound answer distinguishes ``same contour'', ``same summary measurement'', ``same recognition procedure'' and ``same clinical purpose''. The first two can be checked directly without assuming the latter two.}
+
+\computationalanswer{11}
+\task{Derive the volume-disagreement bound and construct equal-volume masks at different locations.}
+\answerstep{1. Define the masks and their physical units.}
+On a common grid, let $m_i,\tilde m_i\in\{0,1\}$ indicate whether voxel $i$ belongs to either mask. Its physical volume is $v_i>0$ in mm$^3$. The selected volumes are
+\[
+V(m)=\sum_i v_i m_i,\qquad V(\tilde m)=\sum_i v_i\tilde m_i.
+\]
+Mask values are dimensionless; these sums are in mm$^3$. Dividing by 1000 converts either volume to mL.
+\answerstep{2. Apply the triangle inequality.}
+Subtract the sums, place the difference inside an absolute value and use that the absolute value of a sum cannot exceed the sum of absolute values:
+\[
+\begin{aligned}
+|V(m)-V(\tilde m)|
+&=\left|\sum_i v_i(m_i-\tilde m_i)\right|\\
+&\leq\sum_i|v_i(m_i-\tilde m_i)|\\
+&=\sum_i v_i|m_i-\tilde m_i|.
+\end{aligned}
+\]
+The last equality uses $v_i>0$. For binary masks, $|m_i-\tilde m_i|$ is one exactly where the masks disagree. The right side is therefore their disagreement volume, also called the volume of their symmetric difference.
+\answerstep{3. Show that equal volume can hide total displacement.}
+Take two distinct voxels, each of volume 1~mm$^3$, and masks
+\[
+m=(1,0),\qquad\tilde m=(0,1).
+\]
+Both have volume 1~mm$^3$, so the left side of the bound is zero. They share no selected voxel, and the right side is $1+1=2$~mm$^3$. Their equal volumes do not establish spatial agreement. Missing volume and extra volume cancel in the signed total.
+
+For a nested pair, $m=(1,1)$ and $\tilde m=(1,0)$, both sides instead equal 1~mm$^3$. The bound can therefore be exact; it is not a claim that all differences cancel.
+\answerstep{4. State which information is discarded.}
+The map $m\mapsto V(m)$ is not one-to-one: many spatial masks have the same summary. Consequently, equal outputs of the composed map $x\mapsto V(f_\theta(x))$ do not imply equal masks $f_\theta(x)$, still less equal algorithms or mechanisms. For comparisons on different grids, first define a physically consistent common representation; equal array indices do not automatically identify the same locations.
+
+\coursenotebook{00_intro_timeline.ipynb}{Notebook 00} provides the explanatory-level context for these mappings.
+\answerconnection{History determines which summary is meaningful for the task. The bound explains why agreement on that summary can leave substantial disagreement in the underlying spatial representation.}
+
+\solutionslide{12}{Read about AI with an application in mind}
+\biomedicalanswer
+\task{Compare a proposed application with the present workflow. Describe one helpful change and one plausible failure.}
+\answerstep{1. Define a concrete application and comparison.}
+Consider assistance in drafting a longitudinal imaging summary from verified findings and prior reports. The current workflow is a professional reading the source material and composing the summary. The proposed workflow adds a model-generated draft, followed by review against the same sources. The comparison should concern an accepted summary, rather than the first text produced.
+
+This choice makes the potential benefit specific: assistance might help organize dates and measurements consistently, leaving more attention for interpretation and communication. Whether it actually saves time or improves clarity must be observed. A broad claim that ``AI improves imaging'' is too imprecise to assess.
+\answerstep{2. Explain a plausible failure.}
+A draft might convert ``no definite increase'' into ``increase'', transpose the side of a finding or merge measurements from different dates. The resulting prose may read smoothly while changing clinical meaning. A second possibility is that the tool works well on common report formats but fails on an unusual sequence or phrasing.
+
+The user must therefore be able to trace statements to their source. An unsupported sentence should remain visible as an error even if the overall summary is impressive.
+\answerstep{3. Identify an informative assessment.}
+Use matched source cases and compare accepted summaries for factual errors, preservation of uncertainty, reader comprehension and total work time. Record errors by type and important case group, not just their overall average. Include representative difficult cases rather than selecting only successful demonstrations.
+
+The application discussion in the syllabus motivates coexistence with professional work \citep{mollick2026coexistence}. It does not supply performance estimates for this particular proposed use. The worked answer is a design for evaluating that use.
+\answercheck{A good answer names the baseline workflow, the exact change assistance introduces, a failure with a clear consequence and an observation that could reveal both benefit and failure.}
+
+\computationalanswer{12}
+\task{Reweight group loss differences for another population and specify a controlled intervention on a suspected irrelevant feature.}
+\answerstep{1. State the sign convention.}
+For matched case $i$, define $d_i=L_i^{AI}-L_i^B$, where $B$ labels the baseline. Loss is smaller when performance is better, so negative $d_i$ favours AI. Suppose two groups have fixed mean differences $\bar d_1=-0.1$ and $\bar d_2=+0.5$ in a common loss scale.
+\answerstep{2. Change only the population weights.}
+Let $w$ be the target population's proportion in group 1; group 2 has proportion $1-w$. The aggregate mean is
+\[
+\bar d(w)=w(-0.1)+(1-w)(0.5)=0.5-0.6w.
+\]
+For the syllabus's mixture $w=0.9$, this is $-0.04$. For equal proportions, it is $+0.20$. For $w=0.6$, it is $+0.14$. The same two group-specific contrasts can thus support an aggregate improvement or deterioration in different populations.
+
+Solve the sign boundary:
+\[
+0.5-0.6w<0\quad\Longleftrightarrow\quad w>\frac56.
+\]
+At $w=5/6$ the aggregate ties. This calculation assumes the two group-specific means remain applicable in the new setting; a new population can also differ within groups. Weights alone cannot correct that additional shift.
+\answerstep{3. Define the feature intervention.}
+In a constructed marker experiment, write input $x=(b,m)$ for biological content $b$ and marker $m$. Keep $b$, its target $y$ and the fixed predictor $f$ unchanged. Compare $f(b,m)$ with $f(b,m')$ after changing only the marker. Record how often the label or score changes and how that affects the stipulated loss. \coursenotebook{08_attention_maps.ipynb}{Notebook 08} implements a marker-intensity replacement while preserving the central pattern in a transparent parameterized model. \coursenotebook{11_shortcut_dependence.ipynb}{Notebook 11} instead changes marker--target association in an analytic binary construction.
+
+If an altered marker changes the output while the intended target stays fixed, the experiment establishes sensitivity to that marker under the intervention. It does not by itself quantify clinical harm. In real images, check that the change does not corrupt the disease information or create an unrealistic artefact; otherwise interpretation becomes ambiguous.
+\answerstep{4. Distinguish the two questions.}
+Reweighting asks how fixed group contrasts combine for a declared target population. The feature intervention asks what the model's function depends on. One is a statement about averaging; the other is a statement about responses to a controlled input change. Both can be relevant to evaluating the same application.
+\answerconnection{Clinical examples identify which errors and people matter. The formal decomposition shows how an apparently favourable average can coexist with a failure in one group or dependence on an unintended cue.}
+
+\solutionslide{13}{Preserve the ability to judge}
+\biomedicalanswer
+\task{Explain how repeated acceptance of an overlay could affect later unaided judgments, and propose an activity requiring explanation and checking.}
+\answerstep{1. Describe two possible learning mechanisms.}
+An overlay can provide feedback: the learner compares a prediction with a proposed boundary, notices a missed feature and revises an explanation. It can also remove practice if the learner accepts it before inspecting the image. In the second workflow, fewer opportunities remain to decide where an uncertain boundary lies or to recognize a plausible-looking error.
+
+These mechanisms motivate different predictions about later unaided performance. Assistance could help, harm or leave it unchanged depending on how it is used and what the learner practices. The mathematics-learning study cited in the syllabus is a reason to ask this question, not an effect estimate for imaging trainees \citep{bastani2025learning}.
+\answerstep{2. Design a teaching activity.}
+First show the image without an overlay. Ask the learner to mark a boundary, state uncertainty and name the contrast or anatomical relationship supporting the choice. Then reveal the proposed overlay and ask the learner to explain two agreements and one possible disagreement. The learner must check the disagreement against relevant views or source information before accepting a final result.
+
+Include some deliberately imperfect proposals in a declared teaching exercise so that checking is meaningful. Discuss why a correction is justified, rather than rewarding conformity with the proposed contour.
+\answerstep{3. Assess retained judgment independently.}
+Later, present new cases without overlays or access to earlier assisted answers. Use a fixed rubric that addresses boundary quality and reasoning, including uncertainty. Compare groups with matched teaching time and baseline assessment where feasible. The later assessment should measure the skill of interest, not recall of a previously corrected contour.
+\answercheck{The answer should explain what practice assistance changes, require an unaided first judgment and identify a later assessment that can reveal retained competence. Immediate speed and later learning are separate outcomes.}
+
+\computationalanswer{13}
+\task{Distinguish percentage points from relative percent change and design a participant-level assessment of later unaided performance.}
+\answerstep{1. Calculate the two outcome contrasts.}
+For the syllabus's invented means, assisted performance is $0.80$ in group A and $0.60$ in group B, while later unaided performance is $0.60$ and $0.75$. Therefore,
+\[
+\Delta_a=0.80-0.60=+0.20,\qquad
+\Delta_l=0.60-0.75=-0.15.
+\]
+The positive assisted contrast and negative later contrast are logically compatible: they concern different outcomes. Neither is obtained by subtracting a participant's assisted score from a different person's later score.
+\answerstep{2. Translate the numerical scales carefully.}
+For proportions correct, $-0.15$ means a decrease of 15 percentage points, from 75\% to 60\%. Relative to the comparison mean 0.75, the change is
+\[
+100\frac{0.60-0.75}{0.75}=-20\%.
+\]
+The denominator determines the relative percentage. The assisted contrast of $+0.20$ is a 20-percentage-point increase, or a relative increase of $100(0.80-0.60)/0.60\approx33.3\%$.
+
+These constructed numbers are not the cited study's reported 17\% reduction. Keeping them explicitly labelled prevents a teaching calculation from being mistaken for a published finding.
+\answerstep{3. Define the assessment and estimator.}
+For participant $i$ in assigned group $g\in\{A,B\}$, let $S_{l,ig}$ be the proportion correct on a new, unaided assessment using a fixed scoring rule. If $n_g$ participants are observed, estimate retained-performance contrast by
+\[
+\widehat\Delta_l=
+\frac1{n_A}\sum_{i=1}^{n_A}S_{l,iA}
+-\frac1{n_B}\sum_{i=1}^{n_B}S_{l,iB}.
+\]
+The unit is a participant, even if each completes many images or questions. An analysis of individual responses must represent their dependence within participants, and possibly shared cases as well.
+\answerstep{4. State what the design must preserve.}
+Use new items, remove access to assisted answers, keep assessment conditions and scoring comparable, and blind scoring to group where possible. Record baseline skill and missing later assessments. Random assignment and appropriate follow-up support a causal interpretation of the teaching contrast; an observational comparison needs additional assumptions about group differences.
+
+Without sample sizes and participant variation, the two means alone do not supply an uncertainty interval. A precise-looking percentage is not evidence of a precisely estimated effect.
+\answerconnection{The biomedical hypothesis concerns what the learner continues to practice. Separate outcomes and participant-level comparisons are needed to test whether that practice changes retained judgment.}
+
+\solutionslide{14}{Map the frontier task by task}
+\biomedicalanswer
+\task{Describe two apparently similar tasks requiring different clinical knowledge, and a setting in which success on one offers weak reassurance about the other.}
+\answerstep{1. Specify the two questions.}
+Task A is outlining a conspicuous abnormal region on an image according to an agreed annotation policy. Task B is deciding why a region has changed between scans after an intervention. Both involve inspecting a lesion, but the second question requires interpretation of time, prior treatment, image contrasts and other clinical observations. A good outline does not answer the causal question.
+
+Another valid pair is recognizing a common large finding and detecting a small abnormality in an unusual location. Their apparent visual similarity can conceal different spatial scales, error consequences and background anatomy.
+\answerstep{2. Predict a revealing circumstance.}
+A model evaluated mainly on familiar acquisitions and untreated cases may encounter postoperative anatomy, a changed acquisition protocol or an atypical appearance. An outline could remain technically plausible while its interpretation is wrong for that context. The professional question is then what the changed appearance means, not simply whether a contour can be drawn.
+
+This is a concrete version of the uneven capability frontier discussed in the syllabus \citep{mollick2026coexistence}. It concerns the task and setting, rather than a single general label such as ``good at medical images''.
+\answerstep{3. Name a useful evaluation.}
+Describe each task's target, relevant population and error type separately. Examine performance under the specific changed circumstances, including what information was available and how the reference conclusion was established. If the issue is interpretation of change, add observations that distinguish competing causes rather than relying only on overlap with a contour.
+\answercheck{The strongest answers identify the extra knowledge needed for the second task and explain why the first task's evaluation did not test it. A vague statement that ``hard cases are different'' leaves the transfer question unspecified.}
+
+\computationalanswer{14}
+\task{For a fixed marker-based rule, derive accuracy and risk under changing marker--target association. Identify exactly what stays fixed.}
+\answerstep{1. Define the rule and loss.}
+Let input $X$ contain a binary marker $M\in\{0,1\}$ and other features. The target is $Y\in\{0,1\}$. Fix the predictor
+\[
+f(X)=M,\qquad L(f(X),Y)=\mathbf1[M\ne Y].
+\]
+The function copies the marker irrespective of other content. Its coefficients, threshold and procedure do not change between settings.
+\answerstep{2. Convert the expectation into a probability.}
+Since an indicator's expectation equals the probability of its event,
+\[
+\begin{aligned}
+\operatorname{Accuracy}_P(f)
+&=\mathbb E_P\mathbf1[M=Y]=P(M=Y),\\
+R_P(f)&=\mathbb E_P\mathbf1[M\ne Y]=P(M\ne Y)=1-P(M=Y).
+\end{aligned}
+\]
+The last equality holds because equality and inequality are complementary events for these labels.
+\answerstep{3. Give fully specified changed populations.}
+For a constructed family, keep $P(Y=0)=P(Y=1)=1/2$. Given either target value, let the marker match it with probability $q$, and take the other binary value with probability $1-q$. This specifies a valid joint distribution with
+\[
+P(M=Y)=q,\qquad \operatorname{Accuracy}=q,\qquad R=1-q.
+\]
+At $q=0.95$, accuracy is $0.95$ and risk $0.05$. At $q=0.5$, both are $0.5$. At $q=0.05$, accuracy is $0.05$ and risk $0.95$. Class prevalence stays balanced throughout, so the changed marker association alone suffices for the reversal.
+\answerstep{4. Relate this to distribution shift.}
+The changed object is the joint law $P(M,Y)$, equivalently the association of marker and target. The predictor is fixed. The numerical example therefore separates a change in setting from retraining or an architectural change. \coursenotebook{11_shortcut_dependence.ipynb}{Notebook 11} provides the corresponding constructed experiment.
+
+The extreme example in the syllabus also makes the point: a rule correct only at input $a$ has risk zero when the population is entirely $a$, and risk one when it is entirely input $b$, which the rule labels incorrectly. Claims about transfer need assumptions connecting the source and target populations or direct target evaluation.
+\answerconnection{Clinical context identifies why a second task or setting may differ. The fixed-rule calculation demonstrates how performance can change substantially without any change to the model itself.}
+
+\solutionslide{15}{Specify, inspect, revise and stop deliberately}
+\biomedicalanswer
+\task{Rewrite an uncertain finding for a patient. Explain which wording preserves uncertainty and which additional observation could justify a stronger statement.}
+\answerstep{1. Start from a source that actually contains uncertainty.}
+For this hypothetical exercise, suppose the source says: ``A small focus of altered signal is present. Its cause is nonspecific on this examination.'' A faithful plain-language version is: ``The scan shows a small area that looks different from the surrounding tissue. This scan alone does not tell us what caused it. Its meaning needs to be considered with the rest of the information about you.''
+
+The rewrite identifies the observation without inventing a diagnosis, a symptom link or a management instruction. Different wording is acceptable if it preserves those distinctions.
+\answerstep{2. Explain why the uncertainty words matter.}
+``Shows'' applies to the visible appearance. ``This scan alone'' limits the evidential claim. ``Does not tell us what caused it'' prevents an abnormal image appearance from becoming a confirmed disease label. Removing these phrases can alter the proposition rather than merely improve the style.
+
+The answer should also remain understandable. Replacing ``nonspecific'' with another unexplained technical word does not solve the communication problem.
+\answerstep{3. Name evidence relevant to a stronger claim.}
+An earlier comparable scan, an additional appropriate measurement or clinical information might help distinguish competing explanations. Specify which alternative that observation would address. For example, a reliable longitudinal comparison could establish that the visible feature changed, but change alone would not necessarily establish its cause. Stronger wording must match what the new evidence actually resolves.
+
+Before accepting the explanation, compare it sentence by sentence with the source: finding, location, chronology, negation and uncertainty. Ask a recipient to explain what they think is known and unknown.
+\answercheck{A correct rewrite can be simple without being more certain. Repeated polishing is useful only if the supported meaning survives each revision.}
+
+\computationalanswer{15}
+\task{Construct a grammatically acceptable but unsupported statement, strengthen its acceptance predicate, and explain why repeated deterministic checks add no new evidence.}
+\answerstep{1. Give a counterexample to a weak check.}
+Let state $q$ contain the source finding, draft explanation and check results. Suppose $C_g(q)=1$ means that grammar and sentence structure are acceptable. The draft ``This scan confirms cancer'' is grammatical, so it may satisfy $C_g=1$ while contradicting the nonspecific source used above. Thus
+\[
+C_g(q)=1\quad\not\Rightarrow\quad\text{the draft is supported by the source}.
+\]
+This is a logical counterexample, not a measured error rate of a language tool.
+\answerstep{2. Define a more relevant predicate.}
+Let $C_e(q)$ check whether the stated findings, location, chronology, negation and certainty agree with the source. Let $C_s(q)$ check whether factual claims have identifiable supporting source passages. Define
+\[
+C(q)=C_g(q)\land C_e(q)\land C_s(q).
+\]
+The symbol $\land$ means logical ``and'': every component must return true. For the unsupported diagnosis, a correctly applied $C_e$ returns zero. These checks need an operational rubric; merely naming a function ``evidence check'' does not establish that its implementation detects every unsupported claim.
+\answerstep{3. Work through the stopping rule.}
+For budget $K=2$, suppose $q_0$ contains the unsupported claim, $q_1$ a more elegant version of the same claim and $q_2$ the faithful uncertain explanation. If the respective acceptance results are $0,0,1$, then
+\[
+\tau=\min\{k\in\{0,1,2\}:C(q_k)=1\}=2.
+\]
+If all three results are zero, the set is empty and the procedure reports no accepted result within the budget. It must not silently return the final draft as if it had passed. Choosing an extended-real convention $\tau=+\infty$ is possible, but must be declared; it is not the finite minimum above.
+\answerstep{4. Explain the evidential limit of repetition.}
+For a deterministic check on unchanged state $q$, each repetition returns the same value $C(q)$. Repeating it $N$ times does not create $N$ independent observations of correctness or test a new property. Changing the draft, evidence or check can produce a new test, but its contribution should be stated explicitly.
+
+Acceptance establishes compliance with the selected, implemented criteria. It does not establish every factual, biological or communicative property that might matter.
+\answerconnection{The biomedical answer supplies what must be preserved. The formal answer translates those requirements into an inspectable procedure and exposes the limits of a weak acceptance rule.}

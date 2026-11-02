@@ -53,38 +53,40 @@ small selection of its processes.
 4. Reproduce a recorded preset and save its parameters, plots and animation.''')
     md(r'''## Concepts and two reading paths
 
+Choose an explanation first, then use the paired exercises to compare what each route establishes. Both routes use the same setup and numerical experiment; run the shared code cells in order.
+
 <details open><summary><strong>For biomedical and imaging readers</strong></summary>
 
-**Viable tumour** is a population density, not a segmentation label. **Oxygen**
-is relative availability averaged over a voxel; a value of 0.1 is one tenth of
-the stipulated normal baseline, not a blood oxygen saturation measurement.
-**Necrotic material** is immobile tumour-cell equivalents. It occupies modelled
-growth capacity and does not represent every form of damaged host tissue.
+**Starting question.** How could reduced oxygen supply and increased consumption alter the pattern of viable tumour and dead material?
 
-Low oxygen reduces births and can transfer viable cells into the necrotic
-compartment. The perfusion rule assumes that accumulated tumour material
-reduces oxygen delivery. Its coefficients are illustrative. BrainWeb supplies
-normal geometry, rather than measured tumour, oxygen or vascular data.
+Begin with the histological picture: identify an invasion border, vessels and necrotic regions. Tell a causal story in ordinary language. Growing tumour can increase demand; reduced delivery can limit oxygen availability; low oxygen can slow proliferation and promote cell death. The model represents selected links in that story. Its necrotic material remains in place and occupies growth capacity.
+
+Compare the viable tumour, oxygen and necrotic panels with the matched reference. Predict where oxygen might fall first and why fewer viable cells need not mean an equally large accumulation of necrosis. BrainWeb is normal anatomy; simulated fields are distinct from observed enhancement, FLAIR abnormalities or measured oxygen.
+
+**Result.** Explain the spatial feedback and its possible imaging interpretation while distinguishing represented mechanisms from omitted vessels, immune processes and phenotype switching.
 
 </details>
 
 <details><summary><strong>For computational readers</strong></summary>
 
-The model couples two evolution equations to a quasi-steady elliptic oxygen
-equation. Conservative harmonic face fluxes prevent periodic wrapping and
-transport across closed tissue barriers. A diffusion positivity bound controls
-the internal step. Exact frozen-oxygen substeps handle births, death transfer
-and clearance; their composition is first order in time. A preconditioned
-conjugate-gradient solve updates oxygen after each internal step and rejects
-non-convergence. Numba compiles the kernels on the first run.
+**Starting question.** Which coupled equations imply the total-material balance and the Fisher–KPP limit?
 
-The original solver is bundled unchanged. The existing anatomy loader samples
-integer grid spacings, preserving categorical labels. At integer sample
-locations this matches the companion's grids; coarser sampling can remove thin
-barriers. Changing grid spacing changes the represented geometry as well as
-the discretization.
+On no-flux domain $\Omega$, $c(\mathbf x,t)$ and $z(\mathbf x,t)$ are viable cells and necrotic equivalents per mm³; $o(\mathbf x,t)$ is relative oxygen:
+$$\partial_tc=\nabla\cdot(D\nabla c)+\rho g(o)c[1-(c+z)/K]_+-\delta h(o)c,$$
+$$\partial_tz=\delta h(o)c-\lambda_z z,\qquad
+0=\ell_o^2\nabla^2o+p(1-o)-\beta(c/K)o.$$
+Here $p=[1+\alpha(c+z)/K]^{-1}$, $g(o)=\min(1,o/\theta_p)$ and $h(o)=[1-o/\theta_d]_+$, with $0<\theta_d<\theta_p<1$ and $[a]_+=\max(a,0)$.
 
-</details>''')
+Adding and integrating gives
+$$\frac{d}{dt}\int_\Omega(c+z)dV
+=\int_\Omega\rho g(o)c[1-(c+z)/K]_+dV-\lambda_z\int_\Omega z\,dV.$$
+Death transfer cancels. With $\beta=0$, positive delivery, $z_0=0$, constant $K$ and $0\le c_0\le K$, the oxygen solution is $o=1$, necrosis remains zero and the matched system recovers Fisher–KPP. Compare identical initialization, boundaries, grid, transport, proliferation rate and carrying capacity.
+
+**Result.** Establish a balance law and its limiting-case assumptions; use the units table below to check every term.
+
+</details>
+
+**Route through this notebook.** Read the biological picture, anatomical comparison and overlays for the biomedical route; work through equations/units, the limiting case and the balance above for the computational route.''')
     md('''## Run in Colab or locally
 
 In Colab, connect to a **CPU** runtime and choose **Runtime → Run all**. Setup
@@ -159,13 +161,36 @@ The two runs share initialization, grid, coefficients and transport domain.
 Their reaction equations differ. All rates and thresholds are assigned teaching
 values. At 2–4 mm, the 0.2-mm oxygen length and capillary structures remain
 unresolved. No treatment, mass effect, fibre anisotropy or vascular dynamics is
-included.''')
+included.
+
+**Shared implementation details.** Conservative harmonic face fluxes prevent
+periodic wrapping and transport across closed barriers. A positivity bound
+controls the diffusion step; frozen-oxygen reaction substeps are composed to
+first order in time. A preconditioned conjugate-gradient solve updates oxygen
+and rejects non-convergence. The pinned numerical source is unchanged. Integer
+anatomical sampling preserves labels at sampled locations but can remove thin
+barriers; changing spacing changes geometry as well as numerical resolution.''')
     md(r'''## 3. Check a limiting case before interpreting the anatomy
 
-**Predict:** With zero oxygen uptake, initially normal oxygen and no necrotic
-material, what should happen? The coupled calculation should recover the
-matched Fisher–KPP run, with no necrosis. This checks implementation consistency.
-It does not test whether the oxygen closure describes measured tumour biology.''')
+**Biomedical prediction.** With uptake disabled and no initial necrotic material,
+oxygen should remain available, births should no longer be oxygen-limited and
+no death transfer should occur. Predict the four panels before running.
+
+**Computational argument.** Set $\beta=0$ and write $w=o-1$. With $\ell_o>0$,
+positive perfusion $p$ and no-flux boundaries, multiplication by $w$ and
+integration give
+$$0=-\ell_o^2\int_\Omega|\nabla w|^2dV-\int_\Omega p w^2dV.$$
+Both terms are nonpositive, so $o=1$. Since $\theta_d<\theta_p<1$, $g=1$ and
+$h=0$. If $z_0=0$, then $z=0$ for all time. For constant $K$ and
+$0\le c_0\le K$, nonnegative dispersal with no flux preserves the Fisher–KPP
+range $0\le c\le K$, so the clipped birth term equals the reference logistic
+term. Initial density above $K$ would break this last equivalence.
+
+**Shared check.** Use the same seed, anatomy, grid, boundaries, $D$, $\rho$ and
+$K$. The numerical comparison below tests agreement up to solver tolerance;
+the continuum argument alone does not guarantee identical finite-step errors.
+This checks implementation consistency. Testing the oxygen closure biologically
+would require independent measurements.''')
     code('''brain_small = lesson.Brain(np.ones((9, 7, 5), np.float32),
     np.full((9, 7, 5), 3, np.uint8), np.eye(4), 1.)
 p = replace(lesson.preset()[1], origin_mm=(4., 3., 2.), radii_mm=(2.,)*3,
@@ -266,6 +291,13 @@ print("Reference files:", sorted(p.name for p in (OUTPUT / "reference").iterdir(
 # import shutil
 # from google.colab import files
 # files.download(shutil.make_archive(str(OUTPUT), "zip", OUTPUT))''')
+    md(r'''## Paired exercises and shared interpretation
+
+**Biomedical and imaging exercise.** Explain why a viable-cell deficit relative to Fisher–KPP can exceed the necrotic count. Predict what removing oxygen uptake should do to the four panels.
+
+**Computational exercise.** Derive the integrated balance, then prove conservation when births and clearance vanish. State every assumption needed for the zero-uptake Fisher–KPP limit.
+
+**Shared interpretation.** The deficit combines reduced births and death transfer; clearance can also remove necrotic material. These are consequences of the stipulated equations, not measurements of a patient's compartments.''')
     md(r'''## 8. Interpret the model against the biological picture
 
 Return to the illustration. The oxygen–necrosis feedback provides a reduced

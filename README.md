@@ -11,8 +11,10 @@ This publication copy contains the paper, computational material and final 30-mi
 
 | Resource | Contents |
 |---|---|
-| [Paper PDF](paper/main.pdf) | Compiled paper, including the 25-page slide companion in Appendix D |
-| [LaTeX source](paper/main.tex) | Main text, with [appendices](paper/appendices.tex) and [bibliography](paper/references.bib) |
+| [Perspective paper](paper/main.pdf) | Thematic discussion, technical appendices and scientific references |
+| [Slide-by-slide syllabus companion](paper/syllabus.pdf) | Teaching guide: 25 slide pages, both reading paths, explained mathematics, glossary and references |
+| [Tentative solutions to the syllabus exercises](paper/syllabus-solutions.pdf) | Worked answers for both paths on every slide, with biological interpretation, mathematical derivations and checks |
+| [LaTeX sources](paper/main.tex) | [Paper](paper/main.tex), [syllabus](paper/syllabus.tex) and [slide notes](paper/syllabus-slides.tex), with shared [formatting](paper/preamble.tex) and [bibliography](paper/references.bib) |
 | [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-three teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
@@ -27,19 +29,40 @@ The paper connects clinical interpretation and brain–model comparisons with nu
 
 The [reader's guide](paper/main.pdf#page=2) offers two reading paths through a shared core:
 
-- **Biomedical and imaging:** focus on clinical observations, measurements and interpretation.
-- **Computational:** trace variables, update rules, numerical checks and worked derivations.
+- **Biomedical and imaging:** start with the phenomenon; explain biological mechanisms, anatomy and clinical meaning; predict observable consequences in ordinary language.
+- **Computational:** define objects, assumptions, variables, domains and units; derive equations, calculate, check dimensions, prove invariants or construct counterexamples.
 
-Four paired perspective boxes connect these approaches in growth modelling, attention and image overlays, associative retrieval, and predictive value and decisions. Both paths retain the assumptions, takeaways and check questions. Readers can switch paths as their interests and preparation suggest.
+Fourteen paired discussions develop these approaches across the paper, each with distinct exercises and a short shared interpretation. All 23 notebooks and all 25 syllabus entries use the same distinction. Setup, code, evidence and limitations are shared; the routes offer complementary forms of reasoning about each topic. Readers can start with either path.
 
-Appendix D is a [25-page slide companion](paper/main.pdf#page=35), with one page
-per slide. Each page starts with a thumbnail and a short title,
-followed by **Biomedical and imaging path** and **Computational path** explanations.
-It serves as extended presenter notes and a syllabus route through the
-[presentation](talk/resources.md) and notebooks. Its [LaTeX source](paper/appendix-slides.tex)
-is editable separately from the main text.
-Slide 24 includes the full video narration, also available as a
-[plain-text transcript](talk/transcripts/slide-24-something-has-changed.txt).
+## Slide-by-slide syllabus companion
+
+The separate [syllabus PDF](paper/syllabus.pdf) follows the 25 presentation slides,
+one teaching page per slide, preceded by an introduction and contents and followed
+by a glossary and its own references. Each slide page has a thumbnail, **Biomedical and imaging
+path** and **Computational path**, with paired exercises, a shared interpretation and notebook links.
+The computational explanations define symbols and units beside the equations,
+read the operations in words, and develop examples or derivations. The
+[glossary](paper/syllabus-glossary.tex) covers abbreviations, concepts and notation
+for both paths and explains symbols with different meanings in different examples.
+Use it beside the [presentation](talk/resources.md); use the [paper](paper/main.pdf)
+for the continuous thematic discussion and technical appendices. Both documents
+link to each other and share their [formatting](paper/preamble.tex) and
+[bibliography database](paper/references.bib).
+
+Slides 18–20 guide [notebook 14d](code/notebooks/14d_coupled_tumour_growth.ipynb):
+the original solver, coupled equations, matched comparisons, CPU and slide presets,
+and numerical checks. Slide 24 includes the full video narration, also available
+as a [plain-text transcript](talk/transcripts/slide-24-something-has-changed.txt).
+The [syllabus source](paper/syllabus.tex) and [slide notes](paper/syllabus-slides.tex)
+can be edited and built independently of the paper.
+
+The separate [tentative solutions](paper/syllabus-solutions.pdf) develop both
+paths for all 25 slides. Each biomedical answer gives a reasoned sample
+interpretation and an informative observation; each computational answer defines
+its objects, works through calculations or proofs and states the assumptions.
+Illustrative examples and saved notebook results are labelled separately. The
+[LaTeX entry point](paper/syllabus-solutions.tex) loads five solution files,
+covering slides 01–05, 06–10, 11–15, 16–20 and 21–25. Build it with `make solutions`.
 
 ## Run the notebooks
 
@@ -101,18 +124,18 @@ Notebooks 14a–14d use `ipywidgets` in Colab, JupyterLab and Cursor. Run the no
 
 GitHub displays saved reference plots. Open a live notebook to use controls; if a widget does not appear, rerun setup and the interactive cell. `make check-growth-widgets` exercises callbacks, cached views, rejection of unstable steps, selected-time baselines and protection of withheld observations, with network access blocked.
 
-## Reproduce the paper and check the code
+## Rebuild the documents and check the code
 
-The lock file records the Python dependencies. A separate TeX installation providing `latexmk`, pdfLaTeX and BibTeX is required to compile the paper. The Python checks do not require TeX or presentation-authoring software.
+The lock file records the Python dependencies. A separate TeX installation providing `latexmk`, pdfLaTeX and BibTeX is required to compile the documents. The Python checks do not require TeX or presentation-authoring software.
 
 ```bash
 uv sync --locked --extra dev
 make figures PYTHON=.venv/bin/python
-make paper
+make documents
 make check PYTHON=.venv/bin/python
 ```
 
-`make all` runs figure generation, paper compilation and checks in that order. `make paper` compiles directly from the committed figures; it does not execute Python or load anatomy. `make growth-figures` rebuilds just the 14a–14c figures and their computed number macros, using the same teaching implementation as the notebooks and the two checksum-verified normal-phantom volumes bundled with the package. `make clean-paper` removes TeX intermediates while retaining the compiled PDF.
+`make all` runs figure generation, compilation of all three documents and checks in that order. `make paper` builds only `paper/main.pdf`; `make syllabus` builds only `paper/syllabus.pdf`; `make solutions` builds only `paper/syllabus-solutions.pdf`; `make documents` builds all three. The document targets compile directly from the committed figures; they do not execute Python or load anatomy. `make growth-figures` rebuilds just the 14a–14c figures and their computed number macros, using the same teaching implementation as the notebooks and the two checksum-verified normal-phantom volumes bundled with the package. `make clean-paper` removes TeX intermediates for all three documents while retaining their PDFs. All three entry points use `paper/preamble.tex`, `paper/bibliography.tex` and `paper/references.bib`; each PDF lists only its cited sources.
 
 `make check` checks bibliography keys, cited figures, local documentation links, notebook structure and saved errors, numerical reference values, segmentation gradients and interventions, action-specific Q-learning, maze outcomes and planner controls, Transformer gradients, growth-model verification, bundled BrainWeb checksums, widget callbacks with network access blocked, generated teaching notes, and all 49,152 possible single-unit updates in the 12-unit Hopfield example. The 14d checks add independent oxygen and temporal references, conservation, live widget callbacks and poster/JSON/GIF/MP4 exports. It also checks the final PPTX's checksum, byte size, package integrity and slide count against the resource manifest. Other presentation sources and development archives remain excluded; the final PPTX resides under `talk/`.
 

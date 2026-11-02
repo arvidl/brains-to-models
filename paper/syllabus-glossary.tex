@@ -1,0 +1,186 @@
+% A reference for both reading paths; compiled only into the syllabus.
+\clearpage
+\phantomsection
+\section*{Abbreviations, definitions, concepts and notation}\label{sec:syllabus-glossary}
+\addcontentsline{toc}{section}{Abbreviations, definitions, concepts and notation}
+\begingroup
+\small
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\newenvironment{syllabusdefinitions}{%
+  \begin{longtable}{@{}>{\raggedright\arraybackslash}p{.25\linewidth}>{\raggedright\arraybackslash}p{.70\linewidth}@{}}
+  \toprule\textbf{Term or symbol} & \textbf{Meaning and how to read it}\\\midrule
+  \endhead
+}{\bottomrule\end{longtable}}
+\newcommand{\glossentry}[2]{\textbf{#1} & #2\\[3pt]}
+\newcommand{\syllabusglossarytopic}[1]{\subsection*{#1}\addcontentsline{toc}{subsection}{#1}}
+
+Use this section alongside either reading path. Definitions describe the use of a term in this companion; a model's operational definition need not exhaust its biological meaning. Symbols are local to an example: $D$ can denote a dataset, diffusivity or a disease event. Read its definition before interpreting an equation.
+
+\syllabusglossarytopic{Abbreviations and short names}
+\begin{syllabusdefinitions}
+\glossentry{4E}{Embodied, embedded, enactive and extended approaches to cognition; these emphasize different relationships among a person, activity and environment.}
+\glossentry{AI}{Artificial intelligence; here a broad label for engineered systems performing specified inference, learning or action tasks.}
+\glossentry{CPU}{Central processing unit. The default teaching simulations use this general-purpose processor.}
+\glossentry{CSF}{Cerebrospinal fluid. The growth lessons treat selected fluid classes as closed barriers, an explicit modelling choice.}
+\glossentry{Fisher--KPP}{Fisher--Kolmogorov--Petrovsky--Piskunov; the reaction--diffusion population model on slide 17.}
+\glossentry{FLAIR}{Fluid-attenuated inversion recovery; an MRI sequence that suppresses much of the CSF signal.}
+\glossentry{fMRI}{Functional magnetic resonance imaging; here an indirect, haemodynamic measurement related to neural activity.}
+\glossentry{FP, FN}{False positive and false negative: a positive result without the target condition, and a negative result despite its presence.}
+\glossentry{GM, WM}{Grey matter and white matter. The lessons assign scalar dispersal coefficients to tissue classes; those values are not measured from the displayed anatomy.}
+\glossentry{LLM}{Large language model; a model generating or scoring language sequences. The model and the tool-enabled workflow are distinct objects.}
+\glossentry{MRI}{Magnetic resonance imaging; images reflect acquisition-dependent tissue signals rather than direct maps of tumour-cell density.}
+\glossentry{ODE, PDE}{Ordinary and partial differential equation. An ODE describes change with one independent variable; a PDE can describe a field changing over space and time.}
+\glossentry{PPV}{Positive predictive value, $P(D\mid+)$: the proportion of positive results with the condition in a specified population.}
+\glossentry{RAS+}{Physical coordinate convention with positive axes toward right, anterior and superior. It specifies directions, not the order in which arrays are stored.}
+\glossentry{RGB}{Red, green and blue; three colour channels used to render a scalar field.}
+\glossentry{ROI}{Region of interest; the declared subset of locations included in a measurement or fitting objective.}
+\glossentry{SE}{Standard error; estimated variability of an estimator across repetitions of its sampling procedure.}
+\glossentry{T1, T2}{Longitudinal and transverse relaxation times; T1- and T2-weighted MRI emphasize different signal properties.}
+\glossentry{TP, TN}{True positive and true negative: positive and negative results agreeing with presence and absence of the target condition.}
+\glossentry{U-Net}{An encoder--decoder segmentation architecture using connections between corresponding spatial scales.}
+\end{syllabusdefinitions}
+
+\clearpage
+\syllabusglossarytopic{Biomedical and imaging concepts: observation and anatomy}
+\begin{syllabusdefinitions}
+\glossentry{Lesion}{An abnormal tissue region. Its clinical meaning depends on anatomy, history and examination; the word alone does not specify a diagnosis or a particular MRI appearance.}
+\glossentry{Glioma}{A group of central nervous system tumours with differing biological properties. The lesson's simplified population model does not represent every glioma subtype or cellular process.}
+\glossentry{Anatomical relationship}{Where structures lie relative to one another. Equal lesion volumes can have different implications because location and neighbouring structures differ.}
+\glossentry{MRI contrast}{A difference in displayed signal produced by tissue properties and acquisition settings. A changed contrast does not, by itself, identify a changed cell population.}
+\glossentry{Enhancement}{Increased signal on an appropriate post-contrast MRI comparison. Enhancement is an imaging observation; equating it directly with viable tumour requires further evidence.}
+\glossentry{FLAIR abnormality; oedema}{FLAIR abnormalities can reflect several tissue processes. Oedema means excess tissue fluid; neither term is synonymous with a measured tumour-cell-density field.}
+\glossentry{Segmentation}{Assignment of spatial labels to pixels or voxels. The annotation policy specifies what belongs to the target; a learned mask is a prediction under that policy.}
+\glossentry{Voxel and physical volume}{A three-dimensional image element and the physical space it represents. Array counts require voxel geometry to become a volume in mm$^3$ or mL.}
+\glossentry{Anatomical phantom; BrainWeb}{A constructed anatomical reference. The normal BrainWeb data supply tissue geometry and image background; the tumour fields and rates in the lessons are assigned separately.}
+\glossentry{Thresholded extent}{The area or volume selected by a cutoff. Changing the cutoff can change the outlined region while leaving the simulated density field unchanged.}
+\glossentry{Density integral}{A sum of local densities weighted by physical volume. Integrating $c$ gives cell number; integrating $u=c/K$ gives a volume-like summary, not a cell count.}
+\glossentry{Imaging biomarker}{A measured imaging characteristic used as an indicator. Reliable measurement, biological interpretation and usefulness for a decision require different evidence.}
+\glossentry{Progression and forecast}{Progression is a clinical interpretation of disease change under stated criteria. A forecast predicts a later quantity; it need not identify the cause of change or the effect of treatment.}
+\end{syllabusdefinitions}
+
+\textbf{A reading distinction.} The anatomical image, a simulated viable-cell field, a necrotic-material field and a coloured overlay have different origins. Before comparing them, name what was measured, what was assumed, and which transformation produced the display. Slides 16--20 use this distinction repeatedly.
+
+\clearpage
+\syllabusglossarytopic{Biomedical concepts: mechanisms, cognition and experience}
+\begin{syllabusdefinitions}
+\glossentry{Proliferation; carrying capacity}{Proliferation creates additional cells. Carrying capacity $K$ sets a density scale limiting births in the model; it is not an automatically measured tissue packing constraint.}
+\glossentry{Dispersal; infiltration}{Dispersal redistributes cells. Infiltration describes their spread into surrounding tissue. Scalar diffusion is an effective population description, not an explicit account of individual migration.}
+\glossentry{Perfusion; consumption}{Perfusion supplies tissue through blood flow; oxygen consumption removes available oxygen. The lesson uses a stipulated delivery factor and uptake rule, without resolving blood vessels.}
+\glossentry{Hypoxia; relative oxygen}{Hypoxia means insufficient oxygen for a biological context. The model's $o$ is availability relative to an assigned normal baseline; it is not blood oxygen saturation or a direct clinical measurement.}
+\glossentry{Necrosis; clearance}{Necrosis involves cell death. State $z$ records immobile necrotic cell equivalents; clearance removes this modelled material. Accumulated $z$ is therefore distinct from cumulative deaths.}
+\glossentry{Go-or-grow}{A hypothesis distinguishing migratory and proliferative states. Basic Fisher--KPP has simultaneous dispersal and logistic growth, without an explicit state-switching variable.}
+\glossentry{Interoception; homeostasis}{Interoception concerns internal bodily signals. Homeostasis concerns regulation that maintains physiological variables within viable ranges. A software invariance proof establishes a specified functional property.}
+\glossentry{Embodied; embedded}{Embodied accounts emphasize the body's contribution to cognition. Embedded accounts emphasize dependence on the surrounding social and physical setting. These emphases can overlap.}
+\glossentry{Enactive; extended}{Enactive accounts emphasize active engagement. Extended accounts ask whether some external resources partly constitute a cognitive process; dependence on a tool alone does not settle that stronger claim.}
+\glossentry{Access; report}{Access concerns information available for reasoning, report or control. A report is an observable response; its occurrence does not by itself identify all underlying mechanisms.}
+\glossentry{Phenomenal experience}{Subjective experience: what seeing, feeling or hearing is like for a subject. Functional performance and first-person experience are different explanatory targets.}
+\glossentry{Pattern completion}{Recovery of a whole configuration from a partial cue. A recurrent model can settle into an unintended attractor; convergence and correct retrieval are separate results.}
+\glossentry{Attention; representation}{Human attention concerns selective processing and control. Model attention is a weighting operation. A representation makes distinctions available to a computation; proving their use requires an additional test.}
+\end{syllabusdefinitions}
+
+\textbf{Read a model compartment carefully.} A deficit in viable cells relative to a reference can combine reduced proliferation and death. It does not imply that every missing viable cell has become necrotic material. The balance on slide 19 makes this biological distinction mathematically explicit.
+
+\clearpage
+\syllabusglossarytopic{Computational concepts: models and operations}
+\begin{syllabusdefinitions}
+\glossentry{Model; domain}{A selective representation and its declared scope. A spatial domain $\Omega$ is the region in which fields are defined; an input domain is the set of admissible inputs.}
+\glossentry{Architecture; parameters}{An architecture specifies a function family and information flow. Parameters $\theta$ select a member of that family; fitted $\hat\theta$ depends on data, objective and training procedure.}
+\glossentry{State; update rule}{State stores the current configuration. An update rule determines its next value. Changing state during inference differs from changing learned parameters during training.}
+\glossentry{Observation operator}{A map from an underlying state or field to what is observed. It can select, average or otherwise transform the state; recovering the state may be non-unique.}
+\glossentry{Display operator}{A map from computed quantities to a view: field selection, slice, threshold, opacity and colour. A display change need not change the underlying solution.}
+\glossentry{Loss; objective; risk}{Loss penalizes one prediction or outcome. An objective aggregates terms for optimization. Population risk is expected loss under a specified data distribution; sample loss estimates a different, observed average.}
+\glossentry{Policy; utility}{A policy maps available information to an action. Utility assigns values to action--outcome pairs; expected utility averages those values using stated probabilities. Maximization does not justify the supplied values.}
+\glossentry{Threshold}{A cutoff with a declared role. A display threshold selects visible density, a classifier threshold labels a score, and a decision threshold compares expected consequences. They need not coincide.}
+\glossentry{Gradient; derivative}{A derivative describes local change. The gradient collects derivatives over coordinates. Its value depends on the variables held fixed and does not automatically equal the effect of a large intervention.}
+\glossentry{Invariant; fixed point}{An invariant is preserved by specified dynamics or transformations. A fixed point is a state unchanged by an update. Reaching a fixed point does not establish that it is the intended answer.}
+\glossentry{Null space; identifiability}{The null space of linear $H$ contains vectors $v$ with $Hv=0$. Identifiability asks whether distinct states or parameters imply distinct observable predictions under the specified model and experiment.}
+\glossentry{Quasi-steady; boundary condition}{A quasi-steady field is solved from a balance at each current state, rather than evolved with its own time derivative. A boundary condition specifies behaviour at the edge; no flux forbids transport across it.}
+\glossentry{Discretization; solver tolerance}{Discretization replaces a continuum problem with finite grid and time operations. Solver tolerance controls a numerical stopping criterion; it is not an uncertainty interval for biological parameters.}
+\end{syllabusdefinitions}
+
+\clearpage
+\syllabusglossarytopic{Evidence, comparison and statistical interpretation}
+\begin{syllabusdefinitions}
+\glossentry{Demonstration; verification; validation}{A demonstration shows a possibility. Verification checks whether an implementation matches its mathematics. Validation compares a model with independent observations for a declared purpose. Passing one does not establish the others.}
+\glossentry{Baseline; matched comparison}{A baseline is an explicit comparison procedure. A matched comparison holds relevant conditions fixed while changing a chosen factor; the unchanged conditions determine what the contrast can isolate.}
+\glossentry{Perturbation; ablation}{A perturbation changes a specified input or component. An ablation removes or disables one. The interpretation depends on whether the change preserves the intended meaning and introduces other effects.}
+\glossentry{Counterexample}{A construction satisfying a claim's premises but contradicting its conclusion. One counterexample disproves a universal implication; it need not describe how often a phenomenon occurs in practice.}
+\glossentry{Distribution shift; shortcut}{Distribution shift changes the probability law of evaluated cases. A shortcut is dependence on a convenient cue that may fail to track the intended feature when the setting changes.}
+\glossentry{Independent observations}{Observations whose joint probabilities factor into their individual probabilities. Repeated judgments on shared items or by shared people may be dependent; extra rows need not add independent information.}
+\glossentry{Variance; standard error}{Variance describes spread around an expectation. Standard error concerns the spread of an estimator, such as a mean, across repeated samples. It differs from variation among individual cases.}
+\glossentry{Paired contrast; confounding}{A paired contrast compares outcomes on matched units. Confounding leaves a comparison entangled with other differences, such as group composition or acquisition. Pairing alone cannot control every unmeasured cause.}
+\glossentry{Potential outcome; randomization}{A potential outcome specifies what would be observed under an intervention. Random assignment supports a causal contrast under the design's assumptions; it does not reveal both outcomes for one person.}
+\glossentry{Calibration}{Probabilities are calibrated for an event and population when predicted probabilities agree with corresponding event frequencies. A bounded score or high accuracy does not establish calibration.}
+\glossentry{Held-out evaluation; persistence}{Held-out data remain unavailable during fitting and selection. Persistence predicts no change from the latest observation; it is a useful forecasting baseline, not an account of biological dynamics.}
+\glossentry{Selection bias in a best run}{Choosing the best noisy score tends to select favourable noise. Evaluation on data not used for that choice is needed to assess the selected procedure's subsequent performance.}
+\glossentry{Provenance; reproducibility}{Provenance records origins and transformations. Reproducibility requires enough data, settings and procedure to repeat a specified result; rerunning the same data does not create a new biological replicate.}
+\end{syllabusdefinitions}
+
+\clearpage
+\syllabusglossarytopic{Mathematical notation: sets, arrays and operations}
+\begin{syllabusdefinitions}
+\glossentry{$x\in X$; $\mathbb R^p$}{$x$ belongs to set $X$. A vector in $\mathbb R^p$ has $p$ real components; $\{0,1\}$ permits only the two listed values.}
+\glossentry{$f:X\to Y$; $f(x)$}{$f$ maps inputs from $X$ to outputs in $Y$; $f(x)$ is its output for input $x$. Composition $V(f(x))$ applies $f$ first and $V$ second.}
+\glossentry{$x_i$; $s_{t+1}$}{A subscript identifies a component, case or time step, as locally defined. $t+1$ is the next discrete update; it is not a derivative.}
+\glossentry{$\hat\theta$; $\tilde m$; $\bar d$}{A hat usually marks an estimate, a tilde an alternative quantity, and a bar an average. These conventions require the accompanying definition.}
+\glossentry{$A\in\mathbb R^{m\times p}$; $A^\top$}{$A$ has $m$ rows and $p$ columns. Transposition exchanges them. $AB$ is defined when the number of columns of $A$ equals the number of rows of $B$.}
+\glossentry{$\det A$}{Determinant of a square matrix: signed volume scaling under its linear map. For the affine's spatial block, $|\det A_{3\times3}|$ gives positive voxel volume; translation does not change it.}
+\glossentry{Softmax; $e^s$}{Softmax converts real scores into positive weights summing to one: exponentiate each score using $e^s$, then divide by the sum of exponentials over the chosen axis. Slide 4 normalizes each row.}
+\glossentry{$\mathbf1[Q]$; $\sum_{i=1}^n$}{The indicator is one when proposition $Q$ holds and zero otherwise. The sum adds the indicated terms for $i=1,\ldots,n$; division by $n$ yields their mean.}
+\glossentry{$|a|$; $|S|$; $\|v\|^2$}{Absolute value for scalar $a$; number of elements for finite set $S$; squared Euclidean length $\sum_i v_i^2$ for vector $v$. Context determines which bars are intended.}
+\glossentry{$\min$; $\max$; $[a]_+$}{Minimum and maximum return values. The positive part is $[a]_+=\max(a,0)$, leaving positive values unchanged and replacing negative ones by zero.}
+\glossentry{$\arg\min$; $\arg\max$}{Return the arguments achieving an optimum. For example, $\hat\theta\in\arg\min_\theta J(\theta)$ names a minimizing parameter; $\min_\theta J(\theta)$ is the minimum objective value. Ties are possible.}
+\glossentry{$\Gamma\vdash\phi$}{Read ``$\phi$ is derivable from premises $\Gamma$ under the chosen formal rules.'' This is distinct from an empirical claim that the premises are true.}
+\glossentry{$\partial_t c$; $\dot M$}{Partial time derivative of a space--time field, holding position fixed; ordinary time derivative $dM/dt$ of a total. Their units include division by time.}
+\glossentry{$\nabla c$; $\nabla\!\cdot\mathbf j$}{Gradient: spatial derivatives pointing toward increase. Divergence: net outward flux per local volume. For flux $\mathbf j=-D\nabla c$, redistribution is $-\nabla\!\cdot\mathbf j$.}
+\glossentry{$\Delta o=\nabla^2o$}{The Laplacian, summing second spatial derivatives. On slide 19 it describes oxygen smoothing. Elsewhere $\Delta$ labels a finite contrast or effect; it is then a different use of the symbol.}
+\glossentry{$\int_\Omega c\,dV$}{A volume integral over domain $\Omega$. Think of adding $c_i v_i$ over increasingly fine voxels. $dV$ carries volume units; density times volume gives cell number.}
+\end{syllabusdefinitions}
+
+\clearpage
+\syllabusglossarytopic{Probability, uncertainty and decision notation}
+\begin{syllabusdefinitions}
+\glossentry{$P(A)$; $P(A\mid B)$}{Probability of event $A$; probability of $A$ given $B$, defined as $P(A\cap B)/P(B)$ when $P(B)>0$. Conditioning reverses neither events nor assumptions automatically.}
+\glossentry{$\neg D$; $+$; $-$}{Absence of disease, a positive test and a negative test. Here $D$ names an event; it is not the diffusion coefficient of the growth equations.}
+\glossentry{$\pi=P(D)$}{Prevalence: the fraction with disease in the specified population, before conditioning on the test result. Elsewhere $\pi$ can name an action policy.}
+\glossentry{$\mathrm{Se}$; $\mathrm{Sp}$}{Sensitivity $P(+\mid D)$ and specificity $P(-\mid\neg D)$. False-positive probability among unaffected people is $1-\mathrm{Sp}$.}
+\glossentry{$P(D\mid+)$}{PPV: reverse the conditioning to ask about disease among positive results. It depends on prevalence as well as sensitivity and specificity.}
+\glossentry{$p$; $C_{FP}$; $C_{FN}$}{For the decision example, $p$ is the event probability given available evidence. The two costs penalize acting without the event and not acting despite it; correct decisions have zero cost in that example.}
+\glossentry{$\mathbb E[Z]$; $Z\sim P$}{Expected value is the probability-weighted average of $Z$. The symbol $\sim$ states that a random quantity follows a named distribution.}
+\glossentry{$\operatorname{Var}(Z)$}{Variance $\mathbb E[(Z-\mathbb E Z)^2]$, in squared units of $Z$. The standard deviation is its square root.}
+\glossentry{$s_d/\sqrt n$}{Estimated SE of a mean of $n$ independent, identically distributed differences, using sample standard deviation $s_d$ and assuming finite variance. Dependence requires a different analysis.}
+\glossentry{$Y(1),Y(0)$; $\Delta$}{Potential outcomes under two interventions and their declared contrast. Only the outcome under the assigned condition is observed for an individual.}
+\end{syllabusdefinitions}
+
+\textbf{Read Bayes' rule as an accounting identity.} For disease event $D$,
+\[
+P(D\mid+)=\frac{P(+\mid D)P(D)}{P(+)},\qquad
+P(+)=\mathrm{Se}\,\pi+(1-\mathrm{Sp})(1-\pi).
+\]
+The numerator counts true-positive probability; the denominator counts all positive probability. In the hypothetical population of 10,000, the 90 true positives and 990 false positives give $90/(90+990)=1/12$. Population size cancels, leaving a dimensionless fraction.
+
+\textbf{Read the action boundary separately.} Comparing $(1-p)C_{FP}$ with $pC_{FN}$ gives threshold $C_{FP}/(C_{FP}+C_{FN})$ for positive costs. This threshold follows from the stipulated losses; neither sensitivity nor PPV chooses acceptable consequences. Slides 10 and 25 keep that distinction explicit.
+
+\clearpage
+\syllabusglossarytopic{Growth, oxygen, measurement and display notation}
+\begin{syllabusdefinitions}
+\glossentry{$\mathbf x$; $t$; $\Omega$}{Physical position in mm, time in days and the tissue domain. Bold $\mathbf x$ denotes a position vector; elsewhere plain $x$ can denote an image or input feature vector.}
+\glossentry{$c(\mathbf x,t)$; $z(\mathbf x,t)$}{Viable density and immobile necrotic material. In the coupled model both use cell equivalents/mm$^3$ so their transfer and total can be accounted for consistently.}
+\glossentry{$K$; $u=c/K$}{Constant capacity in the same density units; $u$ is dimensionless normalized density, not a probability of cancer. Elsewhere $K$ can denote attention keys or an iteration budget.}
+\glossentry{$D$; $\rho$}{Diffusivity in mm$^2$/day and proliferation rate in day$^{-1}$. The lessons assign tissue-dependent scalar $D$; heterogeneity is distinct from directional anisotropy.}
+\glossentry{$o$; $p$}{Dimensionless relative oxygen and delivery factor. Here $p=[1+\alpha(c+z)/K]^{-1}$ is a perfusion rule, not the event probability $p$ of a decision example.}
+\glossentry{$\ell_o$; $\alpha$; $\beta$}{Oxygen smoothing length in mm; dimensionless perfusion-suppression and uptake parameters. They are assigned model settings.}
+\glossentry{$\theta_p$; $\theta_d$; $g,h$}{Dimensionless oxygen thresholds and response functions, with $0<\theta_d<\theta_p<1$. $g$ reduces proliferation; $h$ controls death transfer (slide 20).}
+\glossentry{$B$; $T$; $\delta$; $\lambda_z$}{Local births and viable-to-necrotic transfer in cell equivalents/mm$^3$/day; death-transfer and clearance rates in day$^{-1}$. On slide 16, $B$ instead labels a density integral.}
+\glossentry{$\mathbf n\cdot\mathbf j=0$}{No-flux boundary: outward unit normal $\mathbf n$ has zero dot product with transport flux $\mathbf j$. No material crosses that boundary, although births inside can change the total.}
+\glossentry{$M=\int_\Omega(c+z)\,dV$}{Total viable plus necrotic material in cell equivalents. Internal transfer cancels from $\dot M$; births add material and clearance removes it.}
+\glossentry{$A$; $v$; $N$}{For geometry, $A$ is the image affine, $v$ voxel volume in mm$^3$, and $N$ an integrated cell count. Attention matrix $A$ and sample count $N$ are separate, locally defined uses.}
+\glossentry{$B$; $V_\tau$; $\tau$}{On slide 16, density integral and threshold volume, both in mL, and dimensionless display cutoff. $B=(v/1000)\sum_i u_i$; $V_\tau=(v/1000)\sum_i\mathbf1[u_i\geq\tau]$.}
+\glossentry{$H$; $S_\theta$; $U_\theta(t)$}{An observation or display operator, as specified; a numerical solution operator; and the computed spatial fields. Subscripts on $H$ state which display settings are fixed.}
+\glossentry{$\theta=(s,\rho)$; $J(\theta)$}{For parameter recovery, diffusivity multiplier and growth rate, and mean squared observation residual. This use of $s$ differs from a general dynamical state.}
+\end{syllabusdefinitions}
+
+\textbf{Check dimensions before interpreting a total.} Multiplying density (cells/mm$^3$) by voxel volume (mm$^3$) gives cells. Summing the fraction $u$ times voxel volume instead gives mm$^3$; dividing by 1000 gives mL. A rate balance for $M$ must have cell equivalents/day on both sides. The same numerical array can support several summaries, whose names and units must remain explicit.
+\endgroup

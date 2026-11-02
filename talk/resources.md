@@ -8,18 +8,25 @@ the companion source versions. The presentation can be downloaded from this publ
 
 ## Slide-by-slide teaching notes
 
-Appendix D of the [paper](../paper/main.pdf) is a 25-page syllabus companion,
-with one thumbnail, a short title and two explanations per page:
-**Biomedical and imaging path** and **Computational path**. The
-[LaTeX source](../paper/appendix-slides.tex) is editable. The notes supply definitions,
+The separate [slide-by-slide syllabus companion](../paper/syllabus.pdf) has
+an introduction, contents, 25 slide pages, a glossary and its own references. Each slide page
+has one thumbnail, a short title and two explanations:
+**Biomedical and imaging path** and **Computational path**. The first develops biological and clinical explanation with qualitative predictions; the second specifies mathematical objects and assumptions, with derivations, calculations and counterexamples. Each slide ends with a shared interpretation. The
+[LaTeX entry point](../paper/syllabus.tex), [slide-note source](../paper/syllabus-slides.tex) and [glossary](../paper/syllabus-glossary.tex) are editable. The computational notes define symbols and units, read equations in words and develop examples. The glossary covers both reading paths before the references. The notes supply definitions,
 interpretation, exercises and links to the relevant notebooks; qualifications in
-the notes do not change the presentation deck. Appendix slide 24 uses a supplied
+the notes do not change the presentation deck. The [perspective paper](../paper/main.pdf)
+retains the thematic discussion and technical appendices. Slides 18–20 now guide
+the 14d presets, equations and controlled comparisons. Slide 24 uses a supplied
 video-player image credited to **Prof. Eirik S. Knudsen**, linked to
 [Molekyl](https://www.molekyl.io) and the [film](https://vimeo.com/1234541249).
 Its notes include the full spoken narration from the supplied video, with an
 [editable plain-text transcript](transcripts/slide-24-something-has-changed.txt).
 Punctuation and paragraphing are edited; the writer's credit is retained. The [thumbnail manifest](../paper/figures/talk/manifest.json)
 records the original filenames and checksums.
+
+The separate [Tentative solutions to the syllabus exercises](../paper/syllabus-solutions.pdf)
+provides worked answers for both paths on every slide. It develops the biological
+reasoning and mathematical steps and explains the limits of each conclusion.
 
 ## Slides and supporting material
 
@@ -59,7 +66,9 @@ Results and figures are written under ignored `.build/growth-verification/`.
 ## Check the external implementation
 
 This optional audit checks the slides' original external solver. The local
-14a–14c lessons run independently and do not need this checkout.
+14a–14d lessons run independently and do not need this checkout. Notebook 14d
+bundles that pinned numerical source and has its own local checks; the optional
+audit here still exercises the separate reference checkout.
 
 Use a separate checkout at the pinned commit; retain its own locked environment.
 Create it outside the original development repository. These commands create
@@ -81,9 +90,9 @@ separate repository and its dependencies.
 To run the notebook's optional section, use the reference project's Python
 environment and set `BRAINWEB_KPP_ROOT` to that checkout's absolute path before
 starting Jupyter. A default notebook run explicitly records this section as
-**not run**. The original, more extensive coupled demonstrations use the
-external notebooks and their own data manifest and instructions. The local
-Fisher–KPP examples in 14b/14c use this repository's bundled anatomy.
+**not run**. The original external notebooks retain their own data manifest
+and instructions. Notebook 14d provides the pinned coupled solver locally;
+14b–14d use this repository's bundled normal anatomy.
 
 ## Supplementary material
 
