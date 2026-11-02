@@ -4,7 +4,7 @@ export MPLBACKEND := Agg
 export PYTHONHASHSEED := 7
 export MPLCONFIGDIR := $(CURDIR)/.build/matplotlib
 
-.PHONY: figures growth-figures paper all clean-paper check check-segmentation check-examples check-growth check-growth-brainweb check-growth-widgets check-notebooks
+.PHONY: figures growth-figures paper all clean-paper check check-segmentation check-examples check-growth check-growth-brainweb check-growth-widgets check-growth-coupled check-notebooks
 
 figures:
 	mkdir -p paper/figures
@@ -45,6 +45,7 @@ check:
 	$(PYTHON) scripts/check_growth.py
 	$(PYTHON) scripts/check_growth_extension.py
 	$(PYTHON) scripts/check_growth_widgets.py
+	$(PYTHON) scripts/check_growth_coupled.py
 
 check-growth:
 	$(PYTHON) scripts/check_growth.py
@@ -55,6 +56,9 @@ check-growth-brainweb:
 
 check-growth-widgets:
 	$(PYTHON) scripts/check_growth_widgets.py
+
+check-growth-coupled:
+	$(PYTHON) scripts/check_growth_coupled.py
 
 check-segmentation:
 	$(PYTHON) scripts/check_segmentation.py

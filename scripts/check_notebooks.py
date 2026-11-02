@@ -26,6 +26,7 @@ DEFAULTS = (
     "14a_growth_density_and_thresholds.ipynb",
     "14b_brainweb_growth.ipynb",
     "14c_growth_parameter_recovery.ipynb",
+    "14d_coupled_tumour_growth.ipynb",
     "15_ppv_and_decisions.ipynb",
 )
 
@@ -117,7 +118,10 @@ def main():
                 notebook.cells.insert(0, nbformat.v4.new_code_cell(prelude))
             print(f"Executing {name}", flush=True)
             NotebookClient(notebook, timeout=600, kernel_name="brainsmodels-check",
-                           resources={"metadata": {"path": str(runtime)}}).execute()
+                           resources={"metadata": {"path": str(runtime)}},
+                           on_cell_start=lambda cell, cell_index: print(
+                               f"  cell {cell_index + 1}/{len(notebook.cells)}", flush=True)
+                           ).execute()
             if args.colab:
                 notebook.cells.pop(0)
                 assert (checkout / "code/src/brainsmodels").is_dir(), name

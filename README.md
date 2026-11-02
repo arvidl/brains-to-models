@@ -13,13 +13,13 @@ This publication copy contains the paper, computational material and final 30-mi
 |---|---|
 | [Paper PDF](paper/main.pdf) | Compiled paper, including the 25-page slide companion in Appendix D |
 | [LaTeX source](paper/main.tex) | Main text, with [appendices](paper/appendices.tex) and [bibliography](paper/references.bib) |
-| [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-two teaching examples with learning goals, definitions and guided interpretation |
+| [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-three teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
 | [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
 | [Slide-to-resource guide](talk/resources.md) | All 25 slides, local examples and pinned external implementations |
 
-This repository is public. Every notebook has an **Open in Colab** badge and runs on a standard CPU runtime. After dependencies are installed, the examples run on CPU without API keys, model downloads or patient data. The two normal BrainWeb phantom volumes used by 14b and 14c are bundled (about 9.25 MB). After checkout and dependency setup, all default calculations run offline, independently of the companion repositories.
+This repository is public. Every notebook has an **Open in Colab** badge and runs on a standard CPU runtime. After dependencies are installed, the examples run on CPU without API keys, model downloads or patient data. The two normal BrainWeb phantom volumes used by 14b–14d are bundled (about 9.25 MB). After checkout and dependency setup, all default calculations run offline, independently of the companion repositories.
 
 ## Paper
 
@@ -43,11 +43,11 @@ Slide 24 includes the full video narration, also available as a
 
 ## Run the notebooks
 
-For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b, 14a–14c and 15 also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
+For a browser session, choose a notebook in the [notebook guide](code/notebooks/README.md), click **Open in Colab**, connect to a CPU runtime, and run the setup cell followed by the remaining cells. Setup downloads the shared Python code and figure references, excludes the large PPTX, and installs the numerical dependencies. Notebooks 05b, 14a–14d and 15 also enable Colab's interactive widget support. The optional external 3-D audit in notebook 13 requires a separate checkout; the default notebook is self-contained.
 
-**Colab verified — 29–30 October 2026:** All twenty-two notebooks completed their default runs on hosted CPU runtimes: 00–14c on 29 October and 15 on 30 October. Verification included representative widget checks, 05b’s full-screen mouse interactions, notebook 15’s independent population and decision controls, and bundled BrainWeb data loading. See [verification results and scope](code/notebooks/README.md#colab-verification).
+**Colab verified — 2 November 2026:** The new 14d completed its default hosted CPU run, with its illustration, live coupling controls and synchronized views. The original twenty-two notebooks passed hosted runs on 29–30 October. The 14d hosted check used an uploaded source snapshot before publication; a separate fresh-checkout test passed its Colab bootstrap. See [verification results and scope](code/notebooks/README.md#colab-verification).
 
-Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification; 14a–14c extend growth modelling into tissue-guided spread, BrainWeb anatomy and generated-data parameter recovery. Notebook 15 connects expected diagnostic counts and PPV to explicit decision costs. See the guide for direct Colab links to all twenty-two.
+Each notebook includes learning goals, two reading paths (biomedical/imaging and computational), definitions, equations, guided predictions and discussion of what the results establish. Notebooks 00–07 and their lettered companions develop the broader concepts; 08–13 focus on attention, segmentation, shortcut dependence, memory and numerical verification; 14a–14c extend growth modelling into tissue-guided spread, BrainWeb anatomy and generated-data parameter recovery. Notebook 14d adds the slide demonstrations' coupled oxygen–necrosis solver, histological illustration and synchronized comparison. Notebook 15 connects expected diagnostic counts and PPV to explicit decision costs. See the guide for direct Colab links to all twenty-three.
 
 Use Python 3.11 or newer and [uv](https://docs.astral.sh/uv/getting-started/installation/). Clone this repository using your GitHub access, then change to the checkout directory containing `pyproject.toml` and `uv.lock`:
 
@@ -79,6 +79,7 @@ Keep `code/src` with the notebooks when running locally. Setup cells locate the 
 | [14a](code/notebooks/14a_growth_density_and_thresholds.ipynb) | Density, tissue-dependent spread and the effect of display thresholds |
 | [14b](code/notebooks/14b_brainweb_growth.ipynb) | Three-dimensional Fisher–KPP growth on the normal BrainWeb phantom |
 | [14c](code/notebooks/14c_growth_parameter_recovery.ipynb) | Generated observations, two-parameter recovery and a withheld forecast |
+| [14d](code/notebooks/14d_coupled_tumour_growth.ipynb) | Interactive tumour–oxygen–necrosis model, matched Fisher–KPP reference, histological visual guide and slide presets |
 | [15](code/notebooks/15_ppv_and_decisions.ipynb) | Expected diagnostic counts, prevalence-dependent PPV and decisions under stipulated costs |
 
 ### Editors, widgets and exercises
@@ -87,15 +88,16 @@ Keep `code/src` with the notebooks when running locally. Setup cells locate the 
 - **Interactive landscape:** notebook 05b uses `ipympl` and `ipywidgets`, included in the environment above. Restart the kernel if the widget does not appear. GIF export needs no additional system software; MP4 export requires `ffmpeg`.
 - **Missing imports:** repeat `uv sync --locked --extra dev`, select the project kernel, and restart and run all cells. Check that `import sys; print(sys.executable)` points into the project's `.venv`.
 - **Exercises:** expand a notebook's **Show solution** section, or load a solution with `%load ../solutions/01_1_drop_the_causal_mask.py`. See the [exercise guide](code/solutions/README.md) and [instructor discussion notes](code/notebooks/questions_responses.md).
-- **Google Colab:** all twenty-two notebooks have their own badge and setup. No GitHub authentication or Drive mount is needed to download this public repository. Save a notebook copy in Drive to retain edits, and download generated files before the temporary runtime ends. Setup reuses an existing runtime checkout; to obtain a fresh copy after repository updates, disconnect and delete the runtime, then reconnect and run again.
+- **Google Colab:** all twenty-three notebooks have their own badge and setup. No GitHub authentication or Drive mount is needed to download this public repository. Save a notebook copy in Drive to retain edits, and download generated files before the temporary runtime ends. Setup reuses an existing runtime checkout; to obtain a fresh copy after repository updates, disconnect and delete the runtime, then reconnect and run again.
 
 ### Interactive growth lessons
 
-Notebooks 14a–14c use `ipywidgets` in Colab, JupyterLab and Cursor. Run the notebook, choose simulation/fitting parameters, then press its run button. In 14a/14b, time, threshold and image-view controls read cached states without recomputing. Pending model changes are identified, and an unstable requested step is rejected with its permitted bound. Fixed examples and paper figures remain independent of widget state.
+Notebooks 14a–14d use `ipywidgets` in Colab, JupyterLab and Cursor. Run the notebook, choose simulation/fitting parameters, then press its run button. In 14a/14b, time, threshold and image-view controls read cached states without recomputing. Pending model changes are identified, and an unstable requested step is rejected with its permitted bound. Fixed examples and paper figures remain independent of widget state.
 
 - **14a:** white/grey diffusivities, growth rate, numerical step, time and density threshold.
 - **14b:** those parameters plus 2/4/6 mm anatomical sampling, orthogonal RAS+ slice positions and overlay opacity.
 - **14c:** generating rates, noise and seed, training times, candidate-grid resolution and fitting step. Day 90 stays withheld; persistence uses the latest selected training observation.
+- **14d:** original Fisher–KPP or coupled viable tumour, oxygen and necrosis; seed position/profile/radii/density, capacity, tissue diffusivities, seven coupling parameters, grid and time settings. Shared playback and physical slices read cached fields. The 4-mm CPU preset is economical; separate 2-mm coupled and 1-mm Fisher–KPP presets record the slide settings. Poster, JSON, GIF and MP4 exports retain shared views. The numerical source is bundled unchanged with its licence; no companion checkout is required. The histological illustration provides a biological visual guide, with source attribution.
 
 GitHub displays saved reference plots. Open a live notebook to use controls; if a widget does not appear, rerun setup and the interactive cell. `make check-growth-widgets` exercises callbacks, cached views, rejection of unstable steps, selected-time baselines and protection of withheld observations, with network access blocked.
 
@@ -112,7 +114,7 @@ make check PYTHON=.venv/bin/python
 
 `make all` runs figure generation, paper compilation and checks in that order. `make paper` compiles directly from the committed figures; it does not execute Python or load anatomy. `make growth-figures` rebuilds just the 14a–14c figures and their computed number macros, using the same teaching implementation as the notebooks and the two checksum-verified normal-phantom volumes bundled with the package. `make clean-paper` removes TeX intermediates while retaining the compiled PDF.
 
-`make check` checks bibliography keys, cited figures, local documentation links, notebook structure and saved errors, numerical reference values, segmentation gradients and interventions, action-specific Q-learning, maze outcomes and planner controls, Transformer gradients, growth-model verification, bundled BrainWeb checksums, widget callbacks with network access blocked, generated teaching notes, and all 49,152 possible single-unit updates in the 12-unit Hopfield example. It also checks the final PPTX's checksum, byte size, package integrity and slide count against the resource manifest. Other presentation sources and development archives remain excluded; the final PPTX resides under `talk/`.
+`make check` checks bibliography keys, cited figures, local documentation links, notebook structure and saved errors, numerical reference values, segmentation gradients and interventions, action-specific Q-learning, maze outcomes and planner controls, Transformer gradients, growth-model verification, bundled BrainWeb checksums, widget callbacks with network access blocked, generated teaching notes, and all 49,152 possible single-unit updates in the 12-unit Hopfield example. The 14d checks add independent oxygen and temporal references, conservation, live widget callbacks and poster/JSON/GIF/MP4 exports. It also checks the final PPTX's checksum, byte size, package integrity and slide count against the resource manifest. Other presentation sources and development archives remain excluded; the final PPTX resides under `talk/`.
 
 To execute notebooks afresh in separate kernels:
 
@@ -120,7 +122,7 @@ To execute notebooks afresh in separate kernels:
 make check-notebooks PYTHON=.venv/bin/python
 ```
 
-This requires the `dev` extra. It executes current-paper notebooks 08–15 in a temporary copy of the project and saves executed notebooks and generated outputs under ignored `.build/`. Use `.venv/bin/python scripts/check_notebooks.py --all` to execute all twenty-two notebooks. To check a different notebook, pass its filename:
+This requires the `dev` extra. It executes current-paper notebooks 08–15, including 14d, in a temporary copy of the project and saves executed notebooks and generated outputs under ignored `.build/`. Use `.venv/bin/python scripts/check_notebooks.py --all` to execute all twenty-three notebooks. To check a different notebook, pass its filename:
 
 ```bash
 .venv/bin/python scripts/check_notebooks.py 01_tiny_transformer.ipynb
@@ -144,16 +146,20 @@ The framing and trolley examples train on designed text associations; their main
 
 The T-maze compares two planners given a transition/observation model with a learner initially given zero action values. The reward-only planner demonstrates the instrumental value of information. This is not a comparison under equal prior knowledge or a test of biological active inference.
 
-Notebook 13 uses independent one-dimensional and uniform-compartment references. It reports whether the optional pinned 3-D check was run. See the [resource guide](talk/resources.md#check-the-external-implementation) for that additional check and for the full external coupled demonstrations. Notebooks 14a–14c add a compact independent NumPy solver: constructed 2-D tissue experiments, 3-D BrainWeb-phantom growth, and synthetic two-parameter recovery. They do not reproduce the full external oxygen/necrosis model or its uncertainty audits.
+Notebook 13 uses independent one-dimensional and uniform-compartment references. It reports whether the optional pinned 3-D check was run. See the [resource guide](talk/resources.md#check-the-external-implementation) for that additional check. Notebooks 14a–14c use a compact independent NumPy solver for constructed 2-D tissue experiments, 3-D BrainWeb-phantom growth, and synthetic two-parameter recovery. Notebook 14d includes the full pinned slide solver for oxygen and necrosis and a matched Fisher–KPP reference. It does not include the companion's patient-specific inference or uncertainty audits. The oxygen/perfusion closure and its parameters remain illustrative assumptions; numerical verification does not establish physiological validity.
 
 ### Growth lessons and provenance
 
-The 14a–14c sequence adapts selected questions from the [Shandong companion material](https://github.com/arvidl/AI-assisted-glioma-research/tree/b9c1b512d93426392db6c0571f47f1b54ff05eec) and the [BrainWeb explorer](https://github.com/arvidl/brainweb_fisher_kpp/tree/81ecd42e6f37692a711208caa8d24361904f7e65). The local solver is a small independent educational implementation. The teaching questions retain source attribution; the runtime uses only this repository’s code and included data. The full external coupled solver remains a separate reference.
+The 14a–14c sequence adapts selected questions from the [Shandong companion material](https://github.com/arvidl/AI-assisted-glioma-research/tree/b9c1b512d93426392db6c0571f47f1b54ff05eec) and the [BrainWeb explorer](https://github.com/arvidl/brainweb_fisher_kpp/tree/81ecd42e6f37692a711208caa8d24361904f7e65). Its solver is a small independent educational implementation. Notebook 14d instead bundles the exact numerical source from that pinned BrainWeb explorer, with [source hash and licence](code/src/brainsmodels/_vendor/brainweb_kpp/PROVENANCE.md), [slide presets and illustration attribution](code/src/brainsmodels/data/growth/README.md). All four runtime lessons use only this repository's code and included data.
 
 Normal phantom anatomy, assigned simulated tumour density and generated noisy observations are identified separately. Tissue diffusivities are locally scalar; no dMRI-derived direction field is used. In 14c the seed, tissue ratio and observation operator are known, and day 90 is withheld from fitting. Grid-search ranges do not constitute confidence intervals.
 
 Run `make check-growth` for offline numerical checks and `make check-growth-brainweb` to include pinned-data geometry, anatomical runs and the generated-data forecast. Set `BRAINSMODELS_BRAINWEB_DIR` to a matching existing data folder to read it without writing there. Missing or altered bundled files raise an error; there is no downloader or substitute anatomy. Input hashes, source versions, coordinates, settings and computed results are recorded in [the growth figure record](paper/figures/growth_extension_values.json).
 
+Run `make check-growth-coupled` for 14d's analytic oxygen balance, nonuniform spatial oxygen reference, closed barriers, viable-to-necrotic transfer, conservation, zero-uptake limit, independent temporal-refinement reference, real offline widget callbacks and poster/JSON/GIF/MP4 exports. The first run compiles Numba kernels. Notebook 14d saves its own records under ignored `.build/growth-14d`; it does not replace the 14a–14c paper figures.
+
 ## Rights and attribution
+
+The histological schematic in notebook 14d is Comba et al. (2021), Figure 1, [CC BY 4.0](https://doi.org/10.3389/fonc.2021.703764); its diagram and legend retain their attribution. It is bundled separately from the MIT-licensed code. See the [asset record](code/src/brainsmodels/data/growth/README.md).
 
 Code and original material retain the repository's [MIT license](LICENSE). The two reproduced glioma figures retain their article-specific CC BY 4.0 attributions in the paper. BrainWeb data retain their original terms and attribution ([BrainWeb](https://brainweb.bic.mni.mcgill.ca/brainweb/); Collins et al. 1998; Cocosco et al. 1997); the two checksum-verified input NIfTI files are included under [the package data directory](code/src/brainsmodels/data/brainweb/README.md), with source aliases and attribution. They are also included when building a Python wheel. The generated anatomical figure carries attribution in the paper. Third-party material retains its original rights and credit lines. Full reference-article PDFs and archived source presentations are not distributed in this publication copy.

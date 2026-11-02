@@ -141,13 +141,14 @@ def main():
                            for cell in notebook["cells"]
                            for output in cell.get("outputs", []))
             assert previews >= 2, "Verification notebook is missing its saved plots"
-        if path.name.startswith(("14a_", "14b_", "14c_")):
+        if path.name.startswith(("14a_", "14b_", "14c_", "14d_")):
             previews = sum("image/png" in output.get("data", {})
                            for cell in notebook["cells"] for output in cell.get("outputs", []))
             assert previews >= 1, f"Growth lesson is missing its saved figure: {path.name}"
             assert "ipywidgets>=8.1" in setup_source and "enable_custom_widget_manager" in setup_source
             assert any("interactive" in cell.get("metadata", {}).get("tags", [])
-                       and "brainsmodels.growth_widgets" in "".join(cell["source"])
+                       and any(module in "".join(cell["source"]) for module in
+                               ("brainsmodels.growth_widgets", "brainsmodels.growth_coupled_widgets"))
                        for cell in notebook["cells"]), f"Missing live growth controls: {path.name}"
         if path.name == "15_ppv_and_decisions.ipynb":
             assert "ipywidgets>=8.1" in setup_source and "enable_custom_widget_manager" in setup_source
