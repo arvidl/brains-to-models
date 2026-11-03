@@ -4,7 +4,7 @@ A perspective paper and reproducible computational examples for the joint PRESIM
 
 The paper connects representation, attention, memory, embodiment and consciousness with medical AI. The examples distinguish a model's successful performance from claims about biological mechanisms, understanding and clinical benefit. They are teaching resources, not clinical systems.
 
-This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) (see also this [[link](https://docs.google.com/presentation/d/e/2PACX-1vQYRZnUC5Ae8V7WGU5Gw1XjBR4-0Ez_DUImMWuV4mgNcOI_JADfLvSEEagQYJXCipluD4p232XmfuGo/pub?start=false&loop=false&delayms=3000)]).
+This publication copy contains the paper, computational material and final 30-minute [PowerPoint presentation](talk/From_Brains_to_Models_PRESIMAL_arvid20261105.pptx) (see also this [[link](https://docs.google.com/presentation/d/e/2PACX-1vQYRZnUC5Ae8V7WGU5Gw1XjBR4-0Ez_DUImMWuV4mgNcOI_JADfLvSEEagQYJXCipluD4p232XmfuGo/pub?start=false&loop=false&delayms=3000)]).
 
 
 ## Start here
@@ -18,7 +18,7 @@ This publication copy contains the paper, computational material and final 30-mi
 | [Notebook guide and Colab links](code/notebooks/README.md) | Twenty-three teaching examples with learning goals, definitions and guided interpretation |
 | [Python implementation](code/src/brainsmodels) | Shared numerical models and figure builders |
 | [Exercises](code/solutions/README.md) | Worked exercises and instructor resources |
-| [Final presentation](talk/From%20Brains%20to%20Models_20261029_1030.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
+| [Final presentation](talk/From_Brains_to_Models_PRESIMAL_arvid20261105.pptx) | 25-slide PowerPoint deck for the 30-minute talk, 78.1 MiB |
 | [Slide-to-resource guide](talk/resources.md) | All 25 slides, local examples and pinned external implementations |
 
 This repository is public. Every notebook has an **Open in Colab** badge and runs on a standard CPU runtime. After dependencies are installed, the examples run on CPU without API keys, model downloads or patient data. The two normal BrainWeb phantom volumes used by 14b–14d are bundled (about 9.25 MB). After checkout and dependency setup, all default calculations run offline, independently of the companion repositories.

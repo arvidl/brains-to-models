@@ -1,6 +1,6 @@
 # Resources for the 30 minute presentation
 
-This guide follows the 25 slides in the [final PowerPoint presentation](From%20Brains%20to%20Models_20261029_1030.pptx), *From Brains to Models_20261029_1030.pptx*.
+This guide follows the 25 slides in the [updated PRESIMAL PowerPoint presentation](From_Brains_to_Models_PRESIMAL_arvid20261105.pptx).
 It connects the presentation to runnable examples and identifies which results
 come from separate research repositories. The [resource manifest](resources.json)
 records the included PPTX's path, byte size, checksum and slide count, along with
